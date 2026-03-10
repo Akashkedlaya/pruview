@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  folders      Folder[]
+}
+
+model Folder {
+  id          Int      @id @default(autoincrement())
+  name        String
+  shareToken  String   @unique
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  admin       Admin    @relation(fields: [adminId], references: [id])
+  adminId     Int
+  images      Image[]
+}
+
+model Image {
+  id          Int      @id @default(autoincrement())
+  filename    String
+  originalKey String
+  thumbKey    String
+  sizeBytes   Int
+  uploadedAt  DateTime @default(now())
+  folder      Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  folderId    Int
+}
