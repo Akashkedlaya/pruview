@@ -34,18 +34,19 @@ export default function UploadPage() {
     return localStorage.getItem('pruview_token')
   }
 
-  async function loadFolder() {
-    try {
-      const res = await fetch(`${API}/api/folders/${id}`, {
-        headers: { Authorization: `Bearer ${getToken()}` }
-      })
-      if (res.status === 401) { router.push('/admin/login'); return }
-      const data = await res.json()
-      setFolder(data)
-    } catch (err) {
-      setError('Could not load folder.')
-    }
+ async function loadFolder() {
+  try {
+    const res = await fetch(`${API}/api/folders/${id}`, {
+      headers: { Authorization: `Bearer ${getToken()}` }
+    })
+    if (res.status === 401) { router.push('/admin/login'); return }
+    if (res.status === 404) { router.push('/admin'); return }  // ← add this
+    const data = await res.json()
+    setFolder(data)
+  } catch (err) {
+    setError('Could not load folder.')
   }
+}
 
   async function uploadFile(file: File) {
     try {
@@ -145,7 +146,7 @@ export default function UploadPage() {
             <h1 className="text-3xl font-semibold text-[#0f0f0f]" style={{ fontFamily: 'Georgia, serif' }}>
               {folder.name}
             </h1>
-            <p className="text-[#888] text-sm mt-1">{folder.images.length} photos</p>
+            <p className="text-[#888] text-sm mt-1">{folder.images?.length ?? 0} photos</p>
           </div>
           <button onClick={copyLink}
             className="px-5 py-2.5 border border-[#e0ddd8] text-[#333] text-sm font-semibold rounded-xl hover:border-[#c8a020] hover:text-[#c8a020] transition-all">
@@ -169,8 +170,8 @@ export default function UploadPage() {
           {/* Progress bars */}
           {Object.entries(progress).length > 0 && (
             <div className="mt-6 flex flex-col gap-2 text-left max-w-sm mx-auto">
-              {Object.entries(progress).map(([name, pct]) => (
-                <div key={name}>
+              {Object.entries(progress).map(([name, pct], index) => (
+                <div key={`${index}-${name}`}>
                   <div className="flex justify-between text-xs text-[#888] mb-1">
                     <span className="truncate max-w-[200px]">{name}</span>
                     <span>{pct}%</span>

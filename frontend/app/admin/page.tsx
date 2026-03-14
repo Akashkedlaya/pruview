@@ -86,9 +86,10 @@ export default function AdminHome() {
   }
 
   function logout() {
-    localStorage.removeItem('pruview_token')
-    router.push('/admin/login')
-  }
+  localStorage.removeItem('pruview_token')
+  document.cookie = 'pruview_token=; path=/; max-age=0'
+  router.push('/admin/login')
+}
 
   useEffect(() => { loadFolders() }, [])
 

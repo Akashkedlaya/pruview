@@ -29,6 +29,8 @@ export default function LoginPage() {
         return
       }
       localStorage.setItem('pruview_token', data.token)
+      // Also save as cookie for middleware to read
+      document.cookie = `pruview_token=${data.token}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Strict`
       router.push('/admin')
     } catch (err) {
       setError('Cannot connect to server.')

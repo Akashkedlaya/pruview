@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+
+  # Local PostgreSQL for development
+  postgres:
+    image: postgres:15-alpine
+    container_name: pruview-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER:     postgres
+      POSTGRES_PASSWORD: localpassword
+      POSTGRES_DB:       pruview
+    ports:
+      - "5433:5432"   # 5433 on host to avoid conflict with local postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: pruview-backend
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+      
+    environment:
+      DATABASE_URL:          postgresql://postgres:localpassword@postgres:5432/pruview
+      JWT_SECRET:            your-super-secret-jwt-key-change-this
+      AWS_ACCESS_KEY_ID:     ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION:            ap-south-1
+      AWS_S3_BUCKET:         pruview-photos
+      CLOUDFRONT_URL:        https://placeholder.cloudfront.net
+      FRONTEND_URL:          http://localhost:3000
+      PORT:                  3001
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:

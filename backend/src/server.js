@@ -12,7 +12,8 @@ app.get('/health', (req, res) => {
 
 app.use('/api/auth',    require('./routes/auth'))
 app.use('/api/folders', require('./routes/folders'))
-app.use('/api/images',  require('./routes/images'))   // ← add this
+app.use('/api/images',  require('./routes/images'))  
+app.use('/api/g',       require('./routes/gallery'))  // ← add this
 
 app.listen(process.env.PORT, () => {
   console.log(`✦ Pruview running on http://localhost:${process.env.PORT}`)

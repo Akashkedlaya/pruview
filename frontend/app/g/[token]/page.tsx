@@ -1,0 +1,283 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useParams } from 'next/navigation'
+
+type Image = {
+  id: number
+  filename: string
+  thumbUrl: string
+  sizeBytes: number
+}
+
+type Gallery = {
+  folder: { id: number; name: string; createdAt: string }
+  images: Image[]
+  total: number
+}
+
+export default function GalleryPage() {
+  const { token } = useParams()
+  const [gallery, setGallery]               = useState<Gallery | null>(null)
+  const [error, setError]                   = useState('')
+  const [lightboxIndex, setLightboxIndex]   = useState<number | null>(null)
+  const [downloading, setDownloading]       = useState<number | null>(null)
+  const [downloadingAll, setDownloadingAll] = useState(false)
+  const [downloadProgress, setDownloadProgress] = useState(0)
+
+  const API = process.env.NEXT_PUBLIC_API_URL
+
+  useEffect(() => {
+    fetch(`${API}/api/g/${token}`)
+      .then(res => {
+        if (!res.ok) throw new Error('Gallery not found')
+        return res.json()
+      })
+      .then(data => setGallery(data))
+      .catch(() => setError('This gallery link is invalid or has been removed.'))
+  }, [token])
+
+  // ── Keyboard navigation
+  useEffect(() => {
+    function handleKey(e: KeyboardEvent) {
+      if (lightboxIndex === null || !gallery) return
+      if (e.key === 'ArrowRight') goNext()
+      if (e.key === 'ArrowLeft')  goPrev()
+      if (e.key === 'Escape')     setLightboxIndex(null)
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [lightboxIndex, gallery])
+
+  function goNext() {
+    if (!gallery || lightboxIndex === null) return
+    setLightboxIndex(i => i !== null ? (i + 1) % gallery.images.length : null)
+  }
+
+  function goPrev() {
+    if (!gallery || lightboxIndex === null) return
+    setLightboxIndex(i => i !== null ? (i - 1 + gallery.images.length) % gallery.images.length : null)
+  }
+
+  async function getDownloadUrl(imageId: number) {
+    const res  = await fetch(`${API}/api/g/${token}/download/${imageId}`)
+    const data = await res.json()
+    return data.downloadUrl
+  }
+
+  async function downloadImage(img: Image) {
+    setDownloading(img.id)
+    try {
+      const url = await getDownloadUrl(img.id)
+      window.open(url, '_blank')
+    } catch {
+      alert('Could not download. Try again.')
+    } finally {
+      setDownloading(null)
+    }
+  }
+
+  async function downloadAll() {
+    if (!gallery) return
+    setDownloadingAll(true)
+    setDownloadProgress(0)
+
+    for (let i = 0; i < gallery.images.length; i++) {
+      const img = gallery.images[i]
+      try {
+        const url = await getDownloadUrl(img.id)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = img.filename
+        a.target = '_blank'
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        await new Promise(r => setTimeout(r, 800))
+      } catch {
+        console.error('Failed to download:', img.filename)
+      }
+      setDownloadProgress(Math.round(((i + 1) / gallery.images.length) * 100))
+    }
+
+    setDownloadingAll(false)
+    setDownloadProgress(0)
+  }
+
+  function formatSize(bytes: number) {
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB'
+  }
+
+  const lightboxImage = lightboxIndex !== null && gallery ? gallery.images[lightboxIndex] : null
+
+  // ── Error state
+  if (error) return (
+    <div className="min-h-screen bg-white flex items-center justify-center p-8">
+      <div className="text-center">
+        <p className="text-6xl mb-6">🔗</p>
+        <h1 className="text-[#0f0f0f] text-2xl font-semibold mb-3" style={{ fontFamily: 'Georgia, serif' }}>
+          Gallery not found
+        </h1>
+        <p className="text-[#888] text-sm">{error}</p>
+      </div>
+    </div>
+  )
+
+  // ── Loading state
+  if (!gallery) return (
+    <div className="min-h-screen bg-white flex items-center justify-center">
+      <p className="text-[#aaa] text-sm">Loading gallery…</p>
+    </div>
+  )
+
+  return (
+    <div className="min-h-screen bg-white">
+
+      {/* Header */}
+      <div className="px-8 py-12 border-b border-[#e8e5e0]">
+        <div className="max-w-6xl mx-auto flex items-end justify-between gap-4 flex-wrap">
+          <div>
+            {/* Logo */}
+            <p className="text-xs tracking-[4px] uppercase mb-3 font-bold">
+              <span className="text-[#5f9ea0]">PRU</span><span className="text-[#999]">VIEW</span>
+            </p>
+            <h1 className="text-[#0f0f0f] text-4xl font-light mb-2" style={{ fontFamily: 'Georgia, serif' }}>
+              {gallery.folder.name}
+            </h1>
+            <p className="text-[#888] text-sm">
+              {gallery.total} {gallery.total === 1 ? 'photo' : 'photos'}
+            </p>
+          </div>
+
+          {/* Download all button */}
+          {gallery.total > 0 && (
+            <div className="flex flex-col items-end gap-2">
+              <button
+                onClick={downloadAll}
+                disabled={downloadingAll}
+                className="px-6 py-3 bg-[#e8c547] text-[#0f0f0f] text-sm font-bold rounded-xl hover:bg-[#f0d060] disabled:opacity-60 transition-all flex items-center gap-2 shadow-lg border-2 border-[#c8a020]"
+              >
+                {downloadingAll ? (
+                  <span>Downloading {downloadProgress}%</span>
+                ) : (
+                  <>
+                    <span className="text-lg">⬇</span>
+                    <span>Download All {gallery.total} Photos</span>
+                  </>
+                )}
+              </button>
+              {downloadingAll && (
+                <div className="w-full h-1 bg-[#e8e5e0] rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-[#e8c547] rounded-full transition-all duration-300"
+                    style={{ width: `${downloadProgress}%` }}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Grid */}
+      <div className="max-w-6xl mx-auto px-8 py-10">
+        {gallery.images.length === 0 ? (
+          <div className="text-center py-24">
+            <p className="text-[#aaa] text-sm">No photos in this gallery yet.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            {gallery.images.map((img, index) => (
+              <div
+                key={img.id}
+                className="group relative aspect-square rounded-xl overflow-hidden bg-[#e8e5e0] cursor-pointer"
+                onClick={() => setLightboxIndex(index)}
+              >
+                <img
+                  src={img.thumbUrl}
+                  alt={img.filename}
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                  <p className="text-white text-xs truncate w-full">{img.filename}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <div className="text-center py-8 border-t border-[#e8e5e0]">
+        <p className="text-[#aaa] text-xs font-bold tracking-widest uppercase">
+          Delivered by <span className="text-[#5f9ea0]">PRU</span><span className="text-[#999]">VIEW</span>
+        </p>
+      </div>
+
+      {/* Lightbox — stays dark */}
+      {lightboxImage && lightboxIndex !== null && (
+        <div
+          className="fixed inset-0 bg-white z-50 flex items-center justify-center p-4"
+          onClick={() => setLightboxIndex(null)}
+        >
+          {/* Prev arrow */}
+          <button
+            onClick={e => { e.stopPropagation(); goPrev() }}
+            className="absolute left-4 top-1/2 -translate-y-1/2 w-14 h-14 bg-[#0f0f0f] text-white rounded-full flex items-center justify-center text-2xl font-bold hover:bg-[#e8c547] hover:text-[#0f0f0f] transition-all z-10 shadow-xl"
+          >
+            ❮
+          </button>
+
+          {/* Next arrow */}
+          <button
+            onClick={e => { e.stopPropagation(); goNext() }}
+            className="absolute right-4 top-1/2 -translate-y-1/2 w-14 h-14 bg-[#0f0f0f] text-white rounded-full flex items-center justify-center text-2xl font-bold hover:bg-[#e8c547] hover:text-[#0f0f0f] transition-all z-10 shadow-xl"
+          >
+            ❯
+          </button>
+
+          <div
+            className="relative max-w-4xl w-full"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Close + counter */}
+            <div className="flex items-center justify-between mb-3">
+              <span className="text- [#aaa] text-sm">
+                {lightboxIndex + 1} / {gallery.images.length}
+              </span>
+              <button
+                onClick={() => setLightboxIndex(null)}
+                className="text-[#aaa] hover:text-[#0f0f0f] text-sm transition-colors"
+              >
+                ✕ Close
+              </button>
+            </div>
+
+            {/* Image */}
+            <img
+              src={lightboxImage.thumbUrl}
+              alt={lightboxImage.filename}
+              className="w-full rounded-xl max-h-[75vh] object-contain"
+            />
+
+            {/* Info + Download */}
+            <div className="flex items-center justify-between mt-4 px-1">
+              <div>
+                <p className="text-[#0f0f0f] text-sm font-medium">{lightboxImage.filename}</p>
+                <p className="text-[#666] text-xs mt-0.5">{formatSize(lightboxImage.sizeBytes)}</p>
+              </div>
+              <button
+                onClick={() => downloadImage(lightboxImage)}
+                disabled={downloading === lightboxImage.id}
+                className="px-5 py-2.5 bg-[#e8c547] text-[#0f0f0f] text-sm font-bold rounded-xl hover:bg-[#f0d060] disabled:opacity-50 transition-all shadow-md flex items-center gap-2"
+              >
+                {downloading === lightboxImage.id ? 'Preparing…' : <><span>⬇</span><span>Download Original</span></>}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+    </div>
+  )
+}

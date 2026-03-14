@@ -110,7 +110,7 @@ router.get('/:id/upload-url', async (req, res) => {
 
     const ext      = path.extname(filename)
     const baseName = `${uuidv4()}${ext}`
-    const s3Key    = `originals/${baseName}`
+    const s3Key    = `folders/${folderId}/originals/${baseName}`
 
     const uploadUrl = await getPresignedUploadUrl(s3Key, contentType, 300)
     return res.json({ uploadUrl, s3Key })
@@ -136,7 +136,7 @@ router.post('/:id/images', async (req, res) => {
     if (!folder) return res.status(404).json({ message: 'Folder not found.' })
 
     // For now thumbKey = same as originalKey (no Lambda yet)
-    const thumbKey = originalKey
+    const thumbKey = originalKey 
 
     const image = await prisma.image.create({
       data: { filename, originalKey, thumbKey, sizeBytes: parseInt(sizeBytes), folderId }
