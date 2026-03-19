@@ -7,7 +7,7 @@ app.use(cors({ origin: process.env.FRONTEND_URL }))
 app.use(express.json())
 
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', service: 'pruview-backend' })
+  res.json({ status: 'ok', service: 'pruview-backend', version : '1.0.0' })
 })
 
 app.use('/api/auth',    require('./routes/auth'))
