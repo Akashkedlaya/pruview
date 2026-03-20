@@ -3,6 +3,35 @@ const prisma  = require('../lib/prisma')
 const { getS3Url } = require('../lib/s3')
 
 const router = express.Router()
+const matches = await prisma.$queryRawUnsafe(`
+  SELECT 
+    fe.id as embedding_id,
+    fe."imageId",
+    fe."folderId",
+    1 - (fe.embedding <=> '${vectorStr}'::vector) as similarity
+  FROM "FaceEmbedding" fe
+  WHERE fe."folderId" = ${folder.id}
+  ORDER BY similarity DESC
+  LIMIT 50
+`)
+
+// ← ADD THESE LOGS
+console.log('=== FACE MATCH DEBUG ===')
+console.log('All scores:', matches.map(m => ({
+  imageId: m.imageId,
+  similarity: parseFloat(m.similarity).toFixed(3)
+})))
+
+const filtered = matches.filter(m => parseFloat(m.similarity) >= 0.75)
+console.log('Above 0.75 threshold:', filtered.length)
+console.log('========================')
+
+if (filtered.length === 0) {
+  return res.json({ images: [], total: 0 })
+}
+
+const imageIds = [...new Set(filtered.map(m => m.imageId))]
+
 
 // POST /api/g/:token/match-face
 // Consumer sends face embedding → get matching photos
