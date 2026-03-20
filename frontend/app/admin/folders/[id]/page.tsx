@@ -33,7 +33,38 @@ export default function UploadPage() {
   function getToken() {
     return localStorage.getItem('pruview_token')
   }
+  async function reindexFaces() {
+  if (!folder) return
+  setError('')
+  try {
+    const { loadModels, detectFacesInImage } = await import('@/app/lib/faceDetection')
+    await loadModels()
 
+    let indexed = 0
+    for (const img of folder.images) {
+      try {
+        const embeddings = await detectFacesInImage(img.thumbUrl)
+        if (embeddings.length > 0) {
+          await fetch(`${API}/api/images/${img.id}/index-faces`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${getToken()}`
+            },
+            body: JSON.stringify({ embeddings, folderId: id })
+          })
+          indexed++
+          console.log(`✅ Indexed ${img.filename}: ${embeddings.length} face(s)`)
+        }
+      } catch (err) {
+        console.warn(`Skipped ${img.filename}:`, err)
+      }
+    }
+    alert(`✅ Re-indexed ${indexed} photos with faces`)
+  } catch (err) {
+    setError('Re-indexing failed.')
+  }
+}  
   async function loadFolder() {
     try {
       const res = await fetch(`${API}/api/folders/${id}`, {
@@ -176,6 +207,18 @@ export default function UploadPage() {
             {copied ? '✓ Link copied!' : 'Copy share link'}
           </button>
         </div>
+        <div className="flex items-center gap-3">
+  <button
+    onClick={reindexFaces}
+    className="px-4 py-2 border border-[#e0ddd8] text-[#333] text-xs font-semibold rounded-xl hover:border-[#c8a020] hover:text-[#c8a020] transition-all"
+  >
+    🔄 Re-index faces
+  </button>
+  <button onClick={copyLink}
+    className="px-5 py-2.5 border border-[#e0ddd8] text-[#333] text-sm font-semibold rounded-xl hover:border-[#c8a020] hover:text-[#c8a020] transition-all">
+    {copied ? '✓ Link copied!' : 'Copy share link'}
+  </button>
+</div>
 
         {/* Upload zone */}
         <div

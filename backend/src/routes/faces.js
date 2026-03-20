@@ -34,7 +34,7 @@ router.post('/:token/match-face', async (req, res) => {
         1 - (fe.embedding <=> '${vectorStr}'::vector) as similarity
       FROM "FaceEmbedding" fe
       WHERE fe."folderId" = ${folder.id}
-        AND 1 - (fe.embedding <=> '${vectorStr}'::vector) >= 0.6
+        AND 1 - (fe.embedding <=> '${vectorStr}'::vector) >= 0.75
       ORDER BY similarity DESC
       LIMIT 50
     `)
