@@ -34,52 +34,75 @@ export default function UploadPage() {
     return localStorage.getItem('pruview_token')
   }
 
- async function loadFolder() {
-  try {
-    const res = await fetch(`${API}/api/folders/${id}`, {
-      headers: { Authorization: `Bearer ${getToken()}` }
-    })
-    if (res.status === 401) { router.push('/admin/login'); return }
-    if (res.status === 404) { router.push('/admin'); return }  // ← add this
-    const data = await res.json()
-    setFolder(data)
-  } catch (err) {
-    setError('Could not load folder.')
+  async function loadFolder() {
+    try {
+      const res = await fetch(`${API}/api/folders/${id}`, {
+        headers: { Authorization: `Bearer ${getToken()}` }
+      })
+      if (res.status === 401) { router.push('/admin/login'); return }
+      if (res.status === 404) { router.push('/admin'); return }
+      const data = await res.json()
+      setFolder(data)
+    } catch (err) {
+      setError('Could not load folder.')
+    }
   }
-}
 
   async function uploadFile(file: File) {
     try {
-      // Step 1 — get presigned URL from backend
+      // Step 1 — get presigned URL
       const urlRes = await fetch(
         `${API}/api/folders/${id}/upload-url?filename=${encodeURIComponent(file.name)}&contentType=${file.type}`,
         { headers: { Authorization: `Bearer ${getToken()}` } }
       )
       const { uploadUrl, s3Key } = await urlRes.json()
 
-      // Step 2 — upload file directly to S3
+      // Step 2 — upload to S3
       setProgress(p => ({ ...p, [file.name]: 0 }))
       await fetch(uploadUrl, {
-        method:  'PUT',
-        body:    file,
+        method: 'PUT',
+        body: file,
         headers: { 'Content-Type': file.type }
       })
-      setProgress(p => ({ ...p, [file.name]: 100 }))
+      setProgress(p => ({ ...p, [file.name]: 50 }))
 
       // Step 3 — save metadata to DB
       const saveRes = await fetch(`${API}/api/folders/${id}/images`, {
-        method:  'POST',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization:  `Bearer ${getToken()}`
+          Authorization: `Bearer ${getToken()}`
         },
         body: JSON.stringify({
-          filename:    file.name,
+          filename: file.name,
           originalKey: s3Key,
-          sizeBytes:   file.size
+          sizeBytes: file.size
         })
       })
       const newImage = await saveRes.json()
+
+      // Step 4 — detect and index faces
+      setProgress(p => ({ ...p, [file.name]: 75 }))
+      try {
+        const { loadModels, detectFacesInImage } = await import('@/app/lib/faceDetection')
+        await loadModels()
+        const embeddings = await detectFacesInImage(newImage.thumbUrl)
+        if (embeddings.length > 0) {
+          await fetch(`${API}/api/images/${newImage.id}/index-faces`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${getToken()}`
+            },
+            body: JSON.stringify({ embeddings, folderId: id })
+          })
+          console.log(`✅ Indexed ${embeddings.length} face(s) in ${file.name}`)
+        }
+      } catch (faceErr) {
+        console.warn('Face indexing failed (non-critical):', faceErr)
+      }
+
+      setProgress(p => ({ ...p, [file.name]: 100 }))
       setFolder(f => f ? { ...f, images: [newImage, ...f.images] } : f)
 
     } catch (err) {
@@ -100,7 +123,7 @@ export default function UploadPage() {
   async function deleteImage(imageId: number) {
     if (!confirm('Delete this photo?')) return
     await fetch(`${API}/api/images/${imageId}`, {
-      method:  'DELETE',
+      method: 'DELETE',
       headers: { Authorization: `Bearer ${getToken()}` }
     })
     setFolder(f => f ? { ...f, images: f.images.filter(i => i.id !== imageId) } : f)
@@ -167,7 +190,6 @@ export default function UploadPage() {
           </p>
           <p className="text-xs text-[#aaa]">JPG, PNG, WEBP, HEIC — up to 15 MB each</p>
 
-          {/* Progress bars */}
           {Object.entries(progress).length > 0 && (
             <div className="mt-6 flex flex-col gap-2 text-left max-w-sm mx-auto">
               {Object.entries(progress).map(([name, pct], index) => (
@@ -211,9 +233,8 @@ export default function UploadPage() {
                   alt={img.filename}
                   className="w-full h-full object-cover"
                 />
-                {/* Hover overlay */}
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
-                  <p className="text-white text-xs text-center px-2 truncate w-full text-center">
+                  <p className="text-white text-xs text-center px-2 truncate w-full">
                     {img.filename}
                   </p>
                   <p className="text-white/60 text-xs">{formatSize(img.sizeBytes)}</p>
@@ -228,7 +249,6 @@ export default function UploadPage() {
             ))}
           </div>
         )}
-
       </div>
     </div>
   )
