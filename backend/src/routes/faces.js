@@ -40,8 +40,8 @@ router.post('/:token/match-face', async (req, res) => {
       similarity: parseFloat(m.similarity).toFixed(3)
     })))
 
-    const filtered = matches.filter(m => parseFloat(m.similarity) >= 0.75)
-    console.log('Above 0.75 threshold:', filtered.length)
+    const filtered = matches.filter(m => parseFloat(m.similarity) >= 0.92)
+    console.log('Above 0.92 threshold:', filtered.length)
     console.log('========================')
 
     if (filtered.length === 0) {
