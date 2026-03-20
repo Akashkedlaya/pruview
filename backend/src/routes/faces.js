@@ -3,38 +3,7 @@ const prisma  = require('../lib/prisma')
 const { getS3Url } = require('../lib/s3')
 
 const router = express.Router()
-const matches = await prisma.$queryRawUnsafe(`
-  SELECT 
-    fe.id as embedding_id,
-    fe."imageId",
-    fe."folderId",
-    1 - (fe.embedding <=> '${vectorStr}'::vector) as similarity
-  FROM "FaceEmbedding" fe
-  WHERE fe."folderId" = ${folder.id}
-  ORDER BY similarity DESC
-  LIMIT 50
-`)
 
-// ← ADD THESE LOGS
-console.log('=== FACE MATCH DEBUG ===')
-console.log('All scores:', matches.map(m => ({
-  imageId: m.imageId,
-  similarity: parseFloat(m.similarity).toFixed(3)
-})))
-
-const filtered = matches.filter(m => parseFloat(m.similarity) >= 0.75)
-console.log('Above 0.75 threshold:', filtered.length)
-console.log('========================')
-
-if (filtered.length === 0) {
-  return res.json({ images: [], total: 0 })
-}
-
-const imageIds = [...new Set(filtered.map(m => m.imageId))]
-
-
-// POST /api/g/:token/match-face
-// Consumer sends face embedding → get matching photos
 router.post('/:token/match-face', async (req, res) => {
   try {
     const { embedding } = req.body
@@ -51,10 +20,8 @@ router.post('/:token/match-face', async (req, res) => {
       return res.status(404).json({ message: 'Gallery not found.' })
     }
 
-    // Convert embedding array to postgres vector format
     const vectorStr = `[${embedding.join(',')}]`
 
-    // Find matching faces using cosine similarity
     const matches = await prisma.$queryRawUnsafe(`
       SELECT 
         fe.id as embedding_id,
@@ -63,19 +30,26 @@ router.post('/:token/match-face', async (req, res) => {
         1 - (fe.embedding <=> '${vectorStr}'::vector) as similarity
       FROM "FaceEmbedding" fe
       WHERE fe."folderId" = ${folder.id}
-        AND 1 - (fe.embedding <=> '${vectorStr}'::vector) >= 0.75
       ORDER BY similarity DESC
       LIMIT 50
     `)
 
-    if (matches.length === 0) {
+    console.log('=== FACE MATCH DEBUG ===')
+    console.log('All scores:', matches.map(m => ({
+      imageId: m.imageId,
+      similarity: parseFloat(m.similarity).toFixed(3)
+    })))
+
+    const filtered = matches.filter(m => parseFloat(m.similarity) >= 0.75)
+    console.log('Above 0.75 threshold:', filtered.length)
+    console.log('========================')
+
+    if (filtered.length === 0) {
       return res.json({ images: [], total: 0 })
     }
 
-    // Get unique image IDs
-    const imageIds = [...new Set(matches.map(m => m.imageId))]
+    const imageIds = [...new Set(filtered.map(m => m.imageId))]
 
-    // Fetch full image details
     const images = await prisma.image.findMany({
       where: { id: { in: imageIds } }
     })
@@ -85,13 +59,10 @@ router.post('/:token/match-face', async (req, res) => {
       filename:  img.filename,
       thumbUrl:  getS3Url(img.thumbKey),
       sizeBytes: img.sizeBytes,
-      similarity: matches.find(m => m.imageId === img.id)?.similarity
+      similarity: filtered.find(m => m.imageId === img.id)?.similarity
     }))
 
-    return res.json({
-      images: imagesWithUrls,
-      total:  imagesWithUrls.length
-    })
+    return res.json({ images: imagesWithUrls, total: imagesWithUrls.length })
 
   } catch (err) {
     console.error('Face match error:', err)
