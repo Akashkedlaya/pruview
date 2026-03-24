@@ -105,6 +105,21 @@ export default function AdminHome() {
           Sign out
         </button>
       </nav>
+      <nav className="bg-[#0f0f0f] px-8 py-4 flex items-center justify-between">
+         <span className="text-white text-xl font-semibold" style={{ fontFamily: 'Georgia, serif' }}>
+          pru<span className="text-[#e8c547]">view</span>
+         </span>
+         <div className="flex items-center gap-6">
+           <button
+             onClick={() => router.push('/admin/crm')}
+             className="text-[#666] hover:text-white text-sm transition-colors">
+              CRM
+           </button>
+           <button onClick={logout} className="text-[#666] text-sm hover:text-white transition-colors">
+             Sign out
+           </button>
+         </div>
+      </nav>
 
       <div className="max-w-4xl mx-auto px-8 py-12">
 
