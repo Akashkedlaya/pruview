@@ -10,11 +10,13 @@ datasource db {
 }
 
 model Admin {
-  id           Int      @id @default(autoincrement())
-  email        String   @unique
-  passwordHash String
-  createdAt    DateTime @default(now())
-  folders      Folder[]
+  id             Int            @id @default(autoincrement())
+  email          String         @unique
+  passwordHash   String
+  createdAt      DateTime       @default(now())
+  folders        Folder[]
+  photographers  Photographer[]
+  events         Event[]
 }
 
 model Folder {
@@ -47,4 +49,50 @@ model FaceEmbedding {
   embedding  Unsupported("vector(128)")
   createdAt  DateTime @default(now())
   image      Image    @relation(fields: [imageId], references: [id], onDelete: Cascade)
+}
+
+model Photographer {
+  id             Int       @id @default(autoincrement())
+  name           String
+  phone          String
+  specialization String?
+  adminId        Int
+  admin          Admin     @relation(fields: [adminId], references: [id])
+  bookings       Booking[]
+  createdAt      DateTime  @default(now())
+}
+
+model Event {
+  id         Int        @id @default(autoincrement())
+  coupleName String
+  startDate  DateTime
+  endDate    DateTime
+  location   String?
+  adminId    Int
+  admin      Admin      @relation(fields: [adminId], references: [id])
+  days       EventDay[]
+  createdAt  DateTime   @default(now())
+}
+
+model EventDay {
+  id        Int       @id @default(autoincrement())
+  eventId   Int
+  dayNumber Int
+  date      DateTime
+  event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  bookings  Booking[]
+}
+
+model Booking {
+  id             Int          @id @default(autoincrement())
+  eventDayId     Int
+  slot           String
+  eventName      String
+  photographerId Int
+  location       String?
+  status         String       @default("PENDING")
+  whatsappSent   Boolean      @default(false)
+  eventDay       EventDay     @relation(fields: [eventDayId], references: [id], onDelete: Cascade)
+  photographer   Photographer @relation(fields: [photographerId], references: [id])
+  createdAt      DateTime     @default(now())
 }

@@ -16,6 +16,8 @@ app.use('/api/images',  require('./routes/images'))
 app.use('/api/g',       require('./routes/gallery')) 
 app.use('/api/g',       require('./routes/faces')) 
 app.use('/api/images',  require('./routes/faceIndex')) 
+app.use('/api/crm',     require('./routes/crm'))
+
 
 app.listen(process.env.PORT, () => {
   console.log(`✦ Pruview running on http://localhost:${process.env.PORT}`)
