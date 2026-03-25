@@ -88,7 +88,7 @@ export default function NewEvent() {
                 type="text"
                 value={coupleName}
                 onChange={e => setCoupleName(e.target.value)}
-                placeholder="Akash ❤️ Priya"
+                placeholder="Couple Name"
                 className="w-full px-4 py-3 border border-[#e0ddd8] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#c8a020] focus:ring-1 focus:ring-[#c8a020] transition-all"
               />
             </div>
