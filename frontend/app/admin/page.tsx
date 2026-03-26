@@ -97,14 +97,7 @@ export default function AdminHome() {
     <div className="min-h-screen bg-[#f8f7f4]">
 
       {/* Nav */}
-      <nav className="bg-[#0f0f0f] px-8 py-4 flex items-center justify-between">
-        <span className="text-white text-xl font-semibold" style={{ fontFamily: 'Georgia, serif' }}>
-          pru<span className="text-[#e8c547]">view</span>
-        </span>
-        <button onClick={logout} className="text-[#666] text-sm hover:text-white transition-colors">
-          Sign out
-        </button>
-      </nav>
+      
       <nav className="bg-[#0f0f0f] px-8 py-4 flex items-center justify-between">
          <span className="text-white text-xl font-semibold" style={{ fontFamily: 'Georgia, serif' }}>
           pru<span className="text-[#e8c547]">view</span>

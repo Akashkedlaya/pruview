@@ -137,6 +137,23 @@ router.get('/events/:id', async (req, res) => {
     return res.status(500).json({ message: 'Could not load event.' })
   }
 })
+// POST /api/crm/events/:id/days — add extra day
+router.post('/events/:id/days', async (req, res) => {
+  try {
+    const { dayNumber, date } = req.body
+    const day = await prisma.eventDay.create({
+      data: {
+        eventId:   parseInt(req.params.id),
+        dayNumber,
+        date:      new Date(date)
+      }
+    })
+    return res.status(201).json(day)
+  } catch (err) {
+    console.error(err)
+    return res.status(500).json({ message: 'Could not add day.' })
+  }
+})
 
 // DELETE /api/crm/events/:id
 router.delete('/events/:id', async (req, res) => {
