@@ -12,30 +12,25 @@ type Booking = {
   eventDay: { date: string; event: { id: number; coupleName: string } }
 }
 
-type DayData = {
-  bookings: Booking[]
-  status: 'empty' | 'partial' | 'booked'
-}
-
 const SLOT_TIMES: Record<string, string> = {
   MORNING:   'Morning (06:00 - 12:00)',
   AFTERNOON: 'Afternoon (12:00 - 17:00)',
   EVENING:   'Evening (17:00 - 22:00)',
 }
 
-const SLOT_COLORS: Record<string, string> = {
+const SLOT_BORDER: Record<string, string> = {
   MORNING:   'border-l-amber-400',
   AFTERNOON: 'border-l-blue-400',
   EVENING:   'border-l-purple-400',
 }
 
-const STATUS_COLORS: Record<string, string> = {
+const STATUS_DOT: Record<string, string> = {
   empty:   '',
   partial: 'bg-orange-400',
   booked:  'bg-red-500',
 }
 
-const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+const DAYS   = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December'
@@ -71,7 +66,6 @@ export default function CalendarPage() {
     }
   }
 
-  // Build a map of date → bookings
   function buildDateMap(): Record<string, Booking[]> {
     const map: Record<string, Booking[]> = {}
     events.forEach(event => {
@@ -81,7 +75,10 @@ export default function CalendarPage() {
         day.bookings?.forEach((booking: any) => {
           map[dateKey].push({
             ...booking,
-            eventDay: { date: day.date, event: { id: event.id, coupleName: event.coupleName } }
+            eventDay: {
+              date:  day.date,
+              event: { id: event.id, coupleName: event.coupleName }
+            }
           })
         })
       })
@@ -96,20 +93,14 @@ export default function CalendarPage() {
     return 'partial'
   }
 
-  // Get calendar grid for current month
   function getCalendarDays() {
     const firstDay = new Date(currentYear, currentMonth, 1)
     const lastDay  = new Date(currentYear, currentMonth + 1, 0)
-
-    // Monday = 0, adjust getDay() which is Sunday = 0
-    let startDow = firstDay.getDay() - 1
+    let startDow   = firstDay.getDay() - 1
     if (startDow < 0) startDow = 6
-
     const days: (number | null)[] = []
     for (let i = 0; i < startDow; i++) days.push(null)
     for (let d = 1; d <= lastDay.getDate(); d++) days.push(d)
-
-    // Pad to complete last week
     while (days.length % 7 !== 0) days.push(null)
     return days
   }
@@ -140,20 +131,15 @@ export default function CalendarPage() {
     setSelectedDate(null)
   }
 
-  function formatSelectedDate(dateKey: string) {
-    const d = new Date(dateKey)
-    return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
-  }
-
   function sendWhatsApp(phone: string, name: string, booking: Booking) {
-    const message = `Hi ${name},\n\nReminder for your booking:\n\n📸 Event: ${booking.eventName}\n💑 Client: ${booking.eventDay.event.coupleName}\n🕐 Slot: ${booking.slot}\n📍 Location: ${booking.location || 'TBD'}\n\nThank you!\nPruview CRM`
+    const message = `Hi ${name},\n\nReminder for your booking:\n\nEvent: ${booking.eventName}\nClient: ${booking.eventDay.event.coupleName}\nSlot: ${booking.slot}\nLocation: ${booking.location || 'TBD'}\n\nThank you!\nPruview CRM`
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank')
   }
 
   useEffect(() => { loadEvents() }, [])
 
-  const dateMap    = buildDateMap()
-  const calDays    = getCalendarDays()
+  const dateMap          = buildDateMap()
+  const calDays          = getCalendarDays()
   const selectedBookings = selectedDate ? (dateMap[selectedDate] || []) : []
   const selectedStatus   = getDayStatus(selectedBookings)
 
@@ -166,11 +152,13 @@ export default function CalendarPage() {
           <h1 className="text-3xl font-bold text-[#0f0f0f]">
             Calendar Management
           </h1>
-          <p className="text-[#888] text-sm mt-1">View and organize your event schedules</p>
+          <p className="text-[#888] text-sm mt-1">
+            View and organize your event schedules
+          </p>
         </div>
         <button
           onClick={() => router.push('/admin/crm/new')}
-          className="flex items-center gap-2 px-5 py-2.5 bg-[#7c3aed] text-white text-sm font-semibold rounded-xl hover:bg-[#6d28d9] transition-all shadow-md"
+          className="px-5 py-2.5 bg-[#7c3aed] text-white text-sm font-semibold rounded-xl hover:bg-[#6d28d9] transition-all shadow-md"
         >
           + New Booking
         </button>
@@ -182,37 +170,35 @@ export default function CalendarPage() {
         <div className="flex-1 bg-white border border-[#ede9fe] rounded-2xl p-6">
 
           {/* Legend */}
-          <div className="flex items-center justify-end gap-4 mb-4 text-xs">
-            <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-green-400" />
-              <span className="text-[#888]">Available</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-orange-400" />
-              <span className="text-[#888]">Partial</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-red-500" />
-              <span className="text-[#888]">Booked</span>
-            </div>
+          <div className="flex items-center justify-end gap-4 mb-4">
+            {[
+              { label: 'Available', color: 'bg-green-400' },
+              { label: 'Partial',   color: 'bg-orange-400' },
+              { label: 'Booked',    color: 'bg-red-500' },
+            ].map(item => (
+              <div key={item.label} className="flex items-center gap-1.5">
+                <div className={`w-2 h-2 rounded-full ${item.color}`} />
+                <span className="text-xs text-[#888]">{item.label}</span>
+              </div>
+            ))}
           </div>
 
           {/* Month navigation */}
           <div className="flex items-center justify-between mb-6">
             <button
               onClick={prevMonth}
-              className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#f5f3ff] text-[#666] transition-all"
+              className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#f5f3ff] text-[#666] transition-all font-semibold"
             >
-              ‹
+              &lsaquo;
             </button>
             <h2 className="text-lg font-bold text-[#0f0f0f]">
               {MONTHS[currentMonth]} {currentYear}
             </h2>
             <button
               onClick={nextMonth}
-              className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#f5f3ff] text-[#666] transition-all"
+              className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#f5f3ff] text-[#666] transition-all font-semibold"
             >
-              ›
+              &rsaquo;
             </button>
           </div>
 
@@ -249,14 +235,12 @@ export default function CalendarPage() {
                   }`}
                 >
                   <span className="text-sm">{day}</span>
-                  {/* Status dot */}
                   {status !== 'empty' && (
                     <div className={`absolute bottom-1.5 w-1.5 h-1.5 rounded-full ${
-                      isSelect ? 'bg-white' : STATUS_COLORS[status]
+                      isSelect ? 'bg-white' : STATUS_DOT[status]
                     }`} />
                   )}
-                  {/* Multiple dots for multiple bookings */}
-                  {status === 'empty' && bookings.length === 0 && todayDay && (
+                  {status === 'empty' && todayDay && (
                     <div className="absolute bottom-1.5 w-1.5 h-1.5 rounded-full bg-green-400" />
                   )}
                 </div>
@@ -274,10 +258,12 @@ export default function CalendarPage() {
               <div className="px-5 py-4 border-b border-[#f5f3ff] flex items-center justify-between">
                 <div>
                   <p className="font-bold text-[#0f0f0f]">
-                    {new Date(selectedDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                    {new Date(selectedDate + 'T00:00:00').toLocaleDateString('en-IN', {
+                      day: 'numeric', month: 'short'
+                    })}
                   </p>
                   <p className="text-xs text-[#888] mt-0.5">
-                    {new Date(selectedDate).getFullYear()}
+                    {new Date(selectedDate + 'T00:00:00').getFullYear()}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -292,15 +278,15 @@ export default function CalendarPage() {
                   )}
                   <button
                     onClick={() => setSelectedDate(null)}
-                    className="w-6 h-6 flex items-center justify-center text-[#aaa] hover:text-[#333] transition-all"
+                    className="w-6 h-6 flex items-center justify-center text-[#aaa] hover:text-[#333] transition-all text-sm"
                   >
-                    ✕
+                    x
                   </button>
                 </div>
               </div>
 
               {/* Slots */}
-              <div className="p-4 flex flex-col gap-3">
+              <div className="p-4 flex flex-col gap-4">
                 {['MORNING', 'AFTERNOON', 'EVENING'].map(slot => {
                   const slotBookings = selectedBookings.filter(b => b.slot === slot)
                   return (
@@ -313,19 +299,22 @@ export default function CalendarPage() {
                           {slotBookings.map(booking => (
                             <div
                               key={booking.id}
-                              className={`bg-[#faf9ff] border-l-4 ${SLOT_COLORS[slot]} border border-[#ede9fe] rounded-xl p-3`}
+                              className={`bg-[#faf9ff] border-l-4 ${SLOT_BORDER[slot]} border border-[#ede9fe] rounded-xl p-3`}
                             >
-                              <div className="flex items-start justify-between">
+                              <div className="flex items-start justify-between gap-2">
                                 <div className="flex-1 min-w-0">
                                   <p className="text-sm font-semibold text-[#0f0f0f] truncate">
-                                    {booking.eventName} — {booking.eventDay.event.coupleName}
+                                    {booking.eventName}
+                                  </p>
+                                  <p className="text-xs text-[#666] mt-0.5 truncate">
+                                    {booking.eventDay.event.coupleName}
                                   </p>
                                   <p className="text-xs text-[#888] mt-0.5">
-                                    📸 {booking.photographer.name}
+                                    {booking.photographer.name}
                                   </p>
                                   {booking.location && (
                                     <p className="text-xs text-[#888]">
-                                      📍 {booking.location}
+                                      {booking.location}
                                     </p>
                                   )}
                                 </div>
@@ -335,10 +324,10 @@ export default function CalendarPage() {
                                     booking.photographer.name,
                                     booking
                                   )}
-                                  className="w-8 h-8 bg-green-500 hover:bg-green-600 text-white rounded-lg flex items-center justify-center transition-all ml-2 flex-shrink-0 text-sm"
+                                  className="w-8 h-8 bg-green-500 hover:bg-green-600 text-white rounded-lg flex items-center justify-center transition-all flex-shrink-0 text-xs font-bold"
                                   title="Send WhatsApp"
                                 >
-                                  💬
+                                  WA
                                 </button>
                               </div>
                             </div>
@@ -346,8 +335,8 @@ export default function CalendarPage() {
                         </div>
                       ) : (
                         <button
-                          onClick={() => router.push(`/admin/crm`)}
-                          className="w-full py-3 border border-dashed border-[#ede9fe] rounded-xl text-sm text-[#7c3aed] hover:bg-[#f5f3ff] transition-all flex items-center justify-center gap-1"
+                          onClick={() => router.push('/admin/crm')}
+                          className="w-full py-3 border border-dashed border-[#ede9fe] rounded-xl text-sm text-[#7c3aed] hover:bg-[#f5f3ff] transition-all"
                         >
                           + Add Event
                         </button>
@@ -359,7 +348,9 @@ export default function CalendarPage() {
             </div>
           ) : (
             <div className="bg-white border border-[#ede9fe] rounded-2xl p-8 text-center">
-              <p className="text-4xl mb-3">📅</p>
+              <div className="w-12 h-12 bg-[#ede9fe] rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-[#7c3aed] font-bold text-lg">C</span>
+              </div>
               <p className="text-sm font-semibold text-[#333]">Select a date</p>
               <p className="text-xs text-[#aaa] mt-1">
                 Click any date on the calendar to view bookings
