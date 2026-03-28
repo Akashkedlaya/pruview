@@ -284,11 +284,14 @@ export default function PhotographersPage() {
               {/* Actions */}
               <div className="flex items-center gap-2 flex-shrink-0">
                 <button
-                  onClick={() => sendWhatsApp(p.phone, p.name)}
-                  className="w-10 h-10 bg-green-500 hover:bg-green-600 text-white rounded-xl flex items-center justify-center transition-all text-lg"
-                  title="Send WhatsApp"
-                >
-                  💬
+                    onClick={() => sendWhatsApp(p.phone, p.name)}
+                    className="w-10 h-10 hover:opacity-80 transition-all flex items-center justify-center"
+                    title="Send WhatsApp"
+                 >
+                    <svg viewBox="0 0 48 48" width="36" height="36" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="24" cy="24" r="24" fill="#25D366"/>
+                    <path fill="white" d="M24 10.5C16.544 10.5 10.5 16.544 10.5 24c0 2.385.638 4.617 1.748 6.548L10.5 37.5l7.196-1.724A13.44 13.44 0 0024 37.5c7.456 0 13.5-6.044 13.5-13.5S31.456 10.5 24 10.5zm6.51 18.72c-.27.756-1.584 1.44-2.178 1.53-.558.084-1.26.12-2.034-.126-.468-.15-1.068-.348-1.836-.684-3.228-1.392-5.34-4.638-5.502-4.854-.162-.216-1.314-1.746-1.314-3.33 0-1.584.828-2.364 1.122-2.688.294-.324.642-.405.856-.405h.612c.198 0 .468-.075.732.558.27.648.918 2.232.999 2.394.081.162.135.351.027.567-.108.216-.162.351-.324.54-.162.189-.342.423-.486.567-.162.162-.33.339-.141.663.189.324.84 1.383 1.803 2.241 1.239 1.104 2.283 1.446 2.607 1.608.324.162.513.135.702-.081.189-.216.81-.945 1.026-1.269.216-.324.432-.27.729-.162.297.108 1.881.888 2.205 1.05.324.162.54.243.621.378.081.135.081.783-.189 1.539z"/>
+                    </svg>
                 </button>
                 <button
                   onClick={() => openEditModal(p)}
