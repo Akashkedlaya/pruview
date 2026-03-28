@@ -217,5 +217,19 @@ router.delete('/bookings/:id', async (req, res) => {
     return res.status(500).json({ message: 'Could not cancel booking.' })
   }
 })
+// PUT /api/crm/photographers/:id — update photographer
+router.put('/photographers/:id', async (req, res) => {
+  try {
+    const { name, phone, email, specialization, status } = req.body
+    const photographer = await prisma.photographer.update({
+      where: { id: parseInt(req.params.id) },
+      data:  { name, phone, email, specialization, status }
+    })
+    return res.json(photographer)
+  } catch (err) {
+    console.error(err)
+    return res.status(500).json({ message: 'Could not update photographer.' })
+  }
+})
 
 module.exports = router
