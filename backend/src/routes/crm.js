@@ -8,16 +8,25 @@ router.use(requireAuth)
 // ── PHOTOGRAPHERS ──────────────────────────────────────
 
 // GET /api/crm/photographers
-router.get('/photographers', async (req, res) => {
+router.get('/events', async (req, res) => {
   try {
-    const photographers = await prisma.photographer.findMany({
+    const events = await prisma.event.findMany({
       where:   { adminId: req.adminId },
-      orderBy: { name: 'asc' }
+      orderBy: { startDate: 'asc' },
+      include: {
+        days: {
+          include: {
+            bookings: {
+              include: { photographer: true }
+            }
+          }
+        }
+      }
     })
-    return res.json(photographers)
+    return res.json(events)
   } catch (err) {
     console.error(err)
-    return res.status(500).json({ message: 'Could not load photographers.' })
+    return res.status(500).json({ message: 'Could not load events.' })
   }
 })
 
