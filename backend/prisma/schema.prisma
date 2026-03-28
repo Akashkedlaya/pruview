@@ -51,16 +51,7 @@ model FaceEmbedding {
   image      Image    @relation(fields: [imageId], references: [id], onDelete: Cascade)
 }
 
-model Photographer {
-  id             Int       @id @default(autoincrement())
-  name           String
-  phone          String
-  specialization String?
-  adminId        Int
-  admin          Admin     @relation(fields: [adminId], references: [id])
-  bookings       Booking[]
-  createdAt      DateTime  @default(now())
-}
+
 
 model Event {
   id         Int        @id @default(autoincrement())
@@ -95,4 +86,16 @@ model Booking {
   eventDay       EventDay     @relation(fields: [eventDayId], references: [id], onDelete: Cascade)
   photographer   Photographer @relation(fields: [photographerId], references: [id])
   createdAt      DateTime     @default(now())
+}
+model Photographer {
+  id             Int       @id @default(autoincrement())
+  name           String
+  phone          String
+  email          String?
+  specialization String?
+  status         String    @default("AVAILABLE")
+  adminId        Int
+  admin          Admin     @relation(fields: [adminId], references: [id])
+  bookings       Booking[]
+  createdAt      DateTime  @default(now())
 }
