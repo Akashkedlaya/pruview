@@ -199,7 +199,7 @@ export default function GalleryPage() {
     <div className="min-h-screen bg-white flex items-center justify-center p-8">
       <div className="text-center">
         <p className="text-6xl mb-6">🔗</p>
-        <h1 className="text-[#0f0f0f] text-2xl font-semibold mb-3" style={{ fontFamily: 'Georgia, serif' }}>
+        <h1 className="text-[#0f0f0f] text-2xl font-semibold mb-3">
           Gallery not found
         </h1>
         <p className="text-[#888] text-sm">{error}</p>
@@ -224,7 +224,7 @@ export default function GalleryPage() {
             <p className="text-xs tracking-[4px] uppercase mb-3 font-bold">
               <span className="text-[#5f9ea0]">PRU</span><span className="text-[#999]">VIEW</span>
             </p>
-            <h1 className="text-[#0f0f0f] text-4xl font-light mb-2" style={{ fontFamily: 'Georgia, serif' }}>
+            <h1 className="text-[#0f0f0f] text-4xl font-light mb-2">
               {gallery.folder.name}
             </h1>
             <p className="text-[#888] text-sm">
@@ -262,7 +262,7 @@ export default function GalleryPage() {
       <div className="max-w-6xl mx-auto px-8 py-6 border-b border-[#e8e5e0]">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
-            <h2 className="text-lg font-semibold text-[#0f0f0f]" style={{ fontFamily: 'Georgia, serif' }}>
+            <h2 className="text-lg font-semibold text-[#0f0f0f]">
               Find your photos
             </h2>
             <p className="text-sm text-[#888] mt-0.5">

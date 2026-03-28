@@ -22,7 +22,7 @@ export default function Sidebar() {
           <div className="w-8 h-8 bg-[#7c3aed] rounded-lg flex items-center justify-center">
             <span className="text-white text-xs font-bold">P</span>
           </div>
-          <span className="font-semibold text-[#0f0f0f] text-sm" style={{ fontFamily: 'Georgia, serif' }}>
+          <span className="font-semibold text-[#0f0f0f] text-sm">
             pru<span className="text-[#7c3aed]">view</span>
           </span>
         </div>

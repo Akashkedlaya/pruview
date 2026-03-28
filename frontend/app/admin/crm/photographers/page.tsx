@@ -177,7 +177,7 @@ export default function PhotographersPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-2">
         <div>
-          <h1 className="text-3xl font-bold text-[#0f0f0f]" style={{ fontFamily: 'Georgia, serif' }}>
+          <h1 className="text-3xl font-bold text-[#0f0f0f]">
             Photographers Directory
           </h1>
           <p className="text-[#888] text-sm mt-1">
@@ -324,7 +324,7 @@ export default function PhotographersPage() {
                     📸 Photographer details
                   </span>
                 </div>
-                <h2 className="text-xl font-bold text-[#0f0f0f]" style={{ fontFamily: 'Georgia, serif' }}>
+                <h2 className="text-xl font-bold text-[#0f0f0f]">
                   {editingId ? 'Edit Photographer' : 'Add Photographer Information'}
                 </h2>
                 <p className="text-[#888] text-sm mt-1">

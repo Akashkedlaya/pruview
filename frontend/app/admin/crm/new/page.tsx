@@ -143,7 +143,7 @@ export default function NewWedding() {
           ←
         </button>
         <div>
-          <h1 className="text-2xl font-bold text-[#0f0f0f]" style={{ fontFamily: 'Georgia, serif' }}>
+          <h1 className="text-2xl font-bold text-[#0f0f0f]">
             New Wedding
           </h1>
           <p className="text-[#888] text-sm">Create a new wedding and schedule events</p>

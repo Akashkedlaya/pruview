@@ -187,7 +187,7 @@ export default function UploadPage() {
           className="text-[#666] hover:text-white text-sm transition-colors">
           ← Back
         </button>
-        <span className="text-white text-xl font-semibold" style={{ fontFamily: 'Georgia, serif' }}>
+        <span className="text-white text-xl font-semibold">
           pru<span className="text-[#e8c547]">view</span>
         </span>
       </nav>
@@ -197,7 +197,7 @@ export default function UploadPage() {
         {/* Header */}
         <div className="flex items-start justify-between mb-10">
           <div>
-            <h1 className="text-3xl font-semibold text-[#0f0f0f]" style={{ fontFamily: 'Georgia, serif' }}>
+            <h1 className="text-3xl font-semibold text-[#0f0f0f]">
               {folder.name}
             </h1>
             <p className="text-[#888] text-sm mt-1">{folder.images?.length ?? 0} photos</p>

@@ -44,12 +44,12 @@ export default function LoginPage() {
 
       {/* Left — branding */}
       <div className="hidden lg:flex w-1/2 bg-[#0f0f0f] flex-col justify-between p-14">
-        <span className="text-white text-2xl font-semibold" style={{ fontFamily: 'Georgia, serif' }}>
+        <span className="text-white text-2xl font-semibold">
           pru<span className="text-[#e8c547]">view</span>
         </span>
         <div>
           <p className="text-[#444] text-xs tracking-[4px] uppercase mb-4">Admin Portal</p>
-          <h2 className="text-white text-4xl font-light leading-tight" style={{ fontFamily: 'Georgia, serif' }}>
+          <h2 className="text-white text-4xl font-light leading-tight">
             Your images.<br />
             <span className="text-[#e8c547] italic">Beautifully</span><br />
             delivered.
@@ -62,7 +62,7 @@ export default function LoginPage() {
       <div className="w-full lg:w-1/2 flex items-center justify-center bg-[#f8f7f4] p-8">
         <div className="w-full max-w-sm">
 
-          <h1 className="text-3xl font-semibold text-[#0f0f0f] mb-2" style={{ fontFamily: 'Georgia, serif' }}>
+          <h1 className="text-3xl font-semibold text-[#0f0f0f] mb-2">
             Sign in
           </h1>
           <p className="text-[#888] text-sm mb-8">Enter your credentials to continue</p>

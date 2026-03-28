@@ -84,7 +84,7 @@ export default function CRMDashboard() {
     <div className="p-8">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-[#0f0f0f]" style={{ fontFamily: 'Georgia, serif' }}>
+          <h1 className="text-3xl font-bold text-[#0f0f0f]">
             Dashboard
           </h1>
           <p className="text-[#888] text-sm mt-1">Overview of all your scheduled weddings and events</p>
@@ -144,7 +144,7 @@ export default function CRMDashboard() {
         ))}
       </div>
 
-      <h2 className="text-xl font-bold text-[#0f0f0f] mb-5" style={{ fontFamily: 'Georgia, serif' }}>
+      <h2 className="text-xl font-bold text-[#0f0f0f] mb-5">
         {filter === 'all' ? 'Upcoming Weddings' : `${filter.charAt(0).toUpperCase() + filter.slice(1)} Weddings`}
       </h2>
 
@@ -174,7 +174,7 @@ export default function CRMDashboard() {
                 />
               </div>
               <div className="p-5">
-                <h3 className="text-lg font-bold text-[#0f0f0f] mb-3" style={{ fontFamily: 'Georgia, serif' }}>
+                <h3 className="text-lg font-bold text-[#0f0f0f] mb-3">
                   {event.coupleName}
                 </h3>
                 {event.location && (

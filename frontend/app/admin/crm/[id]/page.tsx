@@ -190,7 +190,7 @@ export default function EventDetail() {
             ←
           </button>
           <div className="flex-1">
-            <h1 className="text-2xl font-bold text-[#0f0f0f]" style={{ fontFamily: 'Georgia, serif' }}>
+            <h1 className="text-2xl font-bold text-[#0f0f0f]">
               {event.coupleName}
             </h1>
             <p className="text-[#888] text-sm">

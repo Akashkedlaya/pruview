@@ -84,7 +84,7 @@ export default function CalendarPage() {
             className="text-[#666] hover:text-white text-sm transition-colors">
             ← Back
           </button>
-          <span className="text-white text-xl font-semibold" style={{ fontFamily: 'Georgia, serif' }}>
+          <span className="text-white text-xl font-semibold">
             pru<span className="text-[#e8c547]">view</span>
             <span className="text-[#666] text-sm ml-3">/ CRM / Calendar</span>
           </span>
@@ -92,7 +92,7 @@ export default function CalendarPage() {
       </nav>
 
       <div className="max-w-5xl mx-auto px-8 py-10">
-        <h1 className="text-3xl font-semibold text-[#0f0f0f] mb-2" style={{ fontFamily: 'Georgia, serif' }}>
+        <h1 className="text-3xl font-semibold text-[#0f0f0f] mb-2">
           Calendar View
         </h1>
         <p className="text-[#888] text-sm mb-8">All bookings across all events</p>

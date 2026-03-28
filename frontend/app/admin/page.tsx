@@ -99,7 +99,7 @@ export default function AdminHome() {
       {/* Nav */}
       
       <nav className="bg-[#0f0f0f] px-8 py-4 flex items-center justify-between">
-         <span className="text-white text-xl font-semibold" style={{ fontFamily: 'Georgia, serif' }}>
+         <span className="text-white text-xl font-semibold">
           pru<span className="text-[#e8c547]">view</span>
          </span>
          <div className="flex items-center gap-6">
@@ -118,7 +118,7 @@ export default function AdminHome() {
 
         {/* Header */}
         <div className="mb-10">
-          <h1 className="text-3xl font-semibold text-[#0f0f0f] mb-1" style={{ fontFamily: 'Georgia, serif' }}>
+          <h1 className="text-3xl font-semibold text-[#0f0f0f] mb-1">
             Your Galleries
           </h1>
           <p className="text-[#888] text-sm">Create a folder, upload photos, share the link.</p>
