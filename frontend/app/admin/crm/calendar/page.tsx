@@ -100,10 +100,7 @@ export default function CalendarPage() {
     setSelectedDate(null)
   }
 
-  function sendWhatsApp(phone: string, name: string, booking: Booking) {
-    const msg = `Hi ${name},\n\nReminder:\n\nEvent: ${booking.eventName}\nClient: ${booking.eventDay.event.coupleName}\nSlot: ${booking.slot}\nLocation: ${booking.location || 'TBD'}\n\nThank you!\nPruview CRM`
-    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank')
-  }
+
 
   useEffect(() => { loadEvents() }, [])
 
@@ -234,7 +231,6 @@ export default function CalendarPage() {
                                     <p className="text-sm font-medium text-[#0f0f0f] truncate">{booking.photographer.name}</p>
                                     {booking.photographer.specialization && <p className="text-xs text-[#888] truncate">{booking.photographer.specialization}</p>}
                                   </div>
-                                  <button onClick={() => sendWhatsApp(booking.photographer.phone, booking.photographer.name, booking)} className="w-7 h-7 bg-green-500 hover:bg-green-600 text-white rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0" title="WhatsApp">W</button>
                                 </div>
                               ))}
                             </div>
