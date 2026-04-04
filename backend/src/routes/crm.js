@@ -231,6 +231,73 @@ router.delete('/bookings/:id', async (req, res) => {
     return res.status(500).json({ message: 'Could not cancel booking.' })
   }
 })
+// ── ENQUIRIES ─────────────────────────────────────────
+
+// GET /api/crm/enquiries
+router.get('/enquiries', async (req, res) => {
+  try {
+    const enquiries = await prisma.enquiry.findMany({
+      where:   { adminId: req.adminId },
+      orderBy: { createdAt: 'desc' }
+    })
+    return res.json(enquiries)
+  } catch (err) {
+    console.error(err)
+    return res.status(500).json({ message: 'Could not load enquiries.' })
+  }
+})
+
+// POST /api/crm/enquiries
+router.post('/enquiries', async (req, res) => {
+  try {
+    const { coupleName, phone, startDate, endDate, location, expectedGuests, photographerId, leadSource, followUpDays, description } = req.body
+    if (!coupleName || !phone) {
+      return res.status(400).json({ message: 'Couple name and phone are required.' })
+    }
+    const enquiry = await prisma.enquiry.create({
+      data: {
+        coupleName,
+        phone,
+        startDate,
+        endDate,
+        location,
+        expectedGuests: expectedGuests ? parseInt(expectedGuests) : null,
+        photographerId: photographerId ? parseInt(photographerId) : null,
+        leadSource,
+        followUpDays:   followUpDays ? parseInt(followUpDays) : 3,
+        description,
+        adminId: req.adminId
+      }
+    })
+    return res.status(201).json(enquiry)
+  } catch (err) {
+    console.error(err)
+    return res.status(500).json({ message: 'Could not create enquiry.' })
+  }
+})
+
+// PUT /api/crm/enquiries/:id — update status
+router.put('/enquiries/:id', async (req, res) => {
+  try {
+    const enquiry = await prisma.enquiry.update({
+      where: { id: parseInt(req.params.id) },
+      data:  req.body
+    })
+    return res.json(enquiry)
+  } catch (err) {
+    return res.status(500).json({ message: 'Could not update enquiry.' })
+  }
+})
+
+// DELETE /api/crm/enquiries/:id
+router.delete('/enquiries/:id', async (req, res) => {
+  try {
+    await prisma.enquiry.delete({ where: { id: parseInt(req.params.id) } })
+    return res.json({ message: 'Enquiry deleted.' })
+  } catch (err) {
+    return res.status(500).json({ message: 'Could not delete enquiry.' })
+  }
+})
 
 
 module.exports = router

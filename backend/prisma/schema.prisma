@@ -17,6 +17,7 @@ model Admin {
   folders        Folder[]
   photographers  Photographer[]
   events         Event[]
+  enquiries      Enquiry[] 
 }
 
 model Folder {
@@ -98,4 +99,21 @@ model Photographer {
   admin          Admin     @relation(fields: [adminId], references: [id])
   bookings       Booking[]
   createdAt      DateTime  @default(now())
+}
+model Enquiry {
+  id               Int       @id @default(autoincrement())
+  coupleName       String
+  phone            String
+  startDate        String?
+  endDate          String?
+  location         String?
+  expectedGuests   Int?
+  photographerId   Int?
+  leadSource       String?
+  followUpDays     Int       @default(3)
+  description      String?
+  status           String    @default("NEW_REQUEST")
+  adminId          Int
+  admin            Admin     @relation(fields: [adminId], references: [id])
+  createdAt        DateTime  @default(now())
 }
