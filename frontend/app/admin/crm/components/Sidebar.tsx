@@ -46,6 +46,16 @@ const navItems = [
       </svg>
     )
   },
+  {
+    label: 'Pending Actions',
+    path: '/admin/crm/pending',
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+      </svg>
+    )
+  },
 ]
 
 export default function Sidebar() {
@@ -68,7 +78,7 @@ export default function Sidebar() {
         <p className="text-[#aaa] text-xs mt-1 ml-10">CRM</p>
       </div>
 
-      {/* Nav items */}
+      {/* Nav */}
       <nav className="flex-1 px-3 py-4">
         {navItems.map(item => {
           const isActive = pathname === item.path ||

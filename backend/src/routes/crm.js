@@ -235,6 +235,20 @@ router.post('/events/:id/days', async (req, res) => {
     return res.status(500).json({ message: 'Could not add day.' })
   }
 })
+// PUT /api/crm/events/:id — update status and notes
+router.put('/events/:id', async (req, res) => {
+  try {
+    const { status, notes } = req.body
+    const event = await prisma.event.update({
+      where: { id: parseInt(req.params.id) },
+      data:  { status, notes }
+    })
+    return res.json(event)
+  } catch (err) {
+    console.error(err)
+    return res.status(500).json({ message: 'Could not update event.' })
+  }
+})
 
 // DELETE /api/crm/events/:id
 router.delete('/events/:id', async (req, res) => {

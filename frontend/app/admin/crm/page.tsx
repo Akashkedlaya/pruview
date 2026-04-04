@@ -178,15 +178,11 @@ export default function CRMDashboard() {
                   {event.coupleName}
                 </h3>
                 {event.location && (
-                  <div className="flex items-center gap-2 text-sm text-[#888] mb-2">
-                    <span>📍</span>
-                    <span className="truncate">{event.location}</span>
-                  </div>
+                  <div className="text-sm text-[#888] mb-2 truncate">{event.location}</div>
                 )}
-                <div className="flex items-center gap-2 text-sm text-[#888] mb-4">
-                  <span>📅</span>
-                  <span>{formatDate(event.startDate)} – {formatDate(event.endDate)}</span>
-                </div>
+                 <div className="text-sm text-[#888] mb-4">
+                  {formatDate(event.startDate)} – {formatDate(event.endDate)}
+                 </div>
                 <div className="flex items-center justify-between pt-3 border-t border-[#f5f3ff]">
                   <button
                     onClick={() => router.push(`/admin/crm/${event.id}`)}

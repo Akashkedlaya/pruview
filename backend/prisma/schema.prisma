@@ -10,14 +10,14 @@ datasource db {
 }
 
 model Admin {
-  id             Int            @id @default(autoincrement())
-  email          String         @unique
-  passwordHash   String
-  createdAt      DateTime       @default(now())
-  folders        Folder[]
-  photographers  Photographer[]
-  events         Event[]
-  enquiries      Enquiry[] 
+id            Int            @id @default(autoincrement())
+  email         String         @unique
+  passwordHash  String
+  createdAt     DateTime       @default(now())
+  folders       Folder[]
+  photographers Photographer[]
+  events        Event[]
+  enquiries     Enquiry[]
 }
 
 model Folder {
@@ -55,15 +55,17 @@ model FaceEmbedding {
 
 
 model Event {
-  id         Int        @id @default(autoincrement())
-  coupleName String
-  startDate  DateTime
-  endDate    DateTime
-  location   String?
-  adminId    Int
-  admin      Admin      @relation(fields: [adminId], references: [id])
-  days       EventDay[]
-  createdAt  DateTime   @default(now())
+ id           Int        @id @default(autoincrement())
+  coupleName   String
+  startDate    DateTime
+  endDate      DateTime
+  location     String?
+  actionStatus String?
+  actionNotes  String?
+  adminId      Int
+  admin        Admin      @relation(fields: [adminId], references: [id])
+  days         EventDay[]
+  createdAt    DateTime   @default(now())
 }
 
 model EventDay {
