@@ -312,6 +312,19 @@ router.delete('/bookings/:id', async (req, res) => {
     return res.status(500).json({ message: 'Could not cancel booking.' })
   }
 })
+router.put('/events/:id/action', async (req, res) => {
+  try {
+    const { actionStatus, actionNotes } = req.body
+    const event = await prisma.event.update({
+      where: { id: parseInt(req.params.id) },
+      data:  { actionStatus, actionNotes }
+    })
+    return res.json(event)
+  } catch (err) {
+    console.error(err)
+    return res.status(500).json({ message: 'Could not update action.' })
+  }
+})
 
 
 

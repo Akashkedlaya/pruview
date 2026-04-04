@@ -71,15 +71,18 @@ export default function PendingActionsPage() {
   }
 
   async function saveEvent(event: Event) {
-    const update = pendingUpdates[event.id]
-    if (!update) return
-    setSavingId(event.id)
-    try {
-      const res = await fetch(`${API}/api/crm/events/${event.id}`, {
-        method:  'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
-        body:    JSON.stringify(update)
+  const update = pendingUpdates[event.id]
+  if (!update) return
+  setSavingId(event.id)
+  try {
+    const res = await fetch(`${API}/api/crm/events/${event.id}/action`, {
+      method:  'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
+      body:    JSON.stringify({
+        actionStatus: update.status,
+        actionNotes:  update.notes
       })
+    })
       const data = await res.json()
       setEvents(prev => prev.map(e => e.id === event.id ? { ...e, ...data } : e))
       setPendingUpdates(prev => { const n = { ...prev }; delete n[event.id]; return n })
