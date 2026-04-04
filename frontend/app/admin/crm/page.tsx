@@ -145,7 +145,7 @@ export default function CRMDashboard() {
       </div>
 
       <h2 className="text-xl font-bold text-[#0f0f0f] mb-5">
-        {filter === 'all' ? 'Upcoming Weddings' : `${filter.charAt(0).toUpperCase() + filter.slice(1)} Weddings`}
+        {filter === 'all' ? 'Upcoming Events' : `${filter.charAt(0).toUpperCase() + filter.slice(1)} Events`}
       </h2>
 
       {loading ? (

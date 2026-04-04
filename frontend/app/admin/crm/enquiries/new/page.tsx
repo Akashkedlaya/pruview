@@ -21,16 +21,16 @@ export default function NewEnquiryPage() {
   const [error, setError]                 = useState('')
 
   // Form fields
-  const [coupleName, setCoupleName]               = useState('')
-  const [phone, setPhone]                         = useState('')
-  const [startDate, setStartDate]                 = useState('')
-  const [endDate, setEndDate]                     = useState('')
-  const [location, setLocation]                   = useState('')
-  const [expectedGuests, setExpectedGuests]       = useState('')
-  const [photographerId, setPhotographerId]       = useState('')
-  const [leadSource, setLeadSource]               = useState('Instagram')
-  const [followUpDays, setFollowUpDays]           = useState('3')
-  const [description, setDescription]             = useState('')
+  const [coupleName, setCoupleName]           = useState('')
+  const [phone, setPhone]                     = useState('')
+  const [startDate, setStartDate]             = useState('')
+  const [endDate, setEndDate]                 = useState('')
+  const [location, setLocation]               = useState('')
+  const [expectedGuests, setExpectedGuests]   = useState('')
+  const [photographerIds, setPhotographerIds] = useState<number[]>([])
+  const [leadSource, setLeadSource]           = useState('Instagram')
+  const [followUpDays, setFollowUpDays]       = useState('3')
+  const [description, setDescription]         = useState('')
 
   const API = process.env.NEXT_PUBLIC_API_URL
 
@@ -49,6 +49,12 @@ export default function NewEnquiryPage() {
     }
   }
 
+  function togglePhotographer(id: number) {
+    setPhotographerIds(prev =>
+      prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]
+    )
+  }
+
   async function saveEnquiry(softBlock = false) {
     if (!coupleName.trim() || !phone.trim()) {
       setError('Couple name and phone number are required.')
@@ -63,7 +69,8 @@ export default function NewEnquiryPage() {
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
         body:    JSON.stringify({
           coupleName, phone, startDate, endDate,
-          location, expectedGuests, photographerId,
+          location, expectedGuests,
+          photographerId: photographerIds[0] || null,
           leadSource, followUpDays, description,
           status: 'NEW_REQUEST'
         })
@@ -71,15 +78,16 @@ export default function NewEnquiryPage() {
       const data = await res.json()
       if (!res.ok) { setError(data.message); return }
 
-      // Send soft block WhatsApp if photographer selected
-      if (softBlock && photographerId) {
-        const photographer = photographers.find(p => p.id === parseInt(photographerId))
-        if (photographer) {
-          const dateStr = startDate ? new Date(startDate).toLocaleDateString('en-IN', {
-            day: 'numeric', month: 'long', year: 'numeric'
-          }) : 'TBD'
+      // Send soft block WhatsApp to all selected photographers
+      if (softBlock && photographerIds.length > 0) {
+        for (const pid of photographerIds) {
+          const photographer = photographers.find(p => p.id === pid)
+          if (photographer) {
+            const dateStr = startDate
+              ? new Date(startDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
+              : 'TBD'
 
-          const message = `Hi ${photographer.name},
+            const message = `Hi ${photographer.name},
 
 We have a potential booking enquiry and would like to do a soft block for your availability:
 
@@ -93,7 +101,11 @@ Please confirm if you are available for this date. This is a soft block — not 
 Thank you!
 Pruview CRM`
 
-          window.open(`https://wa.me/${photographer.phone}?text=${encodeURIComponent(message)}`, '_blank')
+            window.open(`https://wa.me/${photographer.phone}?text=${encodeURIComponent(message)}`, '_blank')
+            if (photographerIds.length > 1) {
+              await new Promise(r => setTimeout(r, 800))
+            }
+          }
         }
       }
 
@@ -107,8 +119,6 @@ Pruview CRM`
   }
 
   useEffect(() => { loadPhotographers() }, [])
-
-  const selectedPhotographer = photographers.find(p => p.id === parseInt(photographerId))
 
   return (
     <div className="p-8 max-w-3xl">
@@ -145,7 +155,7 @@ Pruview CRM`
               type="text"
               value={phone}
               onChange={e => setPhone(e.target.value)}
-              placeholder="+1 (555) 000-0000"
+              placeholder="+91 98765 43210"
               className="w-full px-4 py-3 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#7c3aed] transition-all"
             />
           </div>
@@ -196,23 +206,59 @@ Pruview CRM`
             />
           </div>
 
-          {/* Photographer */}
-          <div>
-            <label className="block text-sm font-semibold text-[#333] mb-2">Select Photographer</label>
-            <select
-              value={photographerId}
-              onChange={e => setPhotographerId(e.target.value)}
-              className="w-full px-4 py-3 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#7c3aed] transition-all"
-            >
-              <option value="">Assign a photographer</option>
-              {photographers.map(p => (
-                <option key={p.id} value={p.id}>{p.name}</option>
-              ))}
-            </select>
-            {selectedPhotographer && (
-              <p className="text-xs text-[#888] mt-1.5">
-                +{selectedPhotographer.phone}
-                {selectedPhotographer.specialization && ` · ${selectedPhotographer.specialization}`}
+          {/* Multi-select Photographers */}
+          <div className="col-span-2">
+            <label className="block text-sm font-semibold text-[#333] mb-2">
+              Select Photographers
+              {photographerIds.length > 0 && (
+                <span className="ml-2 text-[#7c3aed] font-normal">
+                  ({photographerIds.length} selected)
+                </span>
+              )}
+            </label>
+            <div className="border border-[#e8e5e0] rounded-xl overflow-hidden max-h-48 overflow-y-auto">
+              {photographers.length === 0 ? (
+                <div className="px-4 py-3 text-sm text-[#aaa]">
+                  No photographers added yet. Add photographers first.
+                </div>
+              ) : (
+                photographers.map((p, index) => (
+                  <div
+                    key={p.id}
+                    onClick={() => togglePhotographer(p.id)}
+                    className={`flex items-center justify-between px-4 py-3 cursor-pointer transition-all ${
+                      index !== photographers.length - 1 ? 'border-b border-[#f0ede8]' : ''
+                    } ${
+                      photographerIds.includes(p.id)
+                        ? 'bg-[#ede9fe]'
+                        : 'hover:bg-[#f5f3ff]'
+                    }`}
+                  >
+                    <div>
+                      <p className="text-sm font-medium text-[#0f0f0f]">{p.name}</p>
+                      <p className="text-xs text-[#888]">
+                        +{p.phone}
+                        {p.specialization && ` · ${p.specialization}`}
+                      </p>
+                    </div>
+                    <div className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-all ${
+                      photographerIds.includes(p.id)
+                        ? 'border-[#7c3aed] bg-[#7c3aed]'
+                        : 'border-[#e0ddd8]'
+                    }`}>
+                      {photographerIds.includes(p.id) && (
+                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                          <path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      )}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+            {photographerIds.length > 0 && (
+              <p className="text-xs text-[#7c3aed] mt-1.5">
+                Soft Block will send WhatsApp to all {photographerIds.length} selected photographer{photographerIds.length > 1 ? 's' : ''}
               </p>
             )}
           </div>
@@ -230,7 +276,7 @@ Pruview CRM`
           </div>
 
           {/* Follow up days */}
-          <div className="col-span-2">
+          <div>
             <label className="block text-sm font-semibold text-[#333] mb-2">
               Follow up notification (in days)
             </label>
@@ -240,7 +286,7 @@ Pruview CRM`
               onChange={e => setFollowUpDays(e.target.value)}
               min="1"
               max="30"
-              className="w-32 px-4 py-3 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#7c3aed] transition-all"
+              className="w-full px-4 py-3 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#7c3aed] transition-all"
             />
           </div>
 
@@ -271,10 +317,10 @@ Pruview CRM`
           <div className="flex gap-3">
             <button
               onClick={() => saveEnquiry(true)}
-              disabled={softBlocking || saving || !coupleName.trim() || !phone.trim() || !photographerId}
+              disabled={softBlocking || saving || !coupleName.trim() || !phone.trim() || photographerIds.length === 0}
               className="px-6 py-2.5 border border-[#e8e5e0] text-[#333] text-sm font-semibold rounded-xl hover:bg-[#f8f7f4] disabled:opacity-40 transition-all"
             >
-              {softBlocking ? 'Sending...' : 'Soft Block'}
+              {softBlocking ? 'Sending...' : `Soft Block${photographerIds.length > 0 ? ` (${photographerIds.length})` : ''}`}
             </button>
             <button
               onClick={() => saveEnquiry(false)}
