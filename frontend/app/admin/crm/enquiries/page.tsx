@@ -155,6 +155,22 @@ export default function EnquiriesPage() {
     })
     setEnquiries(prev => prev.filter(e => e.id !== id))
   }
+  async function confirmEnquiry(id: number) {
+    if (!confirm('Convert this enquiry to an event? This cannot be undone.')) return
+    try {
+    const res = await fetch(`${API}/api/crm/enquiries/${id}/confirm`, {
+      method:  'PUT',
+      headers: { Authorization: `Bearer ${getToken()}` }
+    })
+      const data = await res.json()
+      if (!res.ok) { alert(data.message); return }
+    // Remove from list and navigate to new event
+        setEnquiries(prev => prev.filter(e => e.id !== id))
+        router.push(`/admin/crm/${data.event.id}`)
+      } catch (err) {
+      console.error(err)
+    }
+}
 
   function formatDate(date?: string) {
     if (!date) return null
@@ -267,6 +283,16 @@ export default function EnquiriesPage() {
                           <option value="FOLLOW_UP">Follow Up</option>
                           <option value="CONVERTED">Converted</option>
                         </select>
+                          {/* Add this before the Save button */}
+                          {(enquiry.status === 'FOLLOW_UP' || enquiry.status === 'CONTACTED' || enquiry.status === 'NEW_REQUEST') && (
+                          <button
+                           onClick={() => confirmEnquiry(enquiry.id)}
+                           className="px-4 py-1.5 bg-green-500 text-white text-sm font-semibold rounded-lg hover:bg-green-600 transition-all"
+                           >
+                            Confirm →
+                            </button>
+                          )}
+
 
                         <button
                           onClick={() => saveStatus(enquiry.id)}
