@@ -1,19 +1,17 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["postgresqlExtensions"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider   = "postgresql"
-  url        = env("DATABASE_URL")
-  extensions = [vector]
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Admin {
-id            Int            @id @default(autoincrement())
-  email         String         @unique
+  id            Int                  @id @default(autoincrement())
+  email         String               @unique
   passwordHash  String
-  createdAt     DateTime       @default(now())
+  createdAt     DateTime             @default(now())
   folders       Folder[]
   photographers Photographer[]
   events        Event[]
@@ -21,51 +19,63 @@ id            Int            @id @default(autoincrement())
 }
 
 model Folder {
-  id         Int      @id @default(autoincrement())
-  name       String
-  shareToken String   @unique
-  isActive   Boolean  @default(true)
-  adminId    Int
-  createdAt  DateTime @default(now())
-  admin      Admin    @relation(fields: [adminId], references: [id])
-  images     Image[]
+  id        Int      @id @default(autoincrement())
+  name      String
+  token     String   @unique
+  adminId   Int
+  admin     Admin    @relation(fields: [adminId], references: [id])
+  images    Image[]
+  createdAt DateTime @default(now())
 }
 
 model Image {
-  id           Int             @id @default(autoincrement())
-  folderId     Int
-  filename     String
-  originalKey  String
-  thumbKey     String
-  sizeBytes    Int
-  uploadedAt   DateTime        @default(now())
-  folder       Folder          @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  id             Int             @id @default(autoincrement())
+  filename       String
+  s3Key          String
+  folderId       Int
+  folder         Folder          @relation(fields: [folderId], references: [id], onDelete: Cascade)
   faceEmbeddings FaceEmbedding[]
+  createdAt      DateTime        @default(now())
 }
 
 model FaceEmbedding {
-  id         Int      @id @default(autoincrement())
-  imageId    Int
-  folderId   Int
-  embedding  Unsupported("vector(128)")
-  createdAt  DateTime @default(now())
-  image      Image    @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  id        Int    @id @default(autoincrement())
+  imageId   Int
+  image     Image  @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  embedding String
 }
 
-
+model Photographer {
+  id             Int       @id @default(autoincrement())
+  name           String
+  phone          String
+  email          String?
+  specialization String?
+  status         String    @default("AVAILABLE")
+  adminId        Int
+  admin          Admin     @relation(fields: [adminId], references: [id])
+  bookings       Booking[]
+  createdAt      DateTime  @default(now())
+}
 
 model Event {
- id           Int        @id @default(autoincrement())
-  coupleName   String
-  startDate    DateTime
-  endDate      DateTime
-  location     String?
-  actionStatus String?
-  actionNotes  String?
-  adminId      Int
-  admin        Admin      @relation(fields: [adminId], references: [id])
-  days         EventDay[]
-  createdAt    DateTime   @default(now())
+  id                  Int                  @id @default(autoincrement())
+  coupleName          String
+  startDate           DateTime
+  endDate             DateTime
+  location            String?
+  status              String               @default("ACTIVE")
+  actionStatus        String?
+  actionNotes         String?
+  deliveryDeadline    DateTime?
+  completionDate      DateTime?
+  sourceEnquiryId     Int?
+  adminId             Int
+  admin               Admin                @relation(fields: [adminId], references: [id])
+  days                EventDay[]
+  invoice             Invoice?
+  postProductionTasks PostProductionTask[]
+  createdAt           DateTime             @default(now())
 }
 
 model EventDay {
@@ -90,18 +100,7 @@ model Booking {
   photographer   Photographer @relation(fields: [photographerId], references: [id])
   createdAt      DateTime     @default(now())
 }
-model Photographer {
-  id             Int       @id @default(autoincrement())
-  name           String
-  phone          String
-  email          String?
-  specialization String?
-  status         String    @default("AVAILABLE")
-  adminId        Int
-  admin          Admin     @relation(fields: [adminId], references: [id])
-  bookings       Booking[]
-  createdAt      DateTime  @default(now())
-}
+
 model Enquiry {
   id               Int       @id @default(autoincrement())
   coupleName       String
@@ -111,11 +110,52 @@ model Enquiry {
   location         String?
   expectedGuests   Int?
   photographerId   Int?
+  packageDetails   String?
+  estimatedCost    Float?
   leadSource       String?
   followUpDays     Int       @default(3)
   description      String?
   status           String    @default("NEW_REQUEST")
+  convertedEventId Int?
   adminId          Int
   admin            Admin     @relation(fields: [adminId], references: [id])
   createdAt        DateTime  @default(now())
+}
+
+model PostProductionTask {
+  id           Int       @id @default(autoincrement())
+  eventId      Int
+  taskName     String
+  assigneeName String?
+  assigneeId   Int?
+  dueDate      DateTime?
+  status       String    @default("NOT_STARTED")
+  notes        String?
+  order        Int       @default(0)
+  event        Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  createdAt    DateTime  @default(now())
+}
+
+model Invoice {
+  id          Int       @id @default(autoincrement())
+  eventId     Int       @unique
+  packageName String?
+  totalAmount Float     @default(0)
+  currency    String    @default("INR")
+  status      String    @default("UNPAID")
+  notes       String?
+  event       Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  payments    Payment[]
+  createdAt   DateTime  @default(now())
+}
+
+model Payment {
+  id        Int      @id @default(autoincrement())
+  invoiceId Int
+  amount    Float
+  paidOn    DateTime @default(now())
+  method    String   @default("CASH")
+  notes     String?
+  invoice   Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 }
