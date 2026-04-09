@@ -188,7 +188,7 @@ export default function CRMDashboard() {
                     onClick={() => router.push(`/admin/crm/${event.id}`)}
                     className="flex items-center gap-2 px-4 py-2 border border-[#ede9fe] rounded-lg text-sm text-[#333] hover:border-[#7c3aed] hover:text-[#7c3aed] transition-all"
                   >
-                    ✏️ Edit Event
+                     Edit Event
                   </button>
                   <button
                     onClick={() => router.push(`/admin/crm/${event.id}`)}

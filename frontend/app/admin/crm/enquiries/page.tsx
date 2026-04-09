@@ -22,14 +22,14 @@ const STATUS_STYLES: Record<string, string> = {
   NEW_REQUEST: 'bg-blue-500 text-white',
   CONTACTED:   'bg-orange-400 text-white',
   FOLLOW_UP:   'bg-purple-500 text-white',
-  CONVERTED:   'bg-green-500 text-white',
+  
 }
 
 const STATUS_LABELS: Record<string, string> = {
   NEW_REQUEST: 'New Request',
   CONTACTED:   'Contacted',
   FOLLOW_UP:   'Follow Up',
-  CONVERTED:   'Converted',
+  
 }
 
 const LEAD_SOURCES = ['Instagram', 'Facebook', 'Google', 'Referral', 'Wedding Fair', 'Website', 'Other']
@@ -281,7 +281,7 @@ export default function EnquiriesPage() {
                           <option value="NEW_REQUEST">New Request</option>
                           <option value="CONTACTED">Contacted</option>
                           <option value="FOLLOW_UP">Follow Up</option>
-                          <option value="CONVERTED">Converted</option>
+                          
                         </select>
                           {/* Add this before the Save button */}
                           {(enquiry.status === 'FOLLOW_UP' || enquiry.status === 'CONTACTED' || enquiry.status === 'NEW_REQUEST') && (

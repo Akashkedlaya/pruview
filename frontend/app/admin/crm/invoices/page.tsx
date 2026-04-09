@@ -281,17 +281,17 @@ Pruview`
                         <div>
                           <label className="block text-xs font-semibold text-[#555] mb-1.5">Package Name</label>
                           <input type="text" value={editPackage} onChange={e => setEditPackage(e.target.value)}
-                            className="w-full px-3 py-2 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#7c3aed] transition-all" />
+                            className="w-full px-3 py-2 border border-[#e8e5e0] rounded-lg text-sm text-[#0f0f0f] placeholder-[#999] focus:outline-none focus:border-[#7c3aed] transition-all" />
                         </div>
                         <div>
                           <label className="block text-xs font-semibold text-[#555] mb-1.5">Total Amount (₹)</label>
                           <input type="number" value={editAmount} onChange={e => setEditAmount(e.target.value)}
-                            className="w-full px-3 py-2 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#7c3aed] transition-all" />
+                            className="w-full px-3 py-2 border border-[#e8e5e0] rounded-lg text-sm text-[#0f0f0f] placeholder-[#999] focus:outline-none focus:border-[#7c3aed] transition-all" />
                         </div>
                         <div>
                           <label className="block text-xs font-semibold text-[#555] mb-1.5">Notes</label>
                           <input type="text" value={editNotes} onChange={e => setEditNotes(e.target.value)}
-                            className="w-full px-3 py-2 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#7c3aed] transition-all" />
+                            className="w-full px-3 py-2 border border-[#e8e5e0] rounded-lg text-sm text-[#0f0f0f] placeholder-[#999] focus:outline-none focus:border-[#7c3aed] transition-all" />
                         </div>
                         <div className="col-span-3 flex gap-2">
                           <button onClick={() => saveInvoice(invoice.id)} disabled={savingInvoice}
@@ -360,17 +360,17 @@ Pruview`
                             <label className="block text-xs text-[#555] mb-1">Amount (₹) *</label>
                             <input type="number" value={payAmount} onChange={e => setPayAmount(e.target.value)}
                               placeholder="50000"
-                              className="w-full px-3 py-2 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#7c3aed] transition-all" />
+                              className="w-full px-3 py-2 border border-[#e8e5e0] rounded-lg text-sm text-[#0f0f0f] placeholder-[#999] focus:outline-none focus:border-[#7c3aed] transition-all" />
                           </div>
                           <div>
                             <label className="block text-xs text-[#555] mb-1">Date</label>
                             <input type="date" value={payDate} onChange={e => setPayDate(e.target.value)}
-                              className="w-full px-3 py-2 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#7c3aed] transition-all" />
+                              className="w-full px-3 py-2 border border-[#e8e5e0] rounded-lg text-sm text-[#0f0f0f] placeholder-[#999] focus:outline-none focus:border-[#7c3aed] transition-all" />
                           </div>
                           <div>
                             <label className="block text-xs text-[#555] mb-1">Method</label>
                             <select value={payMethod} onChange={e => setPayMethod(e.target.value)}
-                              className="w-full px-3 py-2 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#7c3aed] transition-all">
+                              className="w-full px-3 py-2 border border-[#e8e5e0] rounded-lg text-sm text-[#0f0f0f] placeholder-[#999] focus:outline-none focus:border-[#7c3aed] transition-all">
                               {PAYMENT_METHODS.map(m => <option key={m} value={m}>{m}</option>)}
                             </select>
                           </div>
