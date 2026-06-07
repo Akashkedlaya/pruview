@@ -286,14 +286,14 @@ export default function NewEnquiryPage() {
 
         <div className="flex items-center justify-between mt-8 pt-6 border-t border-[#eff6ff]">
           <button onClick={() => router.push('/admin/crm/enquiries')}
-            className="px-6 py-2.5 border border-[#e8e5e0] text-[#333] text-sm font-semibold rounded-xl hover:bg-[#FDFBD4] transition-all">
+            className="px-6 py-2.5 border border-[#e8e5e0] text-[#333] text-sm font-semibold rounded-xl hover:bg-[#EDE8D0] transition-all">
             Cancel
           </button>
           <div className="flex gap-3">
             <button
               onClick={() => saveEnquiry(true)}
               disabled={softBlocking || saving || !coupleName.trim() || !phone.trim() || photographerIds.length === 0}
-              className="px-6 py-2.5 border border-[#e8e5e0] text-[#333] text-sm font-semibold rounded-xl hover:bg-[#FDFBD4] disabled:opacity-40 transition-all">
+              className="px-6 py-2.5 border border-[#e8e5e0] text-[#333] text-sm font-semibold rounded-xl hover:bg-[#EDE8D0] disabled:opacity-40 transition-all">
               {softBlocking ? 'Sending...' : `Soft Block${photographerIds.length > 0 ? ` (${photographerIds.length})` : ''}`}
             </button>
             <button

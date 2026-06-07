@@ -454,7 +454,7 @@ export default function PhotographersPage() {
             <div className="flex gap-3 px-8 py-5 border-t border-[#eff6ff]">
               <button
                 onClick={() => setShowModal(false)}
-                className="flex-1 py-3 border border-[#e8e5e0] text-[#333] text-sm font-semibold rounded-xl hover:bg-[#FDFBD4] transition-all"
+                className="flex-1 py-3 border border-[#e8e5e0] text-[#333] text-sm font-semibold rounded-xl hover:bg-[#EDE8D0] transition-all"
               >
                 Cancel
               </button>

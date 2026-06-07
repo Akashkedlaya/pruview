@@ -173,13 +173,13 @@ export default function UploadPage() {
   useEffect(() => { loadFolder() }, [id])
 
   if (!folder) return (
-    <div className="min-h-screen bg-[#FDFBD4] flex items-center justify-center">
+    <div className="min-h-screen bg-[#EDE8D0] flex items-center justify-center">
       <p className="text-[#888]">Loading…</p>
     </div>
   )
 
   return (
-    <div className="min-h-screen bg-[#FDFBD4]">
+    <div className="min-h-screen bg-[#EDE8D0]">
 
       {/* Nav */}
       <nav className="bg-[#0f0f0f] px-8 py-4 flex items-center gap-4">
@@ -227,7 +227,7 @@ export default function UploadPage() {
           onDrop={e => { e.preventDefault(); handleFiles(e.dataTransfer.files) }}
           className="border-2 border-dashed border-[#e0ddd8] rounded-2xl p-12 text-center cursor-pointer hover:border-[#c8a020] transition-all mb-8 bg-white"
         >
-          <div className="w-12 h-12 bg-[#FDFBD4] border border-[#e8e5e0] rounded-xl flex items-center justify-center mx-auto mb-3">
+          <div className="w-12 h-12 bg-[#EDE8D0] border border-[#e8e5e0] rounded-xl flex items-center justify-center mx-auto mb-3">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
           </div>
           <p className="font-semibold text-[#333] mb-1">

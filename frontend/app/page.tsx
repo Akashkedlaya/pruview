@@ -14,11 +14,11 @@ export default function LandingPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-[#FDFBD4] text-[#0a0a0a] font-sans">
+    <div className="min-h-screen bg-[#EDE8D0] text-[#0a0a0a] font-sans">
 
       {/* ── Navbar ── */}
       <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-[#FDFBD4]/95 backdrop-blur-sm border-b border-black/10' : 'bg-transparent'
+        scrolled ? 'bg-[#EDE8D0]/95 backdrop-blur-sm border-b border-black/10' : 'bg-transparent'
       }`}>
         <div className="max-w-7xl mx-auto px-8 lg:px-16 h-16 flex items-center justify-between">
           <Link href="/" className="text-xl font-bold tracking-tight">
@@ -50,7 +50,7 @@ export default function LandingPage() {
         </div>
 
         {menuOpen && (
-          <div className="md:hidden bg-[#FDFBD4] border-t border-black/10 px-8 py-5 flex flex-col gap-4">
+          <div className="md:hidden bg-[#EDE8D0] border-t border-black/10 px-8 py-5 flex flex-col gap-4">
             <a href="#features" className="text-sm text-[#555]" onClick={() => setMenuOpen(false)}>Features</a>
             <a href="#how-it-works" className="text-sm text-[#555]" onClick={() => setMenuOpen(false)}>How it works</a>
             <a href="#for-photographers" className="text-sm text-[#555]" onClick={() => setMenuOpen(false)}>Photographers</a>
@@ -60,7 +60,7 @@ export default function LandingPage() {
       </header>
 
       {/* ── Hero ── */}
-      <section className="min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20 pb-0 bg-[#FDFBD4]">
+      <section className="min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20 pb-0 bg-[#EDE8D0]">
         <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#2563eb] mb-8">
           Wedding photography platform
         </p>
@@ -152,7 +152,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Feature 1: AI Face Recognition ── */}
-      <section id="features" className="py-32 px-6 lg:px-16 bg-[#FDFBD4]">
+      <section id="features" className="py-32 px-6 lg:px-16 bg-[#EDE8D0]">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
           <div>
             <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#2563eb] mb-6">01 — AI Recognition</p>
@@ -289,7 +289,7 @@ export default function LandingPage() {
           </div>
 
           {/* CRM preview */}
-          <div className="bg-[#FDFBD4] rounded-3xl border border-black/8 p-1.5 shadow-xl">
+          <div className="bg-[#EDE8D0] rounded-3xl border border-black/8 p-1.5 shadow-xl">
             <div className="bg-white rounded-2xl overflow-hidden">
               <div className="bg-[#f9f9f9] border-b border-black/5 px-4 py-3 flex items-center justify-between">
                 <span className="text-xs font-semibold text-[#0a0a0a]">pru<span className="text-[#2563eb]">view</span> CRM</span>
@@ -340,7 +340,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── How it works ── */}
-      <section id="how-it-works" className="py-32 px-6 lg:px-16 bg-[#FDFBD4]">
+      <section id="how-it-works" className="py-32 px-6 lg:px-16 bg-[#EDE8D0]">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-20">
             <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#2563eb] mb-6">For guests</p>
@@ -388,7 +388,7 @@ export default function LandingPage() {
           </p>
           <Link
             href="/admin/login"
-            className="inline-flex items-center gap-2 px-10 py-4 bg-white text-[#0a0a0a] font-semibold text-sm rounded-full hover:bg-[#FDFBD4] transition-colors"
+            className="inline-flex items-center gap-2 px-10 py-4 bg-white text-[#0a0a0a] font-semibold text-sm rounded-full hover:bg-[#EDE8D0] transition-colors"
           >
             Get started free
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
