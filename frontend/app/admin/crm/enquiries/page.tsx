@@ -289,8 +289,8 @@ export default function EnquiriesPage() {
                            onClick={() => confirmEnquiry(enquiry.id)}
                            className="px-4 py-1.5 bg-green-500 text-white text-sm font-semibold rounded-lg hover:bg-green-600 transition-all"
                            >
-                            Confirm →
-                            </button>
+                            Confirm
+</button>
                           )}
 
 

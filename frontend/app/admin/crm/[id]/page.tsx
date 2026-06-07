@@ -9,9 +9,9 @@ type EventDay     = { id: number; dayNumber: number; date: string; bookings: Boo
 type Event        = { id: number; coupleName: string; startDate: string; endDate: string; location?: string; days: EventDay[] }
 
 const SLOTS = [
-  { key: 'MORNING',   label: 'Morning',   time: '09:00 AM - 01:00 PM', icon: '☀️' },
-  { key: 'AFTERNOON', label: 'Afternoon', time: '02:00 PM - 05:00 PM', icon: '🌤️' },
-  { key: 'EVENING',   label: 'Evening',   time: '06:00 PM - 11:00 PM', icon: '🌙' },
+  { key: 'MORNING',   label: 'Morning',   time: '09:00 AM - 01:00 PM' },
+  { key: 'AFTERNOON', label: 'Afternoon', time: '02:00 PM - 05:00 PM' },
+  { key: 'EVENING',   label: 'Evening',   time: '06:00 PM - 11:00 PM' },
 ]
 
 const EVENT_NAMES = ['Haldi Ceremony', 'Mehendi', 'Sangeet', 'Wedding Ceremony', 'Reception', 'Engagement', 'Welcome Dinner', 'Portraits', 'Other']
@@ -129,7 +129,7 @@ export default function EventDetail() {
         const dateStr  = new Date(day.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
         const links = selectedPhotographers.map(pid => {
           const p   = photographers.find(ph => ph.id === pid)!
-          const msg = `Hi ${p.name},\n\nYou have been assigned for a photography booking:\n\n📸 Event: ${selectedEvent}\n📅 Date: ${dateStr}\n🕐 Time: ${slotInfo.label} (${slotInfo.time})\n💑 Client: ${event.coupleName}\n📍 Location: ${bookingLocation || event.location || 'TBD'}\n\nPlease confirm your availability.\n\nThank you!\nPruview CRM`
+          const msg = `Hi ${p.name},\n\nYou have been assigned for a photography booking:\n\nEvent: ${selectedEvent}\nDate: ${dateStr}\nTime: ${slotInfo.label} (${slotInfo.time})\nClient: ${event.coupleName}\nLocation: ${bookingLocation || event.location || 'TBD'}\n\nPlease confirm your availability.\n\nThank you!\nPruview CRM`
           return { name: p.name, url: `https://wa.me/${p.phone}?text=${encodeURIComponent(msg)}` }
         })
         setWhatsappLinks(links)
@@ -187,7 +187,7 @@ export default function EventDetail() {
         <div className="flex items-center gap-4 mb-1">
           <button onClick={() => router.push('/admin/crm')}
             className="w-8 h-8 flex items-center justify-center border border-[#e8e5e0] rounded-lg text-[#666] hover:bg-[#f5f3ff] transition-all">
-            ←
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
           </button>
           <div className="flex-1">
             <h1 className="text-2xl font-bold text-[#0f0f0f]">
@@ -250,10 +250,10 @@ export default function EventDetail() {
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
-                          isSelected ? 'bg-[#7c3aed] text-white' : 'bg-[#f5f3ff]'
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                          isSelected ? 'bg-[#7c3aed] text-white' : 'bg-[#f5f3ff] text-[#7c3aed]'
                         }`}>
-                          {slot.icon}
+                          <span className="text-xs font-bold">{slot.key.slice(0,1)}</span>
                         </div>
                         <div>
                           <p className="text-xs text-[#888] uppercase tracking-wide font-medium">
@@ -287,7 +287,7 @@ export default function EventDetail() {
                             <span className="font-medium text-[#7c3aed]">{b.photographer.name}</span>
                             <button onClick={e => { e.stopPropagation(); cancelBooking(b.id, activeDay) }}
                               className="text-[#aaa] hover:text-red-500 transition-colors">
-                              ×
+                              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                             </button>
                           </div>
                         ))}
@@ -308,7 +308,7 @@ export default function EventDetail() {
                     {SLOTS.find(s => s.key === activeSlot)?.label} Slot Details
                   </h3>
                   <button onClick={() => setActiveSlot(null)} className="text-[#aaa] hover:text-[#333] transition-colors">
-                    ···
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                   </button>
                 </div>
                 <p className="text-xs text-[#7c3aed] font-medium mb-5 bg-[#ede9fe] inline-block px-2 py-0.5 rounded">
@@ -339,7 +339,7 @@ export default function EventDetail() {
                                   {p?.name[0]}
                                 </span>
                                 <span>{p?.name.split(' ')[0]} {p?.name.split(' ')[1]?.[0]}.</span>
-                                <button onClick={() => togglePhotographer(pid)} className="hover:text-red-500 ml-0.5">×</button>
+                                <button onClick={() => togglePhotographer(pid)} className="hover:text-red-500 ml-0.5"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
                               </div>
                             )
                           })}
@@ -392,7 +392,7 @@ export default function EventDetail() {
                         disabled={saving || !selectedEvent || selectedPhotographers.length === 0}
                         className="px-4 py-2 bg-[#7c3aed] text-white text-sm font-semibold rounded-xl hover:bg-[#6d28d9] disabled:opacity-40 transition-all flex items-center gap-1.5"
                       >
-                        📲 Book & Notify
+                        Book & Notify
                       </button>
                     </div>
                   </div>
@@ -400,7 +400,9 @@ export default function EventDetail() {
               </div>
             ) : (
               <div className="bg-white rounded-2xl border border-dashed border-[#ede9fe] p-8 text-center h-fit">
-                <p className="text-3xl mb-3">👈</p>
+                <div className="w-12 h-12 bg-[#f5f3ff] rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 8 12 12 16"/><line x1="16" y1="12" x2="8" y2="12"/></svg>
+                </div>
                 <p className="text-[#888] text-sm">Select a time slot on the left to view details and assign photographers</p>
               </div>
             )}
@@ -413,7 +415,9 @@ export default function EventDetail() {
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl p-8 w-full max-w-md">
             <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-3xl mx-auto mb-3">✅</div>
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
               <h2 className="text-xl font-bold text-[#0f0f0f]">Booking Confirmed</h2>
               <p className="text-[#888] text-sm mt-1">Send WhatsApp notifications to each photographer</p>
             </div>
@@ -422,7 +426,7 @@ export default function EventDetail() {
                 <a key={i} href={link.url} target="_blank" rel="noopener noreferrer"
                   className="flex items-center gap-3 px-4 py-3 bg-green-50 border border-green-200 rounded-xl hover:bg-green-100 transition-all"
                 >
-                  <span className="text-xl">📲</span>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                   <div>
                     <p className="text-sm font-semibold text-green-800">Send to {link.name}</p>
                     <p className="text-xs text-green-600">Click to open WhatsApp</p>

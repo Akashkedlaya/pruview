@@ -54,13 +54,13 @@ export default function UploadPage() {
             body: JSON.stringify({ embeddings, folderId: id })
           })
           indexed++
-          console.log(`✅ Indexed ${img.filename}: ${embeddings.length} face(s)`)
+          console.log(`Indexed ${img.filename}: ${embeddings.length} face(s)`)
         }
       } catch (err) {
         console.warn(`Skipped ${img.filename}:`, err)
       }
     }
-    alert(`✅ Re-indexed ${indexed} photos with faces`)
+    alert(`Re-indexed ${indexed} photos with faces`)
   } catch (err) {
     setError('Re-indexing failed.')
   }
@@ -127,7 +127,7 @@ export default function UploadPage() {
             },
             body: JSON.stringify({ embeddings, folderId: id })
           })
-          console.log(`✅ Indexed ${embeddings.length} face(s) in ${file.name}`)
+          console.log(`Indexed ${embeddings.length} face(s) in ${file.name}`)
         }
       } catch (faceErr) {
         console.warn('Face indexing failed (non-critical):', faceErr)
@@ -185,7 +185,7 @@ export default function UploadPage() {
       <nav className="bg-[#0f0f0f] px-8 py-4 flex items-center gap-4">
         <button onClick={() => router.push('/admin')}
           className="text-[#666] hover:text-white text-sm transition-colors">
-          ← Back
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back
         </button>
         <span className="text-white text-xl font-semibold">
           pru<span className="text-[#e8c547]">view</span>
@@ -204,7 +204,7 @@ export default function UploadPage() {
           </div>
           <button onClick={copyLink}
             className="px-5 py-2.5 border border-[#e0ddd8] text-[#333] text-sm font-semibold rounded-xl hover:border-[#c8a020] hover:text-[#c8a020] transition-all">
-            {copied ? '✓ Link copied!' : 'Copy share link'}
+            {copied ? 'Link copied!' : 'Copy share link'}
           </button>
         </div>
         <div className="flex items-center gap-3">
@@ -212,11 +212,11 @@ export default function UploadPage() {
     onClick={reindexFaces}
     className="px-4 py-2 border border-[#e0ddd8] text-[#333] text-xs font-semibold rounded-xl hover:border-[#c8a020] hover:text-[#c8a020] transition-all"
   >
-    🔄 Re-index faces
+    Re-index faces
   </button>
   <button onClick={copyLink}
     className="px-5 py-2.5 border border-[#e0ddd8] text-[#333] text-sm font-semibold rounded-xl hover:border-[#c8a020] hover:text-[#c8a020] transition-all">
-    {copied ? '✓ Link copied!' : 'Copy share link'}
+    {copied ? 'Link copied!' : 'Copy share link'}
   </button>
 </div>
 
@@ -227,7 +227,9 @@ export default function UploadPage() {
           onDrop={e => { e.preventDefault(); handleFiles(e.dataTransfer.files) }}
           className="border-2 border-dashed border-[#e0ddd8] rounded-2xl p-12 text-center cursor-pointer hover:border-[#c8a020] transition-all mb-8 bg-white"
         >
-          <p className="text-3xl mb-3">📷</p>
+          <div className="w-12 h-12 bg-[#f8f7f4] border border-[#e8e5e0] rounded-xl flex items-center justify-center mx-auto mb-3">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </div>
           <p className="font-semibold text-[#333] mb-1">
             {uploading ? 'Uploading…' : 'Drop photos here or click to select'}
           </p>

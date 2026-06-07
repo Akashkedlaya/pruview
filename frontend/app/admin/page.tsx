@@ -154,7 +154,9 @@ export default function AdminHome() {
           <p className="text-[#888] text-sm">Loading…</p>
         ) : folders.length === 0 ? (
           <div className="text-center py-20 text-[#aaa]">
-            <p className="text-4xl mb-4">📁</p>
+            <div className="w-14 h-14 bg-[#f5f3f0] border border-[#e8e5e0] rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#bbb" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            </div>
             <p className="text-sm">No galleries yet. Create your first one above.</p>
           </div>
         ) : (
@@ -165,8 +167,8 @@ export default function AdminHome() {
                 className="bg-white border border-[#e8e5e0] rounded-2xl px-6 py-5 flex items-center gap-4 cursor-pointer hover:border-[#c8a020] transition-all">
 
                 {/* Icon */}
-                <div className="w-10 h-10 rounded-xl bg-[#f8f7f4] border border-[#e8e5e0] flex items-center justify-center text-lg flex-shrink-0">
-                  📁
+                <div className="w-10 h-10 rounded-xl bg-[#f8f7f4] border border-[#e8e5e0] flex items-center justify-center flex-shrink-0">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
                 </div>
 
                 {/* Info */}
@@ -183,7 +185,7 @@ export default function AdminHome() {
                     onClick={() => copyLink(folder)}
                     className="px-4 py-2 text-xs font-semibold text-[#333] border border-[#e0ddd8] rounded-lg hover:border-[#c8a020] hover:text-[#c8a020] transition-all"
                   >
-                    {copied === folder.id ? '✓ Copied!' : 'Copy link'}
+                    {copied === folder.id ? 'Copied!' : 'Copy link'}
                   </button>
                   <button
                     onClick={() => deleteFolder(folder.id)}

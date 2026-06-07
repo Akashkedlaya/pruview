@@ -198,7 +198,9 @@ export default function GalleryPage() {
   if (error) return (
     <div className="min-h-screen bg-white flex items-center justify-center p-8">
       <div className="text-center">
-        <p className="text-6xl mb-6">🔗</p>
+        <div className="w-16 h-16 bg-[#f8f7f4] border border-[#e8e5e0] rounded-2xl flex items-center justify-center mx-auto mb-6">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#bbb" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        </div>
         <h1 className="text-[#0f0f0f] text-2xl font-semibold mb-3">
           Gallery not found
         </h1>
@@ -244,7 +246,7 @@ export default function GalleryPage() {
                 {downloadingAll ? (
                   <span>Downloading {downloadProgress}%</span>
                 ) : (
-                  <><span className="text-lg">⬇</span><span>Download All {gallery.total} Photos</span></>
+                  <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="3" x2="12" y2="15"/><polyline points="7 10 12 15 17 10"/><line x1="5" y1="21" x2="19" y2="21"/></svg><span>Download All {gallery.total} Photos</span></>
                 )}
               </button>
               {downloadingAll && (
@@ -284,9 +286,9 @@ export default function GalleryPage() {
               className="px-6 py-3 bg-[#0f0f0f] text-white text-sm font-bold rounded-xl hover:bg-[#222] disabled:opacity-50 transition-all flex items-center gap-2"
             >
               {scanning ? (
-                <><span className="animate-pulse">●</span><span>Scanning...</span></>
+                <><span className="w-2 h-2 rounded-full bg-white animate-pulse inline-block" /><span>Scanning...</span></>
               ) : (
-                <><span>📸</span><span>Scan Face</span></>
+                <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span>Scan Face</span></>
               )}
             </button>
           </div>
@@ -334,7 +336,7 @@ export default function GalleryPage() {
               </div>
             ) : (
               <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-3 text-green-700 text-sm">
-                ✅ Found {scanResult.length} photo{scanResult.length !== 1 ? 's' : ''} with you in them!
+                Found {scanResult.length} photo{scanResult.length !== 1 ? 's' : ''} with you in them!
               </div>
             )}
           </div>
@@ -390,12 +392,12 @@ export default function GalleryPage() {
           <button
             onClick={e => { e.stopPropagation(); goPrev() }}
             className="absolute left-4 top-1/2 -translate-y-1/2 w-14 h-14 bg-[#0f0f0f] text-white rounded-full flex items-center justify-center text-2xl font-bold hover:bg-[#e8c547] hover:text-[#0f0f0f] transition-all z-10 shadow-xl"
-          >❮</button>
+          ><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
 
           <button
             onClick={e => { e.stopPropagation(); goNext() }}
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-14 h-14 bg-[#0f0f0f] text-white rounded-full flex items-center justify-center text-2xl font-bold hover:bg-[#e8c547] hover:text-[#0f0f0f] transition-all z-10 shadow-xl"
-          >❯</button>
+            className="absolute right-4 top-1/2 -translate-y-1/2 w-14 h-14 bg-[#0f0f0f] text-white rounded-full flex items-center justify-center hover:bg-[#e8c547] hover:text-[#0f0f0f] transition-all z-10 shadow-xl"
+          ><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
 
           <div className="relative max-w-4xl w-full" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-3">
@@ -406,7 +408,7 @@ export default function GalleryPage() {
                 onClick={() => setLightboxIndex(null)}
                 className="text-[#aaa] hover:text-[#0f0f0f] text-sm transition-colors"
               >
-                ✕ Close
+                Close
               </button>
             </div>
 
@@ -428,7 +430,7 @@ export default function GalleryPage() {
               >
                 {downloading === lightboxImage.id
                   ? 'Preparing…'
-                  : <><span>⬇</span><span>Download Original</span></>}
+                  : <><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="3" x2="12" y2="15"/><polyline points="7 10 12 15 17 10"/><line x1="5" y1="21" x2="19" y2="21"/></svg><span>Download Original</span></>}
               </button>
             </div>
           </div>

@@ -13,9 +13,9 @@ type Photographer = {
 const EVENT_NAMES = ['Haldi Ceremony', 'Mehendi', 'Sangeet', 'Wedding Ceremony', 'Reception', 'Engagement', 'Welcome Dinner', 'Portraits', 'Other']
 
 const SLOTS = [
-  { key: 'MORNING',   label: 'Morning',   time: '09:00 - 13:00', icon: '☀️' },
-  { key: 'AFTERNOON', label: 'Afternoon', time: '13:00 - 17:00', icon: '🌤️' },
-  { key: 'EVENING',   label: 'Evening',   time: '18:00 - 23:00', icon: '🌙' },
+  { key: 'MORNING',   label: 'Morning',   time: '09:00 - 13:00' },
+  { key: 'AFTERNOON', label: 'Afternoon', time: '13:00 - 17:00' },
+  { key: 'EVENING',   label: 'Evening',   time: '18:00 - 23:00' },
 ]
 
 export default function NewWedding() {
@@ -118,7 +118,7 @@ export default function NewWedding() {
         for (const photographerId of selectedPhotographers) {
           const p = photographers.find(ph => ph.id === photographerId)!
           const slotInfo = SLOTS.find(s => s.key === activeSlot)!
-          const msg = `Hi ${p.name},\n\nYou have been assigned for a photography booking:\n\n📸 Event: ${selectedEvent}\n📅 Date: ${getDayDate(activeDay)}\n🕐 Time: ${slotInfo.label} (${slotInfo.time})\n💑 Client: ${coupleName}\n📍 Location: ${bookingLocation || location || 'TBD'}\n\nPlease confirm your availability.\n\nThank you!\nPruview CRM`
+          const msg = `Hi ${p.name},\n\nYou have been assigned for a photography booking:\n\nEvent: ${selectedEvent}\nDate: ${getDayDate(activeDay)}\nTime: ${slotInfo.label} (${slotInfo.time})\nClient: ${coupleName}\nLocation: ${bookingLocation || location || 'TBD'}\n\nPlease confirm your availability.\n\nThank you!\nPruview CRM`
           window.open(`https://wa.me/${p.phone}?text=${encodeURIComponent(msg)}`, '_blank')
           await new Promise(r => setTimeout(r, 800))
         }
@@ -140,7 +140,7 @@ export default function NewWedding() {
       <div className="bg-white border-b border-[#ede9fe] px-8 py-5 flex items-center gap-4">
         <button onClick={() => router.push('/admin/crm')}
           className="w-8 h-8 flex items-center justify-center border border-[#e8e5e0] rounded-lg text-[#666] hover:bg-[#f5f3ff] transition-all">
-          ←
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
         </button>
         <div>
           <h1 className="text-2xl font-bold text-[#0f0f0f]">
@@ -217,7 +217,7 @@ export default function NewWedding() {
                   : 'bg-[#7c3aed] text-white hover:bg-[#6d28d9] disabled:opacity-40'
               }`}
             >
-              {savingDetails ? 'Saving…' : detailsSaved ? '✓ Details Saved' : 'Save Details'}
+              {savingDetails ? 'Saving…' : detailsSaved ? 'Details Saved' : 'Save Details'}
             </button>
           </div>
         </div>
@@ -229,7 +229,9 @@ export default function NewWedding() {
 
           {!detailsSaved ? (
             <div className="text-center py-16 text-[#aaa]">
-              <p className="text-4xl mb-3">📅</p>
+              <div className="w-12 h-12 bg-[#f5f3ff] rounded-xl flex items-center justify-center mx-auto mb-3">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
               <p className="text-sm">Save wedding details first to start scheduling</p>
             </div>
           ) : (
@@ -269,7 +271,6 @@ export default function NewWedding() {
                         : 'bg-[#fafafa] text-[#666] border-[#e8e5e0] hover:border-[#7c3aed]'
                       }`}
                     >
-                      <span className="text-xl mb-1">{slot.icon}</span>
                       <span className="font-semibold text-sm">{slot.label}</span>
                       <span className={`text-xs mt-0.5 ${isActive ? 'text-white/70' : 'text-[#aaa]'}`}>
                         {slot.time}
@@ -309,7 +310,7 @@ export default function NewWedding() {
                             return (
                               <div key={id} className="flex items-center gap-1.5 bg-[#ede9fe] text-[#7c3aed] px-3 py-1 rounded-full text-xs font-medium">
                                 <span>{p?.name}</span>
-                                <button onClick={() => togglePhotographer(id)} className="hover:text-red-500 ml-1">×</button>
+                                <button onClick={() => togglePhotographer(id)} className="hover:text-red-500 ml-1"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
                               </div>
                             )
                           })}
@@ -352,7 +353,7 @@ export default function NewWedding() {
                         disabled={saving || !selectedEvent || selectedPhotographers.length === 0}
                         className="px-5 py-2.5 bg-[#25D366] text-white text-sm font-semibold rounded-xl hover:bg-[#22c55e] disabled:opacity-40 transition-all flex items-center gap-2"
                       >
-                        📲 Book & Notify
+                        Book & Notify
                       </button>
                     </div>
                   </div>

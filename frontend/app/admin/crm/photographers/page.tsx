@@ -195,7 +195,7 @@ export default function PhotographersPage() {
       {/* Search */}
       <div className="flex items-center gap-4 mt-6 mb-6">
         <div className="relative flex-1 max-w-sm">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#aaa] text-sm">🔍</span>
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#aaa]"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
           <input
             type="text"
             value={search}
@@ -238,7 +238,9 @@ export default function PhotographersPage() {
         <div className="text-center py-20 text-[#888]">Loading…</div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-24 bg-white border border-[#ede9fe] rounded-2xl">
-          <p className="text-5xl mb-4">📷</p>
+          <div className="w-14 h-14 bg-[#f5f3ff] rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </div>
           <p className="text-[#888]">No photographers yet. Add your first team member.</p>
           <button
             onClick={openAddModal}
@@ -265,14 +267,14 @@ export default function PhotographersPage() {
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-[#0f0f0f]">{p.name}</p>
                 {p.specialization && (
-                  <p className="text-sm text-[#888] mt-0.5">📸 {p.specialization}</p>
+                  <p className="text-sm text-[#888] mt-0.5">{p.specialization}</p>
                 )}
               </div>
 
               {/* Contact */}
               <div className="text-sm text-[#666] hidden sm:block">
-                <p>📞 +{p.phone}</p>
-                {p.email && <p className="text-[#888] mt-0.5">✉️ {p.email}</p>}
+                <p>+{p.phone}</p>
+                {p.email && <p className="text-[#888] mt-0.5">{p.email}</p>}
               </div>
 
               {/* Status */}
@@ -321,7 +323,7 @@ export default function PhotographersPage() {
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-xs bg-[#ede9fe] text-[#7c3aed] px-2 py-0.5 rounded-full font-medium">
-                    📸 Photographer details
+                    Photographer details
                   </span>
                 </div>
                 <h2 className="text-xl font-bold text-[#0f0f0f]">
@@ -337,7 +339,7 @@ export default function PhotographersPage() {
                 onClick={() => setShowModal(false)}
                 className="w-8 h-8 border border-[#e8e5e0] rounded-full flex items-center justify-center text-[#888] hover:text-[#333] transition-all"
               >
-                ✕
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               </button>
             </div>
 
@@ -351,7 +353,7 @@ export default function PhotographersPage() {
                     Name <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#aaa]">👤</span>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#aaa]"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
                     <input
                       type="text"
                       value={name}
@@ -385,7 +387,7 @@ export default function PhotographersPage() {
                   Mobile Number <span className="text-red-400">*</span>
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#aaa]">📞</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#aaa]"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6 19.79 19.79 0 0 1 1.61 5a2 2 0 0 1 1.99-2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
                   <input
                     type="text"
                     value={phone}
@@ -402,7 +404,7 @@ export default function PhotographersPage() {
                   Email Address <span className="text-[#aaa] font-normal">(optional)</span>
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#aaa]">✉️</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#aaa]"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
                   <input
                     type="email"
                     value={email}
@@ -444,7 +446,6 @@ export default function PhotographersPage() {
 
               {/* Footer note */}
               <p className="text-xs text-[#aaa] flex items-center gap-1.5">
-                <span className="text-green-500">✓</span>
                 Required fields help match the photographer to wedding bookings.
               </p>
             </div>

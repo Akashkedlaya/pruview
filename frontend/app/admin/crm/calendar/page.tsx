@@ -13,9 +13,9 @@ type Booking = {
 }
 
 const SLOT_ICONS: Record<string, string> = {
-  MORNING:   '☀',
-  AFTERNOON: '◎',
-  EVENING:   '☽',
+  MORNING:   'AM',
+  AFTERNOON: 'PM',
+  EVENING:   'EVE',
 }
 
 const DAYS_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -235,7 +235,7 @@ export default function CalendarPage() {
                               ))}
                             </div>
                             <button onClick={() => router.push(`/admin/crm/${group.eventId}`)} className="w-full py-2 border border-[#e8e5e0] rounded-lg text-sm text-[#666] hover:border-[#7c3aed] hover:text-[#7c3aed] transition-all flex items-center justify-center gap-1.5">
-                              <span className="text-xs">✏</span> Edit Event
+                              Edit Event
                             </button>
                           </div>
                         ))}
