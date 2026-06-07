@@ -75,7 +75,7 @@ export default function LandingPage() {
             <a href="#features" className="text-sm text-[#555]" onClick={() => setMenuOpen(false)}>Features</a>
             <a href="#how-it-works" className="text-sm text-[#555]" onClick={() => setMenuOpen(false)}>How it works</a>
             <a href="#for-photographers" className="text-sm text-[#555]" onClick={() => setMenuOpen(false)}>For photographers</a>
-            <Link href="/admin/login" className="text-sm font-medium text-[#7c3aed]">Log in →</Link>
+            <Link href="/admin/login" className="text-sm font-medium text-[#7c3aed]">Log in</Link>
           </div>
         )}
       </header>
@@ -133,7 +133,7 @@ export default function LandingPage() {
                 ))}
               </div>
               <div>
-                <div className="flex text-[#f59e0b] text-sm">★★★★★</div>
+                <p className="text-sm font-bold text-[#f59e0b]">5.0 / 5.0</p>
                 <p className="text-xs text-[#777] mt-0.5">Loved by photographers</p>
               </div>
             </div>
