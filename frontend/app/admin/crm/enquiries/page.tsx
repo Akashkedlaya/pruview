@@ -124,6 +124,13 @@ export default function EnquiriesPage() {
   async function saveStatus(id: number) {
     const newStatus = pendingStatus[id]
     if (!newStatus) return
+
+    // "Converted" status → trigger the confirm flow which creates the event in dashboard
+    if (newStatus === 'CONVERTED') {
+      await confirmEnquiry(id)
+      return
+    }
+
     setSavingId(id)
     try {
       const res = await fetch(`${API}/api/crm/enquiries/${id}`, {
@@ -151,7 +158,8 @@ export default function EnquiriesPage() {
   }
 
   async function confirmEnquiry(id: number) {
-    if (!confirm('Convert this enquiry to a confirmed event? This cannot be undone.')) return
+    if (!confirm('Convert this enquiry to an event? All details will be pre-filled in the Dashboard.')) return
+    setSavingId(id)
     try {
       const res = await fetch(`${API}/api/crm/enquiries/${id}/confirm`, {
         method:  'PUT',
@@ -163,6 +171,8 @@ export default function EnquiriesPage() {
       router.push(`/admin/crm/${data.event.id}`)
     } catch (err) {
       console.error(err)
+    } finally {
+      setSavingId(null)
     }
   }
 
@@ -222,24 +232,29 @@ export default function EnquiriesPage() {
             const selectedStatus = pendingStatus[enquiry.id] || enquiry.status
             const isEditing      = editingId === enquiry.id
             const isConverted    = enquiry.status === 'CONVERTED'
+            const isSaving       = savingId === enquiry.id
 
             return (
               <div
                 key={enquiry.id}
                 className="bg-white border border-[#e8e5e0] rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
               >
-                {/* ── Info row ── */}
-                <div className="px-6 pt-5 pb-4">
+                {/* ── Card body ── */}
+                <div className="px-6 py-5">
                   <div className="flex items-start justify-between gap-4">
+
+                    {/* Left: client info */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-1.5 flex-wrap">
                         <h3 className="font-bold text-[#0f0f0f] text-lg leading-tight">{enquiry.coupleName}</h3>
+                        {/* Current status badge */}
                         <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${cfg.bg} ${cfg.text}`}>
                           <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
                           {cfg.label}
                         </span>
                         <span className="text-xs text-[#bbb]">{timeAgo(enquiry.createdAt)}</span>
                       </div>
+
                       <div className="flex items-center gap-4 text-sm text-[#777] flex-wrap">
                         {enquiry.phone && (
                           <span className="flex items-center gap-1.5">
@@ -265,92 +280,93 @@ export default function EnquiriesPage() {
                           <span className="text-xs bg-[#f0ede8] text-[#888] px-2 py-0.5 rounded-full">{enquiry.leadSource}</span>
                         )}
                       </div>
+
                       {enquiry.description && (
                         <p className="mt-2 text-sm text-[#999] line-clamp-1">{enquiry.description}</p>
                       )}
                     </div>
 
-                    {/* Action buttons */}
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      {!isConverted && (
-                        <button
-                          onClick={() => isEditing ? setEditingId(null) : openEdit(enquiry)}
-                          className="flex items-center gap-1.5 px-3 py-1.5 border border-[#e8e5e0] text-[#555] text-xs font-semibold rounded-lg hover:border-[#2563eb] hover:text-[#2563eb] transition-all"
-                        >
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                          {isEditing ? 'Cancel Edit' : 'Edit Details'}
-                        </button>
+                    {/* Right: action buttons */}
+                    <div className="flex items-center gap-2 flex-shrink-0 flex-wrap justify-end">
+
+                      {!isConverted ? (
+                        <>
+                          {/* Status dropdown */}
+                          <select
+                            value={selectedStatus}
+                            onChange={e => {
+                              const val = e.target.value
+                              if (val === enquiry.status) {
+                                setPendingStatus(prev => { const n = { ...prev }; delete n[enquiry.id]; return n })
+                              } else {
+                                setPendingStatus(prev => ({ ...prev, [enquiry.id]: val }))
+                              }
+                            }}
+                            className="border border-[#e8e5e0] rounded-lg px-3 py-1.5 text-sm text-[#333] focus:outline-none focus:border-[#2563eb] bg-white transition-all cursor-pointer"
+                          >
+                            <option value="NEW_REQUEST">New Request</option>
+                            <option value="CONTACTED">Contacted</option>
+                            <option value="FOLLOW_UP">Follow Up</option>
+                            <option value="CONVERTED">Converted</option>
+                          </select>
+
+                          {/* Save button — active when status changed */}
+                          <button
+                            onClick={() => saveStatus(enquiry.id)}
+                            disabled={!hasPending || isSaving}
+                            className="px-4 py-1.5 bg-[#2563eb] text-white text-sm font-semibold rounded-lg disabled:opacity-30 hover:bg-[#1d4ed8] disabled:cursor-not-allowed transition-all"
+                          >
+                            {isSaving ? 'Saving…' : 'Save'}
+                          </button>
+
+                          {/* Edit button */}
+                          <button
+                            onClick={() => isEditing ? setEditingId(null) : openEdit(enquiry)}
+                            className="flex items-center gap-1.5 px-3 py-1.5 border border-[#e8e5e0] text-[#555] text-sm font-semibold rounded-lg hover:border-[#2563eb] hover:text-[#2563eb] transition-all"
+                          >
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            {isEditing ? 'Cancel' : 'Edit'}
+                          </button>
+
+                          {/* Delete button */}
+                          <button
+                            onClick={() => deleteEnquiry(enquiry.id)}
+                            className="flex items-center gap-1 px-3 py-1.5 border border-red-100 text-red-400 text-sm font-semibold rounded-lg hover:bg-red-50 transition-all"
+                          >
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                            Delete
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          {/* Converted state — view booking + edit + delete */}
+                          <button
+                            onClick={() => router.push('/admin/crm')}
+                            className="px-4 py-1.5 border border-[#2563eb] text-[#2563eb] text-sm font-semibold rounded-lg hover:bg-[#eff6ff] transition-all"
+                          >
+                            View Booking
+                          </button>
+                          <button
+                            onClick={() => isEditing ? setEditingId(null) : openEdit(enquiry)}
+                            className="flex items-center gap-1.5 px-3 py-1.5 border border-[#e8e5e0] text-[#555] text-sm font-semibold rounded-lg hover:border-[#2563eb] hover:text-[#2563eb] transition-all"
+                          >
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            {isEditing ? 'Cancel' : 'Edit'}
+                          </button>
+                          <button
+                            onClick={() => deleteEnquiry(enquiry.id)}
+                            className="flex items-center gap-1 px-3 py-1.5 border border-red-100 text-red-400 text-sm font-semibold rounded-lg hover:bg-red-50 transition-all"
+                          >
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                            Delete
+                          </button>
+                        </>
                       )}
-                      {isConverted && (
-                        <button
-                          onClick={() => router.push('/admin/crm')}
-                          className="flex items-center gap-1.5 px-3 py-1.5 border border-[#e8e5e0] text-[#2563eb] text-xs font-semibold rounded-lg hover:bg-[#eff6ff] transition-all"
-                        >
-                          View Booking
-                        </button>
-                      )}
-                      <button
-                        onClick={() => deleteEnquiry(enquiry.id)}
-                        className="flex items-center gap-1 px-3 py-1.5 border border-red-100 text-red-400 text-xs font-semibold rounded-lg hover:bg-red-50 transition-all"
-                      >
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-                        Delete
-                      </button>
                     </div>
                   </div>
                 </div>
 
-                {/* ── Status update bar ── */}
-                {!isConverted && (
-                  <div className="px-6 py-3 bg-[#fafafa] border-t border-[#f0ede8] flex items-center gap-3 flex-wrap">
-                    <span className="text-xs font-semibold text-[#555]">Update Status:</span>
-
-                    {['NEW_REQUEST', 'CONTACTED', 'FOLLOW_UP'].map(status => {
-                      const s        = STATUS_CONFIG[status]
-                      const isActive = selectedStatus === status
-                      return (
-                        <button
-                          key={status}
-                          onClick={() => {
-                            if (status === enquiry.status) {
-                              setPendingStatus(prev => { const n = { ...prev }; delete n[enquiry.id]; return n })
-                            } else {
-                              setPendingStatus(prev => ({ ...prev, [enquiry.id]: status }))
-                            }
-                          }}
-                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
-                            isActive
-                              ? `${s.bg} ${s.text} border-current`
-                              : 'bg-white text-[#888] border-[#e8e5e0] hover:border-[#aaa]'
-                          }`}
-                        >
-                          <span className={`w-1.5 h-1.5 rounded-full ${isActive ? s.dot : 'bg-[#ccc]'}`} />
-                          {s.label}
-                        </button>
-                      )
-                    })}
-
-                    <button
-                      onClick={() => saveStatus(enquiry.id)}
-                      disabled={!hasPending || savingId === enquiry.id}
-                      className="px-4 py-1.5 bg-[#2563eb] text-white text-xs font-semibold rounded-lg disabled:opacity-30 hover:bg-[#1d4ed8] disabled:cursor-not-allowed transition-all"
-                    >
-                      {savingId === enquiry.id && !isEditing ? 'Saving…' : 'Save Status'}
-                    </button>
-
-                    <div className="w-px h-5 bg-[#e8e5e0] mx-1" />
-
-                    <button
-                      onClick={() => confirmEnquiry(enquiry.id)}
-                      className="flex items-center gap-1.5 px-4 py-1.5 bg-green-500 text-white text-xs font-semibold rounded-lg hover:bg-green-600 transition-all"
-                    >
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                      Confirm as Event
-                    </button>
-                  </div>
-                )}
-
-                {/* ── Edit form ── */}
+                {/* ── Edit form (expands below) ── */}
                 {isEditing && (
                   <div className="px-6 pb-6 border-t border-[#dbeafe] bg-[#fafeff]">
                     <p className="text-xs font-semibold text-[#2563eb] uppercase tracking-wider mt-5 mb-4 flex items-center gap-2">
@@ -411,9 +427,9 @@ export default function EnquiriesPage() {
                         className="px-5 py-2 border border-[#e8e5e0] text-[#555] text-sm font-semibold rounded-lg hover:bg-[#EDE8D0] transition-all">
                         Cancel
                       </button>
-                      <button onClick={saveEdit} disabled={savingId === enquiry.id}
+                      <button onClick={saveEdit} disabled={isSaving}
                         className="px-5 py-2 bg-[#2563eb] text-white text-sm font-semibold rounded-lg hover:bg-[#1d4ed8] disabled:opacity-40 transition-all">
-                        {savingId === enquiry.id ? 'Saving…' : 'Save Changes'}
+                        {isSaving ? 'Saving…' : 'Save Changes'}
                       </button>
                     </div>
                   </div>
