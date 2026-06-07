@@ -198,7 +198,7 @@ export default function GalleryPage() {
   if (error) return (
     <div className="min-h-screen bg-white flex items-center justify-center p-8">
       <div className="text-center">
-        <div className="w-16 h-16 bg-[#f8f7f4] border border-[#e8e5e0] rounded-2xl flex items-center justify-center mx-auto mb-6">
+        <div className="w-16 h-16 bg-[#FDFBD4] border border-[#e8e5e0] rounded-2xl flex items-center justify-center mx-auto mb-6">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#bbb" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
         </div>
         <h1 className="text-[#0f0f0f] text-2xl font-semibold mb-3">
@@ -331,7 +331,7 @@ export default function GalleryPage() {
         {scanResult !== null && (
           <div className="mt-4">
             {scanResult.length === 0 ? (
-              <div className="bg-[#f8f7f4] border border-[#e8e5e0] rounded-xl px-4 py-3 text-[#888] text-sm">
+              <div className="bg-[#FDFBD4] border border-[#e8e5e0] rounded-xl px-4 py-3 text-[#888] text-sm">
                 No photos found with your face. Try scanning again in better lighting.
               </div>
             ) : (

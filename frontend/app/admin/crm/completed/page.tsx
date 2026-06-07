@@ -71,19 +71,19 @@ export default function CompletedPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 gap-4 mb-8">
-        <div className="bg-white border border-[#ede9fe] rounded-2xl p-5">
+        <div className="bg-white border border-[#dbeafe] rounded-2xl p-5">
           <p className="text-3xl font-bold text-green-500">{events.length}</p>
           <p className="text-sm text-[#888] mt-1">Events Completed</p>
         </div>
-        <div className="bg-white border border-[#ede9fe] rounded-2xl p-5">
-          <p className="text-3xl font-bold text-[#7c3aed]">₹{totalRevenue.toLocaleString('en-IN')}</p>
+        <div className="bg-white border border-[#dbeafe] rounded-2xl p-5">
+          <p className="text-3xl font-bold text-[#2563eb]">₹{totalRevenue.toLocaleString('en-IN')}</p>
           <p className="text-sm text-[#888] mt-1">Total Revenue</p>
         </div>
       </div>
 
       {/* Filters */}
       <div className="flex items-center gap-3 mb-6 flex-wrap">
-        <div className="flex gap-1 bg-white border border-[#ede9fe] rounded-xl p-1">
+        <div className="flex gap-1 bg-white border border-[#dbeafe] rounded-xl p-1">
           {[
             { key: 'all',        label: 'All Time' },
             { key: 'this-month', label: 'This Month' },
@@ -93,7 +93,7 @@ export default function CompletedPage() {
           ].map(tab => (
             <button key={tab.key} onClick={() => setFilter(tab.key)}
               className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
-                filter === tab.key ? 'bg-[#7c3aed] text-white' : 'text-[#666] hover:text-[#0f0f0f]'
+                filter === tab.key ? 'bg-[#2563eb] text-white' : 'text-[#666] hover:text-[#0f0f0f]'
               }`}>
               {tab.label}
             </button>
@@ -103,7 +103,7 @@ export default function CompletedPage() {
         {/* Year picker */}
         {['month','quarter','year'].includes(filter) && (
           <select value={year} onChange={e => setYear(e.target.value)}
-            className="border border-[#e8e5e0] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-[#7c3aed] transition-all">
+            className="border border-[#e8e5e0] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-[#2563eb] transition-all">
             {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
           </select>
         )}
@@ -111,7 +111,7 @@ export default function CompletedPage() {
         {/* Month picker */}
         {filter === 'month' && (
           <select value={month} onChange={e => setMonth(e.target.value)}
-            className="border border-[#e8e5e0] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-[#7c3aed] transition-all">
+            className="border border-[#e8e5e0] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-[#2563eb] transition-all">
             {MONTHS.map((m, i) => <option key={i} value={i+1}>{m}</option>)}
           </select>
         )}
@@ -119,7 +119,7 @@ export default function CompletedPage() {
         {/* Quarter picker */}
         {filter === 'quarter' && (
           <select value={quarter} onChange={e => setQuarter(e.target.value)}
-            className="border border-[#e8e5e0] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-[#7c3aed] transition-all">
+            className="border border-[#e8e5e0] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-[#2563eb] transition-all">
             {['1','2','3','4'].map(q => <option key={q} value={q}>Q{q}</option>)}
           </select>
         )}
@@ -128,12 +128,12 @@ export default function CompletedPage() {
       {loading ? (
         <div className="text-center py-20 text-[#888]">Loading…</div>
       ) : events.length === 0 ? (
-        <div className="text-center py-24 bg-white border border-[#ede9fe] rounded-2xl">
+        <div className="text-center py-24 bg-white border border-[#dbeafe] rounded-2xl">
           <p className="text-[#888]">No completed events found for this period.</p>
         </div>
       ) : (
-        <div className="bg-white border border-[#ede9fe] rounded-2xl overflow-hidden">
-          <div className="grid grid-cols-6 px-6 py-3 border-b border-[#f5f3ff] text-xs font-semibold text-[#888] uppercase tracking-wider">
+        <div className="bg-white border border-[#dbeafe] rounded-2xl overflow-hidden">
+          <div className="grid grid-cols-6 px-6 py-3 border-b border-[#eff6ff] text-xs font-semibold text-[#888] uppercase tracking-wider">
             <span className="col-span-2">Couple</span>
             <span>Event Dates</span>
             <span>Completed</span>
@@ -144,7 +144,7 @@ export default function CompletedPage() {
             <div
               key={event.id}
               onClick={() => router.push(`/admin/crm/${event.id}`)}
-              className="grid grid-cols-6 px-6 py-4 border-b border-[#f5f3ff] last:border-0 hover:bg-[#faf9ff] cursor-pointer transition-all items-center"
+              className="grid grid-cols-6 px-6 py-4 border-b border-[#eff6ff] last:border-0 hover:bg-[#faf9ff] cursor-pointer transition-all items-center"
             >
               <div className="col-span-2">
                 <p className="font-semibold text-[#0f0f0f]">{event.coupleName}</p>

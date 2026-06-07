@@ -8,59 +8,39 @@ export default function LandingPage() {
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
+    const onScroll = () => setScrolled(window.scrollY > 60)
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   return (
-    <div className="min-h-screen bg-white text-[#0f0f0f] font-sans">
+    <div className="min-h-screen bg-[#FDFBD4] text-[#0a0a0a] font-sans">
 
       {/* ── Navbar ── */}
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100' : 'bg-transparent'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 bg-[#7c3aed] rounded-xl flex items-center justify-center shadow-md">
-              <span className="text-white text-xs font-bold tracking-tight">P</span>
-            </div>
-            <span className="font-semibold text-[#0f0f0f] text-base">
-              pru<span className="text-[#7c3aed]">view</span>
-            </span>
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? 'bg-[#FDFBD4]/95 backdrop-blur-sm border-b border-black/10' : 'bg-transparent'
+      }`}>
+        <div className="max-w-7xl mx-auto px-8 lg:px-16 h-16 flex items-center justify-between">
+          <Link href="/" className="text-xl font-bold tracking-tight">
+            pru<span className="text-[#2563eb]">view</span>
           </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-sm text-[#555] hover:text-[#7c3aed] transition-colors">Features</a>
-            <a href="#how-it-works" className="text-sm text-[#555] hover:text-[#7c3aed] transition-colors">How it works</a>
-            <a href="#for-photographers" className="text-sm text-[#555] hover:text-[#7c3aed] transition-colors">For photographers</a>
+          <nav className="hidden md:flex items-center gap-10">
+            <a href="#features" className="text-sm text-[#555] hover:text-[#0a0a0a] transition-colors">Features</a>
+            <a href="#how-it-works" className="text-sm text-[#555] hover:text-[#0a0a0a] transition-colors">How it works</a>
+            <a href="#for-photographers" className="text-sm text-[#555] hover:text-[#0a0a0a] transition-colors">Photographers</a>
           </nav>
 
-          {/* CTA */}
-          <div className="hidden md:flex items-center gap-3">
-            <Link
-              href="/admin/login"
-              className="text-sm font-medium text-[#0f0f0f] hover:text-[#7c3aed] transition-colors"
-            >
+          <div className="hidden md:flex items-center gap-4">
+            <Link href="/admin/login" className="text-sm text-[#555] hover:text-[#0a0a0a] transition-colors">
               Log in
             </Link>
-            <Link
-              href="/admin/login"
-              className="text-sm font-medium bg-[#7c3aed] hover:bg-[#6d28d9] text-white px-5 py-2 rounded-full transition-colors shadow-sm"
-            >
+            <Link href="/admin/login" className="text-sm font-semibold bg-[#0a0a0a] text-white px-5 py-2.5 rounded-full hover:bg-[#2563eb] transition-colors">
               Get started
             </Link>
           </div>
 
-          {/* Hamburger */}
-          <button
-            className="md:hidden p-2 rounded-lg text-[#555] hover:bg-gray-100"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
+          <button className="md:hidden p-2" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? (
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             ) : (
@@ -69,146 +49,94 @@ export default function LandingPage() {
           </button>
         </div>
 
-        {/* Mobile menu */}
         {menuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-100 px-6 py-4 flex flex-col gap-4">
+          <div className="md:hidden bg-[#FDFBD4] border-t border-black/10 px-8 py-5 flex flex-col gap-4">
             <a href="#features" className="text-sm text-[#555]" onClick={() => setMenuOpen(false)}>Features</a>
             <a href="#how-it-works" className="text-sm text-[#555]" onClick={() => setMenuOpen(false)}>How it works</a>
-            <a href="#for-photographers" className="text-sm text-[#555]" onClick={() => setMenuOpen(false)}>For photographers</a>
-            <Link href="/admin/login" className="text-sm font-medium text-[#7c3aed]">Log in</Link>
+            <a href="#for-photographers" className="text-sm text-[#555]" onClick={() => setMenuOpen(false)}>Photographers</a>
+            <Link href="/admin/login" className="text-sm font-semibold text-[#0a0a0a]">Log in</Link>
           </div>
         )}
       </header>
 
       {/* ── Hero ── */}
-      <section className="relative min-h-screen flex items-center bg-[#0f0f0f] overflow-hidden">
-        {/* Background grid */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:64px_64px]" />
-        {/* Purple glow */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[#7c3aed] rounded-full opacity-[0.12] blur-[120px] pointer-events-none" />
+      <section className="min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20 pb-0 bg-[#FDFBD4]">
+        <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#2563eb] mb-8">
+          Wedding photography platform
+        </p>
+        <h1 className="text-5xl sm:text-7xl lg:text-[90px] font-bold text-[#0a0a0a] leading-[1.02] tracking-tight max-w-5xl">
+          Your photography.<br />
+          <span className="font-light text-[#444]">Beautifully</span> delivered.
+        </h1>
+        <p className="mt-8 text-lg sm:text-xl text-[#666] max-w-lg leading-relaxed font-light">
+          Share wedding galleries instantly. Let guests find their own photos using AI face recognition — no sign-up required.
+        </p>
+        <div className="mt-10 flex flex-col sm:flex-row gap-3 items-center">
+          <Link
+            href="/admin/login"
+            className="px-8 py-4 bg-[#0a0a0a] text-white font-semibold text-sm rounded-full hover:bg-[#2563eb] transition-colors"
+          >
+            Start for free
+          </Link>
+          <a
+            href="#features"
+            className="px-8 py-4 border border-black/20 text-[#0a0a0a] font-medium text-sm rounded-full hover:border-black/40 transition-colors"
+          >
+            See how it works
+          </a>
+        </div>
 
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-10 pt-24 pb-20 flex flex-col lg:flex-row items-center gap-16">
-          {/* Text */}
-          <div className="flex-1 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#7c3aed]/20 border border-[#7c3aed]/30 mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#a78bfa] animate-pulse" />
-              <span className="text-xs font-medium text-[#a78bfa]">Wedding photography platform</span>
+        {/* Gallery preview mockup */}
+        <div className="mt-20 w-full max-w-4xl mx-auto">
+          <div className="bg-white rounded-t-2xl border border-black/10 border-b-0 shadow-[0_-8px_40px_rgba(0,0,0,0.12)] overflow-hidden">
+            <div className="bg-[#f2f2f2] border-b border-black/10 px-5 py-3 flex items-center gap-3">
+              <div className="flex gap-1.5">
+                <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
+                <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
+                <div className="w-3 h-3 rounded-full bg-[#28c840]" />
+              </div>
+              <div className="flex-1 bg-white rounded-md h-6 flex items-center px-3 max-w-xs mx-auto">
+                <span className="text-[11px] text-[#999]">pruview.in/g/sharma-wedding</span>
+              </div>
             </div>
-
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight tracking-tight">
-              Every moment,
-              <br />
-              <span className="text-[#7c3aed]">beautifully</span>
-              <br />
-              delivered.
-            </h1>
-
-            <p className="mt-6 text-base sm:text-lg text-[#999] max-w-xl mx-auto lg:mx-0 leading-relaxed">
-              Share wedding galleries with guests. Let them find their own photos using AI face recognition — no sign-up required.
-            </p>
-
-            <div className="mt-10 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-              <Link
-                href="/admin/login"
-                className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-semibold text-sm transition-all shadow-lg shadow-[#7c3aed]/30 hover:shadow-[#7c3aed]/50"
-              >
-                Get started free
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </Link>
-              <a
-                href="#how-it-works"
-                className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full border border-white/20 text-white/80 hover:text-white hover:border-white/40 font-medium text-sm transition-all"
-              >
-                See how it works
-              </a>
-            </div>
-
-            {/* Social proof */}
-            <div className="mt-12 flex items-center gap-6 justify-center lg:justify-start">
-              <div className="flex -space-x-2">
-                {['#7c3aed','#9333ea','#a855f7','#c084fc'].map((c, i) => (
-                  <div key={i} className="w-8 h-8 rounded-full border-2 border-[#0f0f0f] flex items-center justify-center text-white text-xs font-bold" style={{backgroundColor: c}}>
-                    {['A','B','C','D'][i]}
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-5">
+                <div>
+                  <h3 className="font-semibold text-sm text-[#0a0a0a]">Sharma Wedding Gallery</h3>
+                  <p className="text-xs text-[#999] mt-0.5">247 photos · Jun 2025</p>
+                </div>
+                <button className="text-xs px-4 py-2 rounded-full bg-[#2563eb] text-white font-semibold hover:bg-[#1d4ed8] transition-colors">
+                  Find my photos
+                </button>
+              </div>
+              <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
+                {[
+                  'https://images.unsplash.com/photo-1519741497674-611481863552?w=200&q=80',
+                  'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=200&q=80',
+                  'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=200&q=80',
+                  'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=200&q=80',
+                  'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=200&q=80',
+                  'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=200&q=80',
+                  'https://images.unsplash.com/photo-1519741497674-611481863552?w=200&q=80',
+                  'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=200&q=80',
+                  'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=200&q=80',
+                  'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=200&q=80',
+                  'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=200&q=80',
+                  'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=200&q=80',
+                ].map((src, i) => (
+                  <div key={i} className="aspect-square rounded-xl overflow-hidden bg-[#f5f5f5]">
+                    <img src={src} alt="" className="w-full h-full object-cover" />
                   </div>
                 ))}
-              </div>
-              <div>
-                <p className="text-sm font-bold text-[#f59e0b]">5.0 / 5.0</p>
-                <p className="text-xs text-[#777] mt-0.5">Loved by photographers</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Gallery preview card */}
-          <div className="flex-1 flex justify-center lg:justify-end w-full max-w-lg">
-            <div className="relative w-full max-w-md">
-              {/* Main card */}
-              <div className="bg-[#1a1a1a] rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
-                <div className="bg-[#111] px-5 py-3.5 flex items-center gap-3 border-b border-white/[0.06]">
-                  <div className="flex gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
-                    <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
-                    <div className="w-3 h-3 rounded-full bg-[#28c840]" />
-                  </div>
-                  <div className="flex-1 bg-[#222] rounded-md h-6 flex items-center px-3">
-                    <span className="text-[10px] text-[#555]">pruview.in/g/sharma-wedding</span>
-                  </div>
-                </div>
-                {/* Gallery grid */}
-                <div className="p-4 grid grid-cols-3 gap-2">
-                  {[
-                    'https://images.unsplash.com/photo-1519741497674-611481863552?w=200&q=80',
-                    'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=200&q=80',
-                    'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=200&q=80',
-                    'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=200&q=80',
-                    'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=200&q=80',
-                    'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=200&q=80',
-                  ].map((src, i) => (
-                    <div key={i} className="aspect-square rounded-xl overflow-hidden bg-[#222]">
-                      <img src={src} alt="" className="w-full h-full object-cover" />
-                    </div>
-                  ))}
-                </div>
-                {/* Face scan bar */}
-                <div className="mx-4 mb-4 px-4 py-3 bg-[#7c3aed]/20 border border-[#7c3aed]/30 rounded-2xl flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-[#7c3aed]/30 flex items-center justify-center flex-shrink-0">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/><path d="M20 8h-1M5 8H4M12 3V2M17.7 5.3l-.7.7M6.3 5.3l.7.7"/></svg>
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-white">Find your photos</p>
-                    <p className="text-[10px] text-[#777]">Scan your face to find photos of you</p>
-                  </div>
-                  <div className="ml-auto">
-                    <div className="w-7 h-7 rounded-full bg-[#7c3aed] flex items-center justify-center">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Floating badge */}
-              <div className="absolute -top-4 -right-4 bg-white rounded-2xl shadow-xl px-3 py-2 flex items-center gap-2 border border-gray-100">
-                <div className="w-6 h-6 bg-[#dcfce7] rounded-full flex items-center justify-center">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                </div>
-                <span className="text-xs font-semibold text-[#0f0f0f]">47 photos found!</span>
-              </div>
-
-              {/* Floating download badge */}
-              <div className="absolute -bottom-4 -left-4 bg-white rounded-2xl shadow-xl px-3 py-2 flex items-center gap-2 border border-gray-100">
-                <div className="w-6 h-6 bg-[#ede9fe] rounded-full flex items-center justify-center">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                </div>
-                <span className="text-xs font-semibold text-[#0f0f0f]">Download all</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Stats strip ── */}
-      <section className="bg-[#f9f7ff] border-y border-[#ede9fe] py-10">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      {/* ── Stats ── */}
+      <section className="py-16 px-6 border-y border-black/10 bg-white">
+        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {[
             { value: '10,000+', label: 'Photos delivered' },
             { value: '99%', label: 'Face match accuracy' },
@@ -216,290 +144,275 @@ export default function LandingPage() {
             { value: '500+', label: 'Events managed' },
           ].map((s, i) => (
             <div key={i}>
-              <p className="text-2xl sm:text-3xl font-bold text-[#7c3aed]">{s.value}</p>
-              <p className="text-sm text-[#666] mt-1">{s.label}</p>
+              <p className="text-3xl sm:text-4xl font-bold text-[#0a0a0a]">{s.value}</p>
+              <p className="text-sm text-[#999] mt-2 font-light">{s.label}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── Features ── */}
-      <section id="features" className="py-24 px-6 lg:px-10">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-sm font-semibold text-[#7c3aed] uppercase tracking-widest mb-3">Features</p>
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#0f0f0f]">Everything you need,<br />nothing you don't.</h2>
+      {/* ── Feature 1: AI Face Recognition ── */}
+      <section id="features" className="py-32 px-6 lg:px-16 bg-[#FDFBD4]">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
+          <div>
+            <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#2563eb] mb-6">01 — AI Recognition</p>
+            <h2 className="text-4xl sm:text-5xl font-bold text-[#0a0a0a] leading-[1.1]">
+              Guests find their<br />photos <span className="font-light text-[#555]">instantly.</span>
+            </h2>
+            <p className="mt-6 text-[#555] text-lg leading-relaxed max-w-md font-light">
+              No app download. No sign-up. Open the link, scan your face, and see every photo you appear in — within seconds.
+            </p>
+            <div className="mt-10 space-y-3">
+              {[
+                'Works on any device with a camera',
+                'Face scan takes under 2 seconds',
+                '99% face match accuracy',
+                'Privacy-first — no biometric data stored',
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#2563eb] flex-shrink-0" />
+                  <span className="text-sm text-[#444]">{item}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                icon: (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/><path d="M20 8h-1M5 8H4"/></svg>
-                ),
-                title: 'AI face recognition',
-                desc: 'Guests scan their face with their camera and instantly see only the photos they appear in. No app download, no login needed.',
-                accent: '#7c3aed',
-                bg: '#f5f3ff',
-              },
-              {
-                icon: (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                ),
-                title: 'Smart galleries',
-                desc: 'Share a single link with your clients. They get a beautiful, branded gallery with all event photos, organized and ready to download.',
-                accent: '#0ea5e9',
-                bg: '#f0f9ff',
-              },
-              {
-                icon: (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                ),
-                title: 'One-click download',
-                desc: 'Guests download individual photos or the entire gallery in one click. Full-resolution files directly from secure cloud storage.',
-                accent: '#10b981',
-                bg: '#f0fdf4',
-              },
-              {
-                icon: (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                ),
-                title: 'Lead management',
-                desc: 'Capture enquiries, track follow-ups, and convert leads into bookings — all from your CRM dashboard.',
-                accent: '#f59e0b',
-                bg: '#fffbeb',
-              },
-              {
-                icon: (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-                ),
-                title: 'Post-production tracking',
-                desc: 'Track editing progress — culling, retouching, album design — with task assignment and due dates per event.',
-                accent: '#ec4899',
-                bg: '#fdf2f8',
-              },
-              {
-                icon: (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                ),
-                title: 'Invoices & payments',
-                desc: 'Generate invoices, record payments (UPI, cash, bank), and track outstanding balances — everything in one place.',
-                accent: '#6366f1',
-                bg: '#eef2ff',
-              },
-            ].map((f, i) => (
-              <div key={i} className="rounded-2xl p-6 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all group">
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 transition-all" style={{backgroundColor: f.bg, color: f.accent}}>
-                  {f.icon}
+          <div className="relative">
+            <div className="bg-white rounded-3xl border border-black/8 p-5 shadow-xl">
+              <div className="aspect-[4/3] rounded-2xl bg-[#0a0a0a] flex items-center justify-center relative overflow-hidden mb-4">
+                <img
+                  src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80"
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover opacity-30"
+                />
+                <div className="relative z-10 text-center">
+                  <div className="w-28 h-28 rounded-full border-2 border-[#2563eb] mx-auto mb-4 flex items-center justify-center">
+                    <div className="w-20 h-20 rounded-full border border-[#2563eb]/40 flex items-center justify-center">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                    </div>
+                  </div>
+                  <p className="text-white text-sm font-medium">Scanning face...</p>
+                  <p className="text-white/40 text-xs mt-1">Hold still for a moment</p>
                 </div>
-                <h3 className="font-semibold text-[#0f0f0f] mb-2">{f.title}</h3>
-                <p className="text-sm text-[#666] leading-relaxed">{f.desc}</p>
               </div>
-            ))}
+              <div className="flex items-center gap-3 bg-[#eff6ff] rounded-xl px-4 py-3">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span className="text-sm font-semibold text-[#0a0a0a]">47 photos found for you</span>
+                <span className="ml-auto text-xs text-[#2563eb] font-medium">Download all</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── How it works (for guests) ── */}
-      <section id="how-it-works" className="bg-[#0f0f0f] py-24 px-6 lg:px-10">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-sm font-semibold text-[#a78bfa] uppercase tracking-widest mb-3">For guests</p>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white">Find your photos in seconds.</h2>
-            <p className="text-[#777] mt-4 max-w-xl mx-auto text-sm leading-relaxed">No app download. No account. Just open the link the photographer shares and let the magic happen.</p>
+      {/* ── Feature 2: Gallery Sharing (dark) ── */}
+      <section className="py-32 px-6 lg:px-16 bg-[#0a0a0a]">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
+          <div className="relative order-2 lg:order-1">
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { src: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=600&q=80', span: 'col-span-2 aspect-[16/7]' },
+                { src: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=400&q=80', span: 'aspect-square' },
+                { src: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=400&q=80', span: 'aspect-square' },
+              ].map((img, i) => (
+                <div key={i} className={`rounded-2xl overflow-hidden ${img.span}`}>
+                  <img src={img.src} alt="" className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+            <div className="absolute bottom-4 left-4 right-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl px-4 py-3 flex items-center justify-between">
+              <span className="text-white text-xs font-medium truncate">pruview.in/g/sharma-wedding</span>
+              <div className="flex items-center gap-1.5 text-white/50 text-xs flex-shrink-0 ml-3">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                Share link
+              </div>
+            </div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 relative">
-            {/* Connector line */}
-            <div className="hidden md:block absolute top-8 left-1/4 right-1/4 h-px bg-gradient-to-r from-[#7c3aed]/40 via-[#7c3aed] to-[#7c3aed]/40" />
+          <div className="order-1 lg:order-2">
+            <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#60a5fa] mb-6">02 — Gallery Sharing</p>
+            <h2 className="text-4xl sm:text-5xl font-bold text-white leading-[1.1]">
+              One link.<br />Every photo.<br /><span className="font-light text-[#60a5fa]">Ready to share.</span>
+            </h2>
+            <p className="mt-6 text-white/50 text-lg leading-relaxed max-w-md font-light">
+              Upload your edited photos and get a beautiful, branded gallery link in seconds. Share it with clients and their guests instantly.
+            </p>
+            <div className="mt-10 space-y-3">
+              {[
+                'Secure cloud storage with AWS S3',
+                'Full-resolution downloads',
+                'Works on any browser and device',
+                'No watermarks, no file limits',
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#60a5fa] flex-shrink-0" />
+                  <span className="text-sm text-white/60">{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
+      {/* ── Feature 3: Business Dashboard ── */}
+      <section id="for-photographers" className="py-32 px-6 lg:px-16 bg-white">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
+          <div>
+            <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#2563eb] mb-6">03 — Business Dashboard</p>
+            <h2 className="text-4xl sm:text-5xl font-bold text-[#0a0a0a] leading-[1.1]">
+              Run your entire<br />business from<br /><span className="font-light text-[#555]">one place.</span>
+            </h2>
+            <p className="mt-6 text-[#555] text-lg leading-relaxed max-w-md font-light">
+              From first enquiry to final payment — manage your team, track post-production, and invoice clients without juggling multiple tools.
+            </p>
+            <div className="mt-10 space-y-3">
+              {[
+                'Enquiry management and lead tracking',
+                'Slot-based photographer booking calendar',
+                'Post-production task tracking',
+                'Invoices with UPI, cash, and bank transfer',
+                'Full event archive with payment history',
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#2563eb] flex-shrink-0" />
+                  <span className="text-sm text-[#444]">{item}</span>
+                </div>
+              ))}
+            </div>
+            <Link
+              href="/admin/login"
+              className="inline-flex items-center gap-2 mt-10 px-7 py-3.5 bg-[#0a0a0a] text-white text-sm font-semibold rounded-full hover:bg-[#2563eb] transition-colors"
+            >
+              Open dashboard
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </Link>
+          </div>
+
+          {/* CRM preview */}
+          <div className="bg-[#FDFBD4] rounded-3xl border border-black/8 p-1.5 shadow-xl">
+            <div className="bg-white rounded-2xl overflow-hidden">
+              <div className="bg-[#f9f9f9] border-b border-black/5 px-4 py-3 flex items-center justify-between">
+                <span className="text-xs font-semibold text-[#0a0a0a]">pru<span className="text-[#2563eb]">view</span> CRM</span>
+                <span className="text-[10px] bg-[#dbeafe] text-[#2563eb] px-2 py-0.5 rounded-full font-semibold">Live</span>
+              </div>
+              <div className="flex">
+                <div className="w-36 bg-[#f9f9f9] border-r border-black/5 p-2 flex flex-col gap-1">
+                  {['Dashboard', 'Calendar', 'Enquiries', 'Invoices', 'Completed'].map((item, i) => (
+                    <div key={i} className={`px-3 py-1.5 rounded-lg text-[10px] font-medium ${i === 0 ? 'bg-[#dbeafe] text-[#2563eb]' : 'text-[#888]'}`}>
+                      {item}
+                    </div>
+                  ))}
+                </div>
+                <div className="flex-1 p-4">
+                  <p className="text-[11px] font-semibold text-[#0a0a0a] mb-3">Upcoming events</p>
+                  <div className="space-y-2 mb-4">
+                    {[
+                      { name: 'Priya & Arjun', date: 'Jun 12', status: 'CONFIRMED', bg: '#dcfce7', color: '#16a34a' },
+                      { name: 'Meera & Karan', date: 'Jun 18', status: 'ACTIVE', bg: '#dbeafe', color: '#2563eb' },
+                      { name: 'Sana & Rohit', date: 'Jun 25', status: 'UPCOMING', bg: '#fef3c7', color: '#d97706' },
+                    ].map((e, i) => (
+                      <div key={i} className="flex items-center justify-between px-3 py-2 rounded-xl border border-black/5">
+                        <div>
+                          <p className="text-[10px] font-semibold text-[#0a0a0a]">{e.name}</p>
+                          <p className="text-[9px] text-[#bbb]">{e.date}</p>
+                        </div>
+                        <span className="text-[9px] font-semibold px-2 py-0.5 rounded-full" style={{ backgroundColor: e.bg, color: e.color }}>
+                          {e.status}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="bg-[#eff6ff] rounded-xl p-3">
+                      <p className="text-[18px] font-bold text-[#2563eb]">12</p>
+                      <p className="text-[9px] text-[#888]">Events this month</p>
+                    </div>
+                    <div className="bg-[#f0fdf4] rounded-xl p-3">
+                      <p className="text-[18px] font-bold text-[#16a34a]">₹2.4L</p>
+                      <p className="text-[9px] text-[#888]">Revenue collected</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── How it works ── */}
+      <section id="how-it-works" className="py-32 px-6 lg:px-16 bg-[#FDFBD4]">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-20">
+            <p className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#2563eb] mb-6">For guests</p>
+            <h2 className="text-4xl sm:text-5xl font-bold text-[#0a0a0a]">
+              Find your photos<br /><span className="font-light text-[#555]">in three steps.</span>
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-12">
             {[
               {
                 step: '01',
                 title: 'Open the gallery link',
-                desc: 'Your photographer shares a unique link after the event. Open it on any device — no app needed.',
-                icon: (
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                ),
+                desc: 'Your photographer shares a unique link after the event. Open it on any device — phone, tablet, or laptop. No app needed.',
               },
               {
                 step: '02',
                 title: 'Scan your face',
-                desc: 'Tap the face scan button, allow camera access, and look at your screen for 2 seconds.',
-                icon: (
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 6V4a2 2 0 0 1 2-2h2M4 18v2a2 2 0 0 0 2 2h2M14 4h2a2 2 0 0 1 2 2v2M14 20h2a2 2 0 0 0 2-2v-2"/><circle cx="12" cy="12" r="3"/></svg>
-                ),
+                desc: "Tap 'Find my photos', allow camera access, and look at the screen for 2 seconds. Our AI does the rest.",
               },
               {
                 step: '03',
                 title: 'Download your photos',
-                desc: 'Instantly see every photo you appear in. Download one or all with a single tap.',
-                icon: (
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                ),
+                desc: 'See every photo you appear in, instantly. Download one, a few, or all of them in a single click.',
               },
             ].map((s, i) => (
-              <div key={i} className="flex flex-col items-center text-center relative">
-                <div className="w-16 h-16 rounded-2xl bg-[#7c3aed] flex items-center justify-center text-white mb-5 shadow-lg shadow-[#7c3aed]/30 z-10">
-                  {s.icon}
-                </div>
-                <span className="text-xs font-mono text-[#7c3aed] mb-2">{s.step}</span>
-                <h3 className="font-semibold text-white mb-2">{s.title}</h3>
-                <p className="text-sm text-[#777] leading-relaxed">{s.desc}</p>
+              <div key={i}>
+                <p className="text-7xl font-bold text-black/8 mb-5 leading-none">{s.step}</p>
+                <h3 className="font-semibold text-[#0a0a0a] text-lg mb-3">{s.title}</h3>
+                <p className="text-sm text-[#666] leading-relaxed font-light">{s.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── For photographers ── */}
-      <section id="for-photographers" className="py-24 px-6 lg:px-10">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left: Text */}
-            <div>
-              <p className="text-sm font-semibold text-[#7c3aed] uppercase tracking-widest mb-4">For photographers</p>
-              <h2 className="text-3xl sm:text-4xl font-bold text-[#0f0f0f] leading-snug">
-                Run your entire business<br />from one place.
-              </h2>
-              <p className="text-[#666] mt-5 leading-relaxed">
-                From first enquiry to final delivery — manage your team, track post-production, and get paid without juggling multiple tools.
-              </p>
-
-              <div className="mt-8 space-y-4">
-                {[
-                  'Manage enquiries and convert leads to bookings',
-                  'Schedule photographers with slot-based calendar',
-                  'Track editing tasks and production milestones',
-                  'Send invoices and record UPI / cash / bank payments',
-                  'Archive completed events with full payment history',
-                ].map((item, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-[#ede9fe] flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
-                    </div>
-                    <span className="text-sm text-[#444]">{item}</span>
-                  </div>
-                ))}
-              </div>
-
-              <Link
-                href="/admin/login"
-                className="inline-flex items-center gap-2 mt-10 px-7 py-3 rounded-full bg-[#7c3aed] text-white text-sm font-semibold hover:bg-[#6d28d9] transition-colors shadow-lg shadow-[#7c3aed]/25"
-              >
-                Open your dashboard
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </Link>
-            </div>
-
-            {/* Right: CRM preview */}
-            <div className="relative">
-              <div className="bg-white rounded-3xl border border-gray-100 shadow-2xl overflow-hidden">
-                {/* Mini sidebar */}
-                <div className="flex">
-                  <div className="w-44 bg-[#fafafa] border-r border-gray-100 p-3 flex flex-col gap-1">
-                    <div className="px-3 py-2 mb-2">
-                      <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 bg-[#7c3aed] rounded-md flex items-center justify-center">
-                          <span className="text-white text-[9px] font-bold">P</span>
-                        </div>
-                        <span className="text-xs font-semibold text-[#0f0f0f]">pru<span className="text-[#7c3aed]">view</span></span>
-                      </div>
-                      <p className="text-[9px] text-[#aaa] mt-0.5 ml-8">CRM</p>
-                    </div>
-                    {['Dashboard', 'Calendar', 'Enquiries', 'Invoices', 'Completed'].map((item, i) => (
-                      <div key={i} className={`px-3 py-1.5 rounded-lg text-[10px] font-medium ${i === 0 ? 'bg-[#ede9fe] text-[#7c3aed]' : 'text-[#888]'}`}>
-                        {item}
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Content */}
-                  <div className="flex-1 p-4">
-                    <p className="text-xs font-semibold text-[#0f0f0f] mb-3">Upcoming events</p>
-                    <div className="space-y-2">
-                      {[
-                        { name: 'Priya & Arjun', date: 'Jun 12', status: 'CONFIRMED', color: '#dcfce7', textColor: '#16a34a' },
-                        { name: 'Meera & Karan', date: 'Jun 18', status: 'ACTIVE', color: '#ede9fe', textColor: '#7c3aed' },
-                        { name: 'Sana & Rohit', date: 'Jun 25', status: 'UPCOMING', color: '#fef3c7', textColor: '#d97706' },
-                      ].map((e, i) => (
-                        <div key={i} className="flex items-center justify-between px-3 py-2 rounded-xl bg-[#fafafa] border border-gray-100">
-                          <div>
-                            <p className="text-[10px] font-semibold text-[#0f0f0f]">{e.name}</p>
-                            <p className="text-[9px] text-[#aaa]">{e.date}</p>
-                          </div>
-                          <span className="text-[9px] font-semibold px-2 py-0.5 rounded-full" style={{backgroundColor: e.color, color: e.textColor}}>
-                            {e.status}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="mt-4 grid grid-cols-2 gap-2">
-                      <div className="bg-[#f5f3ff] rounded-xl p-3">
-                        <p className="text-[18px] font-bold text-[#7c3aed]">12</p>
-                        <p className="text-[9px] text-[#888]">Events this month</p>
-                      </div>
-                      <div className="bg-[#f0fdf4] rounded-xl p-3">
-                        <p className="text-[18px] font-bold text-[#16a34a]">₹2.4L</p>
-                        <p className="text-[9px] text-[#888]">Revenue collected</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA Banner ── */}
-      <section className="bg-[#7c3aed] py-20 px-6 lg:px-10">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white">Ready to delight your clients?</h2>
-          <p className="text-[#c4b5fd] mt-4 text-base">Start delivering beautiful galleries with face recognition today.</p>
-          <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-            <Link
-              href="/admin/login"
-              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-white text-[#7c3aed] font-semibold text-sm hover:bg-[#f5f3ff] transition-colors shadow-lg"
-            >
-              Get started free
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </Link>
-          </div>
+      {/* ── CTA ── */}
+      <section className="py-40 px-6 bg-[#0a0a0a] text-center">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-4xl sm:text-6xl font-bold text-white leading-[1.05] mb-6">
+            Ready to delight<br /><span className="font-light text-[#60a5fa]">your clients?</span>
+          </h2>
+          <p className="text-white/40 text-lg mb-10 font-light">
+            Start delivering beautiful galleries with AI face recognition today. Free to get started.
+          </p>
+          <Link
+            href="/admin/login"
+            className="inline-flex items-center gap-2 px-10 py-4 bg-white text-[#0a0a0a] font-semibold text-sm rounded-full hover:bg-[#FDFBD4] transition-colors"
+          >
+            Get started free
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </Link>
         </div>
       </section>
 
       {/* ── Footer ── */}
-      <footer className="bg-[#0f0f0f] text-[#666] py-12 px-6 lg:px-10">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-            {/* Logo */}
-            <div>
-              <div className="flex items-center gap-2.5 mb-3">
-                <div className="w-8 h-8 bg-[#7c3aed] rounded-xl flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">P</span>
-                </div>
-                <span className="font-semibold text-white text-base">
-                  pru<span className="text-[#7c3aed]">view</span>
-                </span>
-              </div>
-              <p className="text-xs text-[#555] max-w-xs">Beautiful wedding galleries with AI-powered face recognition.</p>
-            </div>
-
-            {/* Links */}
-            <div className="flex flex-wrap gap-6 text-sm">
-              <a href="#features" className="hover:text-white transition-colors text-xs">Features</a>
-              <a href="#how-it-works" className="hover:text-white transition-colors text-xs">How it works</a>
-              <a href="#for-photographers" className="hover:text-white transition-colors text-xs">For photographers</a>
-              <Link href="/admin/login" className="hover:text-white transition-colors text-xs">Admin login</Link>
-            </div>
+      <footer className="bg-[#0a0a0a] border-t border-white/[0.06] text-[#555] py-14 px-8 lg:px-16">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-8 mb-10">
+          <div>
+            <p className="font-bold text-white text-xl">pru<span className="text-[#2563eb]">view</span></p>
+            <p className="text-xs text-[#444] mt-2 max-w-xs font-light">Beautiful wedding galleries with AI-powered face recognition.</p>
           </div>
-
-          <div className="mt-10 pt-6 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-[#444]">© 2025 Pruview. All rights reserved.</p>
-            <p className="text-xs text-[#444]">www.pruview.in</p>
+          <div className="flex flex-wrap gap-8 text-xs">
+            <a href="#features" className="hover:text-white transition-colors">Features</a>
+            <a href="#how-it-works" className="hover:text-white transition-colors">How it works</a>
+            <a href="#for-photographers" className="hover:text-white transition-colors">For photographers</a>
+            <Link href="/admin/login" className="hover:text-white transition-colors">Admin login</Link>
           </div>
+        </div>
+        <div className="max-w-7xl mx-auto pt-6 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-[#333]">© 2025 Pruview. All rights reserved.</p>
+          <p className="text-xs text-[#333]">www.pruview.in</p>
         </div>
       </footer>
     </div>

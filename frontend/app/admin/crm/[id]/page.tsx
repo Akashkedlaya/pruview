@@ -171,7 +171,7 @@ export default function EventDetail() {
   useEffect(() => { loadData() }, [id])
 
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#f5f3ff' }}>
+    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#eff6ff' }}>
       <p className="text-[#888]">Loading…</p>
     </div>
   )
@@ -180,13 +180,13 @@ export default function EventDetail() {
   const currentDay = event.days[activeDay]
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#f5f3ff' }}>
+    <div className="min-h-screen" style={{ backgroundColor: '#eff6ff' }}>
 
       {/* Header */}
-      <div className="bg-white border-b border-[#ede9fe] px-8 py-5">
+      <div className="bg-white border-b border-[#dbeafe] px-8 py-5">
         <div className="flex items-center gap-4 mb-1">
           <button onClick={() => router.push('/admin/crm')}
-            className="w-8 h-8 flex items-center justify-center border border-[#e8e5e0] rounded-lg text-[#666] hover:bg-[#f5f3ff] transition-all">
+            className="w-8 h-8 flex items-center justify-center border border-[#e8e5e0] rounded-lg text-[#666] hover:bg-[#eff6ff] transition-all">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
           </button>
           <div className="flex-1">
@@ -212,14 +212,14 @@ export default function EventDetail() {
               className={`px-5 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${
                 activeDay === index
                   ? 'bg-[#0f0f0f] text-white'
-                  : 'bg-white text-[#666] border border-[#e8e5e0] hover:border-[#7c3aed]'
+                  : 'bg-white text-[#666] border border-[#e8e5e0] hover:border-[#2563eb]'
               }`}
             >
               Day {day.dayNumber}: {formatDate(day.date)}
             </button>
           ))}
           <button onClick={addDay} disabled={addingDay}
-            className="px-5 py-2.5 rounded-full text-sm font-semibold border border-dashed border-[#7c3aed] text-[#7c3aed] hover:bg-[#f5f3ff] transition-all whitespace-nowrap disabled:opacity-40"
+            className="px-5 py-2.5 rounded-full text-sm font-semibold border border-dashed border-[#2563eb] text-[#2563eb] hover:bg-[#eff6ff] transition-all whitespace-nowrap disabled:opacity-40"
           >
             {addingDay ? '…' : '+ Add Day'}
           </button>
@@ -245,13 +245,13 @@ export default function EventDetail() {
                   <div key={slot.key}
                     onClick={() => selectSlot(slot.key)}
                     className={`bg-white rounded-2xl border p-5 cursor-pointer transition-all ${
-                      isSelected ? 'border-[#7c3aed] ring-2 ring-[#ede9fe]' : 'border-[#e8e5e0] hover:border-[#7c3aed]'
+                      isSelected ? 'border-[#2563eb] ring-2 ring-[#dbeafe]' : 'border-[#e8e5e0] hover:border-[#2563eb]'
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
                         <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                          isSelected ? 'bg-[#7c3aed] text-white' : 'bg-[#f5f3ff] text-[#7c3aed]'
+                          isSelected ? 'bg-[#2563eb] text-white' : 'bg-[#eff6ff] text-[#2563eb]'
                         }`}>
                           <span className="text-xs font-bold">{slot.key.slice(0,1)}</span>
                         </div>
@@ -273,7 +273,7 @@ export default function EventDetail() {
                           {slotBookings.length} Photographer{slotBookings.length > 1 ? 's' : ''}
                         </span>
                       ) : (
-                        <span className="px-3 py-1 bg-[#f5f3ff] text-[#aaa] text-xs font-medium rounded-full">
+                        <span className="px-3 py-1 bg-[#eff6ff] text-[#aaa] text-xs font-medium rounded-full">
                           Available
                         </span>
                       )}
@@ -283,8 +283,8 @@ export default function EventDetail() {
                     {slotBookings.length > 0 && isSelected && (
                       <div className="mt-3 pt-3 border-t border-[#f0ede8] flex flex-wrap gap-2">
                         {slotBookings.map(b => (
-                          <div key={b.id} className="flex items-center gap-2 bg-[#f5f3ff] px-3 py-1.5 rounded-full text-xs">
-                            <span className="font-medium text-[#7c3aed]">{b.photographer.name}</span>
+                          <div key={b.id} className="flex items-center gap-2 bg-[#eff6ff] px-3 py-1.5 rounded-full text-xs">
+                            <span className="font-medium text-[#2563eb]">{b.photographer.name}</span>
                             <button onClick={e => { e.stopPropagation(); cancelBooking(b.id, activeDay) }}
                               className="text-[#aaa] hover:text-red-500 transition-colors">
                               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -302,7 +302,7 @@ export default function EventDetail() {
           {/* Right — Slot details form */}
           <div className="col-span-2">
             {activeSlot ? (
-              <div className="bg-white rounded-2xl border border-[#ede9fe] p-6 sticky top-6">
+              <div className="bg-white rounded-2xl border border-[#dbeafe] p-6 sticky top-6">
                 <div className="flex items-center justify-between mb-1">
                   <h3 className="font-bold text-[#0f0f0f]">
                     {SLOTS.find(s => s.key === activeSlot)?.label} Slot Details
@@ -311,7 +311,7 @@ export default function EventDetail() {
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                   </button>
                 </div>
-                <p className="text-xs text-[#7c3aed] font-medium mb-5 bg-[#ede9fe] inline-block px-2 py-0.5 rounded">
+                <p className="text-xs text-[#2563eb] font-medium mb-5 bg-[#dbeafe] inline-block px-2 py-0.5 rounded">
                   {SLOTS.find(s => s.key === activeSlot)?.time}
                 </p>
 
@@ -319,7 +319,7 @@ export default function EventDetail() {
                   <div>
                     <label className="block text-sm font-medium text-[#333] mb-1.5">Event Name</label>
                     <select value={selectedEvent} onChange={e => setSelectedEvent(e.target.value)}
-                      className="w-full px-4 py-2.5 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#7c3aed] transition-all"
+                      className="w-full px-4 py-2.5 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#2563eb] transition-all"
                     >
                       <option value="">Select event type...</option>
                       {EVENT_NAMES.map(n => <option key={n} value={n}>{n}</option>)}
@@ -334,8 +334,8 @@ export default function EventDetail() {
                           {selectedPhotographers.map(pid => {
                             const p = photographers.find(ph => ph.id === pid)
                             return (
-                              <div key={pid} className="flex items-center gap-1 bg-[#ede9fe] text-[#7c3aed] px-2.5 py-1 rounded-full text-xs font-medium">
-                                <span className="w-4 h-4 bg-[#7c3aed] text-white rounded-full flex items-center justify-center text-[10px]">
+                              <div key={pid} className="flex items-center gap-1 bg-[#dbeafe] text-[#2563eb] px-2.5 py-1 rounded-full text-xs font-medium">
+                                <span className="w-4 h-4 bg-[#2563eb] text-white rounded-full flex items-center justify-center text-[10px]">
                                   {p?.name[0]}
                                 </span>
                                 <span>{p?.name.split(' ')[0]} {p?.name.split(' ')[1]?.[0]}.</span>
@@ -345,7 +345,7 @@ export default function EventDetail() {
                           })}
                           <button
                             onClick={() => {}}
-                            className="text-xs text-[#7c3aed] font-medium hover:underline"
+                            className="text-xs text-[#2563eb] font-medium hover:underline"
                           >
                             + Add more
                           </button>
@@ -372,7 +372,7 @@ export default function EventDetail() {
                     </label>
                     <input type="text" value={bookingLocation} onChange={e => setBookingLocation(e.target.value)}
                       placeholder="Poolside Courtyard, The Ritz-Carlton"
-                      className="w-full px-4 py-2.5 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#7c3aed] transition-all"
+                      className="w-full px-4 py-2.5 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#2563eb] transition-all"
                     />
                   </div>
 
@@ -384,13 +384,13 @@ export default function EventDetail() {
                     <div className="flex gap-2">
                       <button onClick={() => saveBooking(false)}
                         disabled={saving || !selectedEvent || selectedPhotographers.length === 0}
-                        className="px-4 py-2 border border-[#e8e5e0] text-sm font-semibold text-[#333] rounded-xl hover:border-[#7c3aed] hover:text-[#7c3aed] disabled:opacity-40 transition-all"
+                        className="px-4 py-2 border border-[#e8e5e0] text-sm font-semibold text-[#333] rounded-xl hover:border-[#2563eb] hover:text-[#2563eb] disabled:opacity-40 transition-all"
                       >
                         Book
                       </button>
                       <button onClick={() => saveBooking(true)}
                         disabled={saving || !selectedEvent || selectedPhotographers.length === 0}
-                        className="px-4 py-2 bg-[#7c3aed] text-white text-sm font-semibold rounded-xl hover:bg-[#6d28d9] disabled:opacity-40 transition-all flex items-center gap-1.5"
+                        className="px-4 py-2 bg-[#2563eb] text-white text-sm font-semibold rounded-xl hover:bg-[#1d4ed8] disabled:opacity-40 transition-all flex items-center gap-1.5"
                       >
                         Book & Notify
                       </button>
@@ -399,9 +399,9 @@ export default function EventDetail() {
                 </div>
               </div>
             ) : (
-              <div className="bg-white rounded-2xl border border-dashed border-[#ede9fe] p-8 text-center h-fit">
-                <div className="w-12 h-12 bg-[#f5f3ff] rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 8 12 12 16"/><line x1="16" y1="12" x2="8" y2="12"/></svg>
+              <div className="bg-white rounded-2xl border border-dashed border-[#dbeafe] p-8 text-center h-fit">
+                <div className="w-12 h-12 bg-[#eff6ff] rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 8 12 12 16"/><line x1="16" y1="12" x2="8" y2="12"/></svg>
                 </div>
                 <p className="text-[#888] text-sm">Select a time slot on the left to view details and assign photographers</p>
               </div>
@@ -435,7 +435,7 @@ export default function EventDetail() {
               ))}
             </div>
             <button onClick={() => setWhatsappLinks([])}
-              className="w-full py-3 bg-[#7c3aed] text-white text-sm font-semibold rounded-xl hover:bg-[#6d28d9] transition-all">
+              className="w-full py-3 bg-[#2563eb] text-white text-sm font-semibold rounded-xl hover:bg-[#1d4ed8] transition-all">
               Done
             </button>
           </div>

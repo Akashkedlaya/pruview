@@ -198,7 +198,7 @@ export default function EnquiriesPage() {
         </div>
         <button
           onClick={() => router.push('/admin/crm/enquiries/new')}
-          className="flex items-center gap-2 px-5 py-2.5 bg-[#7c3aed] text-white text-sm font-semibold rounded-xl hover:bg-[#6d28d9] transition-all shadow-md"
+          className="flex items-center gap-2 px-5 py-2.5 bg-[#2563eb] text-white text-sm font-semibold rounded-xl hover:bg-[#1d4ed8] transition-all shadow-md"
         >
           + New Enquiry
         </button>
@@ -207,12 +207,12 @@ export default function EnquiriesPage() {
       {/* Stats */}
       <div className="grid grid-cols-4 gap-4 mt-6 mb-8">
         {[
-          { label: 'Total',     value: enquiries.length,                                         color: 'text-[#7c3aed]' },
+          { label: 'Total',     value: enquiries.length,                                         color: 'text-[#2563eb]' },
           { label: 'New',       value: enquiries.filter(e => e.status === 'NEW_REQUEST').length, color: 'text-blue-500' },
           { label: 'Follow Up', value: enquiries.filter(e => e.status === 'FOLLOW_UP').length,   color: 'text-purple-500' },
           { label: 'Converted', value: enquiries.filter(e => e.status === 'CONVERTED').length,   color: 'text-green-500' },
         ].map(stat => (
-          <div key={stat.label} className="bg-white border border-[#ede9fe] rounded-2xl p-5">
+          <div key={stat.label} className="bg-white border border-[#dbeafe] rounded-2xl p-5">
             <p className={`text-3xl font-bold ${stat.color}`}>{stat.value}</p>
             <p className="text-sm text-[#888] mt-1">{stat.label}</p>
           </div>
@@ -224,11 +224,11 @@ export default function EnquiriesPage() {
       {loading ? (
         <div className="text-center py-20 text-[#888]">Loading…</div>
       ) : enquiries.length === 0 ? (
-        <div className="text-center py-24 bg-white border border-[#ede9fe] rounded-2xl">
+        <div className="text-center py-24 bg-white border border-[#dbeafe] rounded-2xl">
           <p className="text-[#888] mb-4">No enquiries yet.</p>
           <button
             onClick={() => router.push('/admin/crm/enquiries/new')}
-            className="px-6 py-2.5 bg-[#7c3aed] text-white text-sm font-semibold rounded-xl hover:bg-[#6d28d9] transition-all"
+            className="px-6 py-2.5 bg-[#2563eb] text-white text-sm font-semibold rounded-xl hover:bg-[#1d4ed8] transition-all"
           >
             + New Enquiry
           </button>
@@ -244,7 +244,7 @@ export default function EnquiriesPage() {
               <div
                 key={enquiry.id}
                 className={`bg-white border rounded-2xl overflow-hidden transition-all ${
-                  enquiry.status === 'NEW_REQUEST' ? 'border-[#7c3aed] ring-1 ring-[#7c3aed]' : 'border-[#e8e5e0]'
+                  enquiry.status === 'NEW_REQUEST' ? 'border-[#2563eb] ring-1 ring-[#2563eb]' : 'border-[#e8e5e0]'
                 }`}
               >
                 {/* Main row */}
@@ -276,7 +276,7 @@ export default function EnquiriesPage() {
                         <select
                           value={currentDisplayStatus}
                           onChange={e => handleStatusChange(enquiry.id, enquiry.status, e.target.value)}
-                          className="border border-[#e8e5e0] rounded-lg px-3 py-1.5 text-sm text-[#333] focus:outline-none focus:border-[#7c3aed] transition-all"
+                          className="border border-[#e8e5e0] rounded-lg px-3 py-1.5 text-sm text-[#333] focus:outline-none focus:border-[#2563eb] transition-all"
                         >
                           <option value="NEW_REQUEST">New Request</option>
                           <option value="CONTACTED">Contacted</option>
@@ -297,14 +297,14 @@ export default function EnquiriesPage() {
                         <button
                           onClick={() => saveStatus(enquiry.id)}
                           disabled={!hasPending || savingId === enquiry.id}
-                          className="px-4 py-1.5 bg-[#7c3aed] text-white text-sm font-semibold rounded-lg disabled:opacity-30 hover:bg-[#6d28d9] transition-all"
+                          className="px-4 py-1.5 bg-[#2563eb] text-white text-sm font-semibold rounded-lg disabled:opacity-30 hover:bg-[#1d4ed8] transition-all"
                         >
                           {savingId === enquiry.id ? 'Saving…' : 'Save'}
                         </button>
 
                         <button
                           onClick={() => isEditing ? setEditingId(null) : openEdit(enquiry)}
-                          className="px-4 py-1.5 border border-[#e8e5e0] text-[#333] text-sm font-semibold rounded-lg hover:border-[#7c3aed] hover:text-[#7c3aed] transition-all"
+                          className="px-4 py-1.5 border border-[#e8e5e0] text-[#333] text-sm font-semibold rounded-lg hover:border-[#2563eb] hover:text-[#2563eb] transition-all"
                         >
                           {isEditing ? 'Cancel' : 'Edit'}
                         </button>
@@ -320,13 +320,13 @@ export default function EnquiriesPage() {
                       <>
                         <button
                           onClick={() => isEditing ? setEditingId(null) : openEdit(enquiry)}
-                          className="px-4 py-1.5 border border-[#e8e5e0] text-[#333] text-sm font-semibold rounded-lg hover:border-[#7c3aed] hover:text-[#7c3aed] transition-all"
+                          className="px-4 py-1.5 border border-[#e8e5e0] text-[#333] text-sm font-semibold rounded-lg hover:border-[#2563eb] hover:text-[#2563eb] transition-all"
                         >
                           {isEditing ? 'Cancel' : 'Edit'}
                         </button>
                         <button
                           onClick={() => router.push('/admin/crm')}
-                          className="text-sm text-[#7c3aed] font-medium hover:underline transition-colors"
+                          className="text-sm text-[#2563eb] font-medium hover:underline transition-colors"
                         >
                           View Booking
                         </button>
@@ -337,64 +337,64 @@ export default function EnquiriesPage() {
 
                 {/* Edit form */}
                 {isEditing && (
-                  <div className="px-6 pb-6 border-t border-[#f5f3ff]">
+                  <div className="px-6 pb-6 border-t border-[#eff6ff]">
                     <p className="text-xs font-semibold text-[#888] uppercase tracking-wider mt-5 mb-4">Edit Enquiry Details</p>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-xs font-semibold text-[#555] mb-1.5">Couple Name</label>
                         <input type="text" value={editCoupleName} onChange={e => setEditCoupleName(e.target.value)}
-                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#7c3aed] transition-all" />
+                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#2563eb] transition-all" />
                       </div>
                       <div>
                         <label className="block text-xs font-semibold text-[#555] mb-1.5">Phone Number</label>
                         <input type="text" value={editPhone} onChange={e => setEditPhone(e.target.value)}
-                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#7c3aed] transition-all" />
+                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#2563eb] transition-all" />
                       </div>
                       <div>
                         <label className="block text-xs font-semibold text-[#555] mb-1.5">Start Date</label>
                         <input type="date" value={editStartDate} onChange={e => setEditStartDate(e.target.value)}
-                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#7c3aed] transition-all" />
+                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#2563eb] transition-all" />
                       </div>
                       <div>
                         <label className="block text-xs font-semibold text-[#555] mb-1.5">End Date</label>
                         <input type="date" value={editEndDate} onChange={e => setEditEndDate(e.target.value)}
-                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#7c3aed] transition-all" />
+                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#2563eb] transition-all" />
                       </div>
                       <div>
                         <label className="block text-xs font-semibold text-[#555] mb-1.5">Location</label>
                         <input type="text" value={editLocation} onChange={e => setEditLocation(e.target.value)}
-                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#7c3aed] transition-all" />
+                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#2563eb] transition-all" />
                       </div>
                       <div>
                         <label className="block text-xs font-semibold text-[#555] mb-1.5">Expected Guests</label>
                         <input type="number" value={editGuests} onChange={e => setEditGuests(e.target.value)}
-                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#7c3aed] transition-all" />
+                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#2563eb] transition-all" />
                       </div>
                       <div>
                         <label className="block text-xs font-semibold text-[#555] mb-1.5">Lead Source</label>
                         <select value={editLeadSource} onChange={e => setEditLeadSource(e.target.value)}
-                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#7c3aed] transition-all">
+                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#2563eb] transition-all">
                           {LEAD_SOURCES.map(s => <option key={s} value={s}>{s}</option>)}
                         </select>
                       </div>
                       <div>
                         <label className="block text-xs font-semibold text-[#555] mb-1.5">Follow Up Days</label>
                         <input type="number" value={editFollowUpDays} onChange={e => setEditFollowUpDays(e.target.value)}
-                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#7c3aed] transition-all" />
+                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#2563eb] transition-all" />
                       </div>
                       <div className="col-span-2">
                         <label className="block text-xs font-semibold text-[#555] mb-1.5">Description</label>
                         <textarea value={editDescription} onChange={e => setEditDescription(e.target.value)} rows={3}
-                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#7c3aed] transition-all resize-none" />
+                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#2563eb] transition-all resize-none" />
                       </div>
                     </div>
                     <div className="flex justify-end gap-3 mt-4">
                       <button onClick={() => setEditingId(null)}
-                        className="px-5 py-2 border border-[#e8e5e0] text-[#333] text-sm font-semibold rounded-lg hover:bg-[#f8f7f4] transition-all">
+                        className="px-5 py-2 border border-[#e8e5e0] text-[#333] text-sm font-semibold rounded-lg hover:bg-[#FDFBD4] transition-all">
                         Cancel
                       </button>
                       <button onClick={saveEdit} disabled={savingId === enquiry.id}
-                        className="px-5 py-2 bg-[#7c3aed] text-white text-sm font-semibold rounded-lg hover:bg-[#6d28d9] disabled:opacity-40 transition-all">
+                        className="px-5 py-2 bg-[#2563eb] text-white text-sm font-semibold rounded-lg hover:bg-[#1d4ed8] disabled:opacity-40 transition-all">
                         {savingId === enquiry.id ? 'Saving…' : 'Save Changes'}
                       </button>
                     </div>

@@ -94,7 +94,7 @@ export default function AdminHome() {
   useEffect(() => { loadFolders() }, [])
 
   return (
-    <div className="min-h-screen bg-[#f8f7f4]">
+    <div className="min-h-screen bg-[#FDFBD4]">
 
       {/* Nav */}
       
@@ -167,7 +167,7 @@ export default function AdminHome() {
                 className="bg-white border border-[#e8e5e0] rounded-2xl px-6 py-5 flex items-center gap-4 cursor-pointer hover:border-[#c8a020] transition-all">
 
                 {/* Icon */}
-                <div className="w-10 h-10 rounded-xl bg-[#f8f7f4] border border-[#e8e5e0] flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-[#FDFBD4] border border-[#e8e5e0] flex items-center justify-center flex-shrink-0">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
                 </div>
 

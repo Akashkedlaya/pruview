@@ -78,16 +78,16 @@ export default function Sidebar() {
   const pathname = usePathname()
 
   return (
-    <div className="w-56 min-h-screen bg-white border-r border-[#ede9fe] flex flex-col fixed left-0 top-0 z-40">
+    <div className="w-56 min-h-screen bg-white border-r border-[#dbeafe] flex flex-col fixed left-0 top-0 z-40">
 
       {/* Logo */}
-      <div className="px-6 py-6 border-b border-[#ede9fe]">
+      <div className="px-6 py-6 border-b border-[#dbeafe]">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-[#7c3aed] rounded-lg flex items-center justify-center">
+          <div className="w-8 h-8 bg-[#2563eb] rounded-lg flex items-center justify-center">
             <span className="text-white text-xs font-bold">P</span>
           </div>
           <span className="font-semibold text-[#0f0f0f] text-sm">
-            pru<span className="text-[#7c3aed]">view</span>
+            pru<span className="text-[#2563eb]">view</span>
           </span>
         </div>
         <p className="text-[#aaa] text-xs mt-1 ml-10">CRM</p>
@@ -104,8 +104,8 @@ export default function Sidebar() {
               onClick={() => router.push(item.path)}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm mb-1 transition-all text-left ${
                 isActive
-                  ? 'bg-[#ede9fe] text-[#7c3aed] font-semibold'
-                  : 'text-[#666] hover:bg-[#f5f3ff] hover:text-[#0f0f0f]'
+                  ? 'bg-[#dbeafe] text-[#2563eb] font-semibold'
+                  : 'text-[#666] hover:bg-[#eff6ff] hover:text-[#0f0f0f]'
               }`}
             >
               <span className="flex-shrink-0">{item.icon}</span>
@@ -116,10 +116,10 @@ export default function Sidebar() {
       </nav>
 
       {/* Bottom */}
-      <div className="px-3 py-4 border-t border-[#ede9fe]">
+      <div className="px-3 py-4 border-t border-[#dbeafe]">
         <button
           onClick={() => router.push('/admin/crm')}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-[#aaa] hover:text-[#666] hover:bg-[#f5f3ff] transition-all text-left"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-[#aaa] hover:text-[#666] hover:bg-[#eff6ff] transition-all text-left"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>

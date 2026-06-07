@@ -130,9 +130,9 @@ export default function CalendarPage() {
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-bold text-[#0f0f0f]">{MONTHS[currentMonth]} {currentYear}</h1>
           <div className="flex items-center gap-2">
-            <button onClick={prevMonth} className="w-9 h-9 flex items-center justify-center bg-white border border-[#e8e5e0] rounded-lg hover:bg-[#f5f3ff] text-[#555] transition-all font-bold">&lsaquo;</button>
-            <button onClick={nextMonth} className="w-9 h-9 flex items-center justify-center bg-white border border-[#e8e5e0] rounded-lg hover:bg-[#f5f3ff] text-[#555] transition-all font-bold">&rsaquo;</button>
-            <button onClick={() => router.push('/admin/crm/new')} className="ml-2 px-4 py-2 bg-[#7c3aed] text-white text-sm font-semibold rounded-xl hover:bg-[#6d28d9] transition-all">+ Add Event</button>
+            <button onClick={prevMonth} className="w-9 h-9 flex items-center justify-center bg-white border border-[#e8e5e0] rounded-lg hover:bg-[#eff6ff] text-[#555] transition-all font-bold">&lsaquo;</button>
+            <button onClick={nextMonth} className="w-9 h-9 flex items-center justify-center bg-white border border-[#e8e5e0] rounded-lg hover:bg-[#eff6ff] text-[#555] transition-all font-bold">&rsaquo;</button>
+            <button onClick={() => router.push('/admin/crm/new')} className="ml-2 px-4 py-2 bg-[#2563eb] text-white text-sm font-semibold rounded-xl hover:bg-[#1d4ed8] transition-all">+ Add Event</button>
           </div>
         </div>
 
@@ -159,17 +159,17 @@ export default function CalendarPage() {
                 <div
                   key={index}
                   onClick={() => setSelectedDate(isSelect ? null : dateKey)}
-                  className={`min-h-[90px] p-2 cursor-pointer transition-all ${border} ${isSelect ? 'bg-[#ede9fe] ring-2 ring-[#7c3aed] ring-inset' : 'hover:bg-[#faf9ff]'}`}
+                  className={`min-h-[90px] p-2 cursor-pointer transition-all ${border} ${isSelect ? 'bg-[#dbeafe] ring-2 ring-[#2563eb] ring-inset' : 'hover:bg-[#faf9ff]'}`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className={`text-sm font-semibold w-7 h-7 flex items-center justify-center rounded-full ${todayDay ? 'bg-[#7c3aed] text-white' : isSelect ? 'text-[#7c3aed] font-bold' : 'text-[#333]'}`}>{day}</span>
+                    <span className={`text-sm font-semibold w-7 h-7 flex items-center justify-center rounded-full ${todayDay ? 'bg-[#2563eb] text-white' : isSelect ? 'text-[#2563eb] font-bold' : 'text-[#333]'}`}>{day}</span>
                     <div className={`w-2 h-2 rounded-full ${dotColor[status]}`} />
                   </div>
                   {bookings.length > 0 && (
                     <div className="flex flex-col gap-0.5 mt-1">
                       {bookings.length <= 2
-                        ? names.map((name, i) => <div key={i} className={`text-xs truncate rounded px-1.5 py-0.5 ${isSelect ? 'bg-[#ddd6fe] text-[#7c3aed]' : 'bg-[#f5f3ff] text-[#666]'}`}>{name}</div>)
-                        : <div className={`text-xs rounded px-1.5 py-0.5 ${isSelect ? 'bg-[#ddd6fe] text-[#7c3aed]' : 'bg-[#f5f3ff] text-[#666]'}`}>{bookings.length} Bookings</div>
+                        ? names.map((name, i) => <div key={i} className={`text-xs truncate rounded px-1.5 py-0.5 ${isSelect ? 'bg-[#ddd6fe] text-[#2563eb]' : 'bg-[#eff6ff] text-[#666]'}`}>{name}</div>)
+                        : <div className={`text-xs rounded px-1.5 py-0.5 ${isSelect ? 'bg-[#ddd6fe] text-[#2563eb]' : 'bg-[#eff6ff] text-[#666]'}`}>{bookings.length} Bookings</div>
                       }
                     </div>
                   )}
@@ -234,14 +234,14 @@ export default function CalendarPage() {
                                 </div>
                               ))}
                             </div>
-                            <button onClick={() => router.push(`/admin/crm/${group.eventId}`)} className="w-full py-2 border border-[#e8e5e0] rounded-lg text-sm text-[#666] hover:border-[#7c3aed] hover:text-[#7c3aed] transition-all flex items-center justify-center gap-1.5">
+                            <button onClick={() => router.push(`/admin/crm/${group.eventId}`)} className="w-full py-2 border border-[#e8e5e0] rounded-lg text-sm text-[#666] hover:border-[#2563eb] hover:text-[#2563eb] transition-all flex items-center justify-center gap-1.5">
                               Edit Event
                             </button>
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <button onClick={() => router.push('/admin/crm/new')} className="w-full py-3 border border-dashed border-[#e8e5e0] rounded-xl text-sm text-[#7c3aed] hover:bg-[#f5f3ff] hover:border-[#7c3aed] transition-all">
+                      <button onClick={() => router.push('/admin/crm/new')} className="w-full py-3 border border-dashed border-[#e8e5e0] rounded-xl text-sm text-[#2563eb] hover:bg-[#eff6ff] hover:border-[#2563eb] transition-all">
                         + Add Event
                       </button>
                     )}
@@ -252,8 +252,8 @@ export default function CalendarPage() {
           </>
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
-            <div className="w-16 h-16 bg-[#ede9fe] rounded-2xl flex items-center justify-center mb-4">
-              <span className="text-[#7c3aed] font-bold text-2xl">C</span>
+            <div className="w-16 h-16 bg-[#dbeafe] rounded-2xl flex items-center justify-center mb-4">
+              <span className="text-[#2563eb] font-bold text-2xl">C</span>
             </div>
             <p className="font-semibold text-[#333] mb-1">Select a date</p>
             <p className="text-sm text-[#aaa] mb-8">Click any date to view the schedule</p>
@@ -266,12 +266,12 @@ export default function CalendarPage() {
                 })
                 return (
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="bg-[#f5f3ff] rounded-xl p-4 text-left">
-                      <p className="text-2xl font-bold text-[#7c3aed]">{entries.filter(([,b]) => b.length > 0).length}</p>
+                    <div className="bg-[#eff6ff] rounded-xl p-4 text-left">
+                      <p className="text-2xl font-bold text-[#2563eb]">{entries.filter(([,b]) => b.length > 0).length}</p>
                       <p className="text-xs text-[#888] mt-1">Days booked</p>
                     </div>
-                    <div className="bg-[#f5f3ff] rounded-xl p-4 text-left">
-                      <p className="text-2xl font-bold text-[#7c3aed]">{entries.reduce((sum,[,b]) => sum + b.length, 0)}</p>
+                    <div className="bg-[#eff6ff] rounded-xl p-4 text-left">
+                      <p className="text-2xl font-bold text-[#2563eb]">{entries.reduce((sum,[,b]) => sum + b.length, 0)}</p>
                       <p className="text-xs text-[#888] mt-1">Total slots</p>
                     </div>
                   </div>

@@ -173,15 +173,15 @@ export default function PostProductionPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4 mb-8">
-        <div className="bg-white border border-[#ede9fe] rounded-2xl p-5">
-          <p className="text-3xl font-bold text-[#7c3aed]">{events.length}</p>
+        <div className="bg-white border border-[#dbeafe] rounded-2xl p-5">
+          <p className="text-3xl font-bold text-[#2563eb]">{events.length}</p>
           <p className="text-sm text-[#888] mt-1">In Post Production</p>
         </div>
-        <div className="bg-white border border-[#ede9fe] rounded-2xl p-5">
+        <div className="bg-white border border-[#dbeafe] rounded-2xl p-5">
           <p className="text-3xl font-bold text-red-500">{overdueEvents.length}</p>
           <p className="text-sm text-[#888] mt-1">Overdue</p>
         </div>
-        <div className="bg-white border border-[#ede9fe] rounded-2xl p-5">
+        <div className="bg-white border border-[#dbeafe] rounded-2xl p-5">
           <p className="text-3xl font-bold text-green-500">
             {events.filter(e => getProgress(e.postProductionTasks) === 100).length}
           </p>
@@ -192,7 +192,7 @@ export default function PostProductionPage() {
       {loading ? (
         <div className="text-center py-20 text-[#888]">Loading…</div>
       ) : events.length === 0 ? (
-        <div className="text-center py-24 bg-white border border-[#ede9fe] rounded-2xl">
+        <div className="text-center py-24 bg-white border border-[#dbeafe] rounded-2xl">
           <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12"/>
@@ -212,7 +212,7 @@ export default function PostProductionPage() {
 
             return (
               <div key={event.id} className={`bg-white border rounded-2xl overflow-hidden transition-all ${
-                overdue ? 'border-red-200' : 'border-[#ede9fe]'
+                overdue ? 'border-red-200' : 'border-[#dbeafe]'
               }`}>
 
                 {/* Card header */}
@@ -248,7 +248,7 @@ export default function PostProductionPage() {
                     <div className="flex items-center gap-3 mt-3">
                       <div className="flex-1 bg-[#f0ede8] rounded-full h-2">
                         <div
-                          className="bg-[#7c3aed] h-2 rounded-full transition-all"
+                          className="bg-[#2563eb] h-2 rounded-full transition-all"
                           style={{ width: `${progress}%` }}
                         />
                       </div>
@@ -263,13 +263,13 @@ export default function PostProductionPage() {
                         type="date"
                         value={event.deliveryDeadline ? event.deliveryDeadline.split('T')[0] : ''}
                         onChange={e => updateDeadline(event.id, e.target.value)}
-                        className="text-xs border border-[#e8e5e0] rounded-lg px-2 py-1.5 text-[#333] focus:outline-none focus:border-[#7c3aed] transition-all"
+                        className="text-xs border border-[#e8e5e0] rounded-lg px-2 py-1.5 text-[#333] focus:outline-none focus:border-[#2563eb] transition-all"
                         title="Delivery deadline"
                       />
                     </div>
                     <button
                       onClick={e => { e.stopPropagation(); router.push(`/admin/crm/${event.id}`) }}
-                      className="text-xs text-[#7c3aed] font-medium hover:underline"
+                      className="text-xs text-[#2563eb] font-medium hover:underline"
                     >
                       View Event
                     </button>
@@ -279,10 +279,10 @@ export default function PostProductionPage() {
 
                 {/* Expanded tasks */}
                 {isExpanded && (
-                  <div className="border-t border-[#f5f3ff] px-6 py-4">
+                  <div className="border-t border-[#eff6ff] px-6 py-4">
 
                     {/* Payment summary */}
-                    <div className="flex items-center justify-between mb-4 bg-[#f5f3ff] rounded-xl px-4 py-3">
+                    <div className="flex items-center justify-between mb-4 bg-[#eff6ff] rounded-xl px-4 py-3">
                       <div className="flex items-center gap-6 text-sm">
                         <span className="text-[#888]">
                           Total: <span className="font-semibold text-[#0f0f0f]">₹{(event.invoice?.totalAmount || 0).toLocaleString('en-IN')}</span>
@@ -296,7 +296,7 @@ export default function PostProductionPage() {
                       </div>
                       <button
                         onClick={() => router.push('/admin/crm/invoices')}
-                        className="text-xs text-[#7c3aed] font-medium hover:underline"
+                        className="text-xs text-[#2563eb] font-medium hover:underline"
                       >
                         Manage Invoice
                       </button>
@@ -305,7 +305,7 @@ export default function PostProductionPage() {
                     {/* Tasks */}
                     <div className="flex flex-col gap-2">
                       {event.postProductionTasks.map(task => (
-                        <div key={task.id} className="flex items-center gap-3 py-2 border-b border-[#f5f3ff] last:border-0">
+                        <div key={task.id} className="flex items-center gap-3 py-2 border-b border-[#eff6ff] last:border-0">
 
                           {/* Status dot */}
                           <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${
@@ -325,7 +325,7 @@ export default function PostProductionPage() {
                             value={task.assigneeName || ''}
                             onChange={e => updateTask(task.id, event.id, { assigneeName: e.target.value })}
                             placeholder="Assignee"
-                            className="text-xs border border-[#e8e5e0] rounded-lg px-2 py-1 w-28 focus:outline-none focus:border-[#7c3aed] transition-all"
+                            className="text-xs border border-[#e8e5e0] rounded-lg px-2 py-1 w-28 focus:outline-none focus:border-[#2563eb] transition-all"
                           />
 
                           {/* Due date */}
@@ -333,7 +333,7 @@ export default function PostProductionPage() {
                             type="date"
                             value={task.dueDate ? task.dueDate.split('T')[0] : ''}
                             onChange={e => updateTask(task.id, event.id, { dueDate: e.target.value })}
-                            className="text-xs border border-[#e8e5e0] rounded-lg px-2 py-1 focus:outline-none focus:border-[#7c3aed] transition-all"
+                            className="text-xs border border-[#e8e5e0] rounded-lg px-2 py-1 focus:outline-none focus:border-[#2563eb] transition-all"
                           />
 
                           {/* Status dropdown */}
@@ -360,21 +360,21 @@ export default function PostProductionPage() {
                             placeholder="Task name..."
                             autoFocus
                             onKeyDown={e => { if (e.key === 'Enter') addCustomTask(event.id) }}
-                            className="flex-1 text-sm border border-[#7c3aed] rounded-lg px-3 py-1.5 focus:outline-none"
+                            className="flex-1 text-sm border border-[#2563eb] rounded-lg px-3 py-1.5 focus:outline-none"
                           />
                           <button onClick={() => addCustomTask(event.id)}
-                            className="px-3 py-1.5 bg-[#7c3aed] text-white text-xs font-semibold rounded-lg hover:bg-[#6d28d9] transition-all">
+                            className="px-3 py-1.5 bg-[#2563eb] text-white text-xs font-semibold rounded-lg hover:bg-[#1d4ed8] transition-all">
                             Add
                           </button>
                           <button onClick={() => { setAddingTask(null); setNewTaskName('') }}
-                            className="px-3 py-1.5 border border-[#e8e5e0] text-xs text-[#666] rounded-lg hover:bg-[#f5f3ff] transition-all">
+                            className="px-3 py-1.5 border border-[#e8e5e0] text-xs text-[#666] rounded-lg hover:bg-[#eff6ff] transition-all">
                             Cancel
                           </button>
                         </div>
                       ) : (
                         <button
                           onClick={() => setAddingTask(event.id)}
-                          className="mt-2 text-xs text-[#7c3aed] hover:underline text-left"
+                          className="mt-2 text-xs text-[#2563eb] hover:underline text-left"
                         >
                           + Add custom task
                         </button>

@@ -186,7 +186,7 @@ export default function PhotographersPage() {
         </div>
         <button
           onClick={openAddModal}
-          className="flex items-center gap-2 px-5 py-2.5 bg-[#7c3aed] text-white text-sm font-semibold rounded-xl hover:bg-[#6d28d9] transition-all shadow-md"
+          className="flex items-center gap-2 px-5 py-2.5 bg-[#2563eb] text-white text-sm font-semibold rounded-xl hover:bg-[#1d4ed8] transition-all shadow-md"
         >
           + Add Photographer
         </button>
@@ -201,7 +201,7 @@ export default function PhotographersPage() {
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search name or specialty..."
-            className="w-full pl-9 pr-4 py-2.5 border border-[#ede9fe] rounded-xl text-sm text-[#0f0f0f] bg-white focus:outline-none focus:border-[#7c3aed] transition-all"
+            className="w-full pl-9 pr-4 py-2.5 border border-[#dbeafe] rounded-xl text-sm text-[#0f0f0f] bg-white focus:outline-none focus:border-[#2563eb] transition-all"
           />
         </div>
 
@@ -219,11 +219,11 @@ export default function PhotographersPage() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4 mb-8">
         {[
-          { label: 'Total',         value: photographers.length, dot: 'bg-[#7c3aed]' },
+          { label: 'Total',         value: photographers.length, dot: 'bg-[#2563eb]' },
           { label: 'Available',     value: photographers.filter(p => p.status === 'AVAILABLE').length,     dot: 'bg-green-500' },
           { label: 'On Assignment', value: photographers.filter(p => p.status === 'ON_ASSIGNMENT').length, dot: 'bg-blue-500' },
         ].map(stat => (
-          <div key={stat.label} className="bg-white border border-[#ede9fe] rounded-2xl p-5 flex items-center gap-4">
+          <div key={stat.label} className="bg-white border border-[#dbeafe] rounded-2xl p-5 flex items-center gap-4">
             <div className={`w-3 h-3 rounded-full ${stat.dot}`} />
             <div>
               <p className="text-2xl font-bold text-[#0f0f0f]">{stat.value}</p>
@@ -237,25 +237,25 @@ export default function PhotographersPage() {
       {loading ? (
         <div className="text-center py-20 text-[#888]">Loading…</div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-24 bg-white border border-[#ede9fe] rounded-2xl">
-          <div className="w-14 h-14 bg-[#f5f3ff] rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <div className="text-center py-24 bg-white border border-[#dbeafe] rounded-2xl">
+          <div className="w-14 h-14 bg-[#eff6ff] rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
           </div>
           <p className="text-[#888]">No photographers yet. Add your first team member.</p>
           <button
             onClick={openAddModal}
-            className="mt-4 px-6 py-2.5 bg-[#7c3aed] text-white text-sm font-semibold rounded-xl hover:bg-[#6d28d9] transition-all"
+            className="mt-4 px-6 py-2.5 bg-[#2563eb] text-white text-sm font-semibold rounded-xl hover:bg-[#1d4ed8] transition-all"
           >
             + Add Photographer
           </button>
         </div>
       ) : (
-        <div className="bg-white border border-[#ede9fe] rounded-2xl overflow-hidden">
+        <div className="bg-white border border-[#dbeafe] rounded-2xl overflow-hidden">
           {filtered.map((p, index) => (
             <div
               key={p.id}
               className={`flex items-center gap-5 px-6 py-5 hover:bg-[#faf9ff] transition-all ${
-                index !== filtered.length - 1 ? 'border-b border-[#f5f3ff]' : ''
+                index !== filtered.length - 1 ? 'border-b border-[#eff6ff]' : ''
               }`}
             >
               {/* Avatar */}
@@ -297,7 +297,7 @@ export default function PhotographersPage() {
                 </button>
                 <button
                   onClick={() => openEditModal(p)}
-                  className="px-4 py-2 border border-[#ede9fe] text-[#7c3aed] text-sm font-medium rounded-xl hover:bg-[#ede9fe] transition-all"
+                  className="px-4 py-2 border border-[#dbeafe] text-[#2563eb] text-sm font-medium rounded-xl hover:bg-[#dbeafe] transition-all"
                 >
                   Edit
                 </button>
@@ -319,10 +319,10 @@ export default function PhotographersPage() {
           <div className="bg-white rounded-2xl w-full max-w-lg overflow-hidden">
 
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-8 py-6 border-b border-[#f5f3ff]">
+            <div className="flex items-center justify-between px-8 py-6 border-b border-[#eff6ff]">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs bg-[#ede9fe] text-[#7c3aed] px-2 py-0.5 rounded-full font-medium">
+                  <span className="text-xs bg-[#dbeafe] text-[#2563eb] px-2 py-0.5 rounded-full font-medium">
                     Photographer details
                   </span>
                 </div>
@@ -359,7 +359,7 @@ export default function PhotographersPage() {
                       value={name}
                       onChange={e => setName(e.target.value)}
                       placeholder="Enter photographer name"
-                      className="w-full pl-9 pr-4 py-3 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#7c3aed] transition-all"
+                      className="w-full pl-9 pr-4 py-3 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#2563eb] transition-all"
                     />
                   </div>
                 </div>
@@ -370,7 +370,7 @@ export default function PhotographersPage() {
                   <select
                     value={specialization}
                     onChange={e => setSpecialization(e.target.value)}
-                    className="w-full px-4 py-3 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#7c3aed] transition-all"
+                    className="w-full px-4 py-3 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#2563eb] transition-all"
                   >
                     <option value="">Select or type specialty</option>
                     {SPECIALIZATIONS.map(s => (
@@ -393,7 +393,7 @@ export default function PhotographersPage() {
                     value={phone}
                     onChange={e => setPhone(e.target.value)}
                     placeholder="+91 98765 43210"
-                    className="w-full pl-9 pr-4 py-3 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#7c3aed] transition-all"
+                    className="w-full pl-9 pr-4 py-3 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#2563eb] transition-all"
                   />
                 </div>
               </div>
@@ -410,7 +410,7 @@ export default function PhotographersPage() {
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     placeholder="photographer@email.com"
-                    className="w-full pl-9 pr-4 py-3 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#7c3aed] transition-all"
+                    className="w-full pl-9 pr-4 py-3 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#2563eb] transition-all"
                   />
                 </div>
               </div>
@@ -429,7 +429,7 @@ export default function PhotographersPage() {
                         className={`flex-1 py-2.5 rounded-xl text-xs font-semibold border transition-all flex items-center justify-center gap-1.5 ${
                           status === key
                             ? STATUS_STYLES[key] + ' border-current'
-                            : 'border-[#e8e5e0] text-[#888] hover:border-[#7c3aed]'
+                            : 'border-[#e8e5e0] text-[#888] hover:border-[#2563eb]'
                         }`}
                       >
                         <div className={`w-1.5 h-1.5 rounded-full ${STATUS_DOTS[key]}`} />
@@ -451,17 +451,17 @@ export default function PhotographersPage() {
             </div>
 
             {/* Modal Footer */}
-            <div className="flex gap-3 px-8 py-5 border-t border-[#f5f3ff]">
+            <div className="flex gap-3 px-8 py-5 border-t border-[#eff6ff]">
               <button
                 onClick={() => setShowModal(false)}
-                className="flex-1 py-3 border border-[#e8e5e0] text-[#333] text-sm font-semibold rounded-xl hover:bg-[#f8f7f4] transition-all"
+                className="flex-1 py-3 border border-[#e8e5e0] text-[#333] text-sm font-semibold rounded-xl hover:bg-[#FDFBD4] transition-all"
               >
                 Cancel
               </button>
               <button
                 onClick={savePhotographer}
                 disabled={saving || !name.trim() || !phone.trim()}
-                className="flex-1 py-3 bg-[#7c3aed] text-white text-sm font-semibold rounded-xl hover:bg-[#6d28d9] disabled:opacity-40 transition-all flex items-center justify-center gap-2"
+                className="flex-1 py-3 bg-[#2563eb] text-white text-sm font-semibold rounded-xl hover:bg-[#1d4ed8] disabled:opacity-40 transition-all flex items-center justify-center gap-2"
               >
                 {saving ? 'Saving…' : (
                   <><span>+</span><span>{editingId ? 'Update Photographer' : 'Add Photographer'}</span></>

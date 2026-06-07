@@ -91,14 +91,14 @@ export default function CRMDashboard() {
         </div>
         <button
           onClick={() => router.push('/admin/crm/new')}
-          className="flex items-center gap-2 px-5 py-2.5 bg-[#7c3aed] text-white text-sm font-semibold rounded-xl hover:bg-[#6d28d9] transition-all shadow-md"
+          className="flex items-center gap-2 px-5 py-2.5 bg-[#2563eb] text-white text-sm font-semibold rounded-xl hover:bg-[#1d4ed8] transition-all shadow-md"
         >
           <span>+</span> New Wedding
         </button>
       </div>
 
       <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
-        <div className="flex gap-1 bg-white border border-[#ede9fe] rounded-xl p-1">
+        <div className="flex gap-1 bg-white border border-[#dbeafe] rounded-xl p-1">
           {[
             { key: 'all',       label: 'All' },
             { key: 'upcoming',  label: 'Upcoming' },
@@ -110,7 +110,7 @@ export default function CRMDashboard() {
               onClick={() => setFilter(tab.key)}
               className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${
                 filter === tab.key
-                  ? 'bg-[#7c3aed] text-white'
+                  ? 'bg-[#2563eb] text-white'
                   : 'text-[#666] hover:text-[#0f0f0f]'
               }`}
             >
@@ -125,7 +125,7 @@ export default function CRMDashboard() {
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search couples..."
-            className="pl-9 pr-4 py-2 border border-[#ede9fe] rounded-xl text-sm text-[#0f0f0f] bg-white focus:outline-none focus:border-[#7c3aed] transition-all w-64"
+            className="pl-9 pr-4 py-2 border border-[#dbeafe] rounded-xl text-sm text-[#0f0f0f] bg-white focus:outline-none focus:border-[#2563eb] transition-all w-64"
           />
         </div>
       </div>
@@ -137,8 +137,8 @@ export default function CRMDashboard() {
           { label: 'Active',       value: events.filter(e => getStatus(e) === 'active').length },
           { label: 'Completed',    value: events.filter(e => getStatus(e) === 'completed').length },
         ].map(stat => (
-          <div key={stat.label} className="bg-white border border-[#ede9fe] rounded-2xl p-5">
-            <p className="text-3xl font-bold text-[#7c3aed]">{stat.value}</p>
+          <div key={stat.label} className="bg-white border border-[#dbeafe] rounded-2xl p-5">
+            <p className="text-3xl font-bold text-[#2563eb]">{stat.value}</p>
             <p className="text-sm text-[#888] mt-1">{stat.label}</p>
           </div>
         ))}
@@ -151,14 +151,14 @@ export default function CRMDashboard() {
       {loading ? (
         <div className="text-center py-20 text-[#888]">Loading…</div>
       ) : upcomingFirst.length === 0 ? (
-        <div className="text-center py-24 bg-white border border-[#ede9fe] rounded-2xl">
-          <div className="w-14 h-14 bg-[#f5f3ff] rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <div className="text-center py-24 bg-white border border-[#dbeafe] rounded-2xl">
+          <div className="w-14 h-14 bg-[#eff6ff] rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
           </div>
           <p className="text-[#888]">No events found. Create your first wedding event.</p>
           <button
             onClick={() => router.push('/admin/crm/new')}
-            className="mt-4 px-6 py-2.5 bg-[#7c3aed] text-white text-sm font-semibold rounded-xl hover:bg-[#6d28d9] transition-all"
+            className="mt-4 px-6 py-2.5 bg-[#2563eb] text-white text-sm font-semibold rounded-xl hover:bg-[#1d4ed8] transition-all"
           >
             + New Wedding
           </button>
@@ -167,7 +167,7 @@ export default function CRMDashboard() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {upcomingFirst.map(event => (
             <div key={event.id}
-              className="bg-white border border-[#ede9fe] rounded-2xl overflow-hidden hover:shadow-lg transition-all">
+              className="bg-white border border-[#dbeafe] rounded-2xl overflow-hidden hover:shadow-lg transition-all">
               <div className="relative h-44 overflow-hidden">
                 <img
                   src={getVenueImage(event.id)}
@@ -185,10 +185,10 @@ export default function CRMDashboard() {
                  <div className="text-sm text-[#888] mb-4">
                   {formatDate(event.startDate)} – {formatDate(event.endDate)}
                  </div>
-                <div className="flex items-center justify-between pt-3 border-t border-[#f5f3ff]">
+                <div className="flex items-center justify-between pt-3 border-t border-[#eff6ff]">
                   <button
                     onClick={() => router.push(`/admin/crm/${event.id}`)}
-                    className="flex items-center gap-2 px-4 py-2 border border-[#ede9fe] rounded-lg text-sm text-[#333] hover:border-[#7c3aed] hover:text-[#7c3aed] transition-all"
+                    className="flex items-center gap-2 px-4 py-2 border border-[#dbeafe] rounded-lg text-sm text-[#333] hover:border-[#2563eb] hover:text-[#2563eb] transition-all"
                   >
                      Edit Event
                   </button>

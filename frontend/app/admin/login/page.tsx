@@ -59,7 +59,7 @@ export default function LoginPage() {
       </div>
 
       {/* Right — form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center bg-[#f8f7f4] p-8">
+      <div className="w-full lg:w-1/2 flex items-center justify-center bg-[#FDFBD4] p-8">
         <div className="w-full max-w-sm">
 
           <h1 className="text-3xl font-semibold text-[#0f0f0f] mb-2">

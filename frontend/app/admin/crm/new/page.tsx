@@ -134,12 +134,12 @@ export default function NewWedding() {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#f5f3ff' }}>
+    <div className="min-h-screen" style={{ backgroundColor: '#eff6ff' }}>
 
       {/* Header */}
-      <div className="bg-white border-b border-[#ede9fe] px-8 py-5 flex items-center gap-4">
+      <div className="bg-white border-b border-[#dbeafe] px-8 py-5 flex items-center gap-4">
         <button onClick={() => router.push('/admin/crm')}
-          className="w-8 h-8 flex items-center justify-center border border-[#e8e5e0] rounded-lg text-[#666] hover:bg-[#f5f3ff] transition-all">
+          className="w-8 h-8 flex items-center justify-center border border-[#e8e5e0] rounded-lg text-[#666] hover:bg-[#eff6ff] transition-all">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
         </button>
         <div>
@@ -153,7 +153,7 @@ export default function NewWedding() {
       <div className="p-8 grid grid-cols-5 gap-6 max-w-7xl mx-auto">
 
         {/* Left — Wedding Details */}
-        <div className="col-span-2 bg-white rounded-2xl border border-[#ede9fe] p-6 h-fit">
+        <div className="col-span-2 bg-white rounded-2xl border border-[#dbeafe] p-6 h-fit">
           <h2 className="text-lg font-bold text-[#0f0f0f] mb-1">1. Wedding Details</h2>
           <p className="text-[#888] text-sm mb-6">Basic information about the couple</p>
 
@@ -163,7 +163,7 @@ export default function NewWedding() {
               <input type="text" value={coupleName}
                 onChange={e => { setCoupleName(e.target.value); setDetailsSaved(false) }}
                 placeholder="Eleanor & James"
-                className="w-full px-4 py-2.5 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#7c3aed] transition-all"
+                className="w-full px-4 py-2.5 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#2563eb] transition-all"
               />
             </div>
 
@@ -172,14 +172,14 @@ export default function NewWedding() {
                 <label className="block text-sm font-medium text-[#333] mb-1.5">Start Date *</label>
                 <input type="date" value={startDate}
                   onChange={e => { setStartDate(e.target.value); setDetailsSaved(false) }}
-                  className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#7c3aed] transition-all"
+                  className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#2563eb] transition-all"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-[#333] mb-1.5">End Date *</label>
                 <input type="date" value={endDate}
                   onChange={e => { setEndDate(e.target.value); setDetailsSaved(false) }}
-                  className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#7c3aed] transition-all"
+                  className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#2563eb] transition-all"
                 />
               </div>
             </div>
@@ -191,7 +191,7 @@ export default function NewWedding() {
               <input type="text" value={location}
                 onChange={e => { setLocation(e.target.value); setDetailsSaved(false) }}
                 placeholder="The Ritz-Carlton, New York"
-                className="w-full px-4 py-2.5 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#7c3aed] transition-all"
+                className="w-full px-4 py-2.5 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#2563eb] transition-all"
               />
             </div>
 
@@ -203,7 +203,7 @@ export default function NewWedding() {
                 onChange={e => { setDescription(e.target.value); setDetailsSaved(false) }}
                 placeholder="3-day traditional wedding with expected 400 guests."
                 rows={3}
-                className="w-full px-4 py-2.5 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#7c3aed] transition-all resize-none"
+                className="w-full px-4 py-2.5 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#2563eb] transition-all resize-none"
               />
             </div>
 
@@ -214,7 +214,7 @@ export default function NewWedding() {
               className={`w-full py-3 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
                 detailsSaved
                   ? 'bg-[#f0fdf4] text-green-700 border border-green-200'
-                  : 'bg-[#7c3aed] text-white hover:bg-[#6d28d9] disabled:opacity-40'
+                  : 'bg-[#2563eb] text-white hover:bg-[#1d4ed8] disabled:opacity-40'
               }`}
             >
               {savingDetails ? 'Saving…' : detailsSaved ? 'Details Saved' : 'Save Details'}
@@ -223,14 +223,14 @@ export default function NewWedding() {
         </div>
 
         {/* Right — Event Schedule */}
-        <div className="col-span-3 bg-white rounded-2xl border border-[#ede9fe] p-6">
+        <div className="col-span-3 bg-white rounded-2xl border border-[#dbeafe] p-6">
           <h2 className="text-lg font-bold text-[#0f0f0f] mb-1">2. Event Schedule</h2>
           <p className="text-[#888] text-sm mb-6">Plan events and assign photographers for each day</p>
 
           {!detailsSaved ? (
             <div className="text-center py-16 text-[#aaa]">
-              <div className="w-12 h-12 bg-[#f5f3ff] rounded-xl flex items-center justify-center mx-auto mb-3">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <div className="w-12 h-12 bg-[#eff6ff] rounded-xl flex items-center justify-center mx-auto mb-3">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
               </div>
               <p className="text-sm">Save wedding details first to start scheduling</p>
             </div>
@@ -243,7 +243,7 @@ export default function NewWedding() {
                     className={`flex flex-col items-center px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all border ${
                       activeDay === i
                         ? 'bg-[#0f0f0f] text-white border-[#0f0f0f]'
-                        : 'bg-white text-[#666] border-[#e8e5e0] hover:border-[#7c3aed]'
+                        : 'bg-white text-[#666] border-[#e8e5e0] hover:border-[#2563eb]'
                     }`}
                   >
                     <span className="font-semibold">Day {i + 1}</span>
@@ -252,7 +252,7 @@ export default function NewWedding() {
                     </span>
                   </button>
                 ))}
-                <button className="flex flex-col items-center px-4 py-2.5 rounded-xl text-sm border border-dashed border-[#7c3aed] text-[#7c3aed] hover:bg-[#f5f3ff] transition-all whitespace-nowrap">
+                <button className="flex flex-col items-center px-4 py-2.5 rounded-xl text-sm border border-dashed border-[#2563eb] text-[#2563eb] hover:bg-[#eff6ff] transition-all whitespace-nowrap">
                   <span>+</span>
                   <span className="text-xs mt-0.5">Add Day</span>
                 </button>
@@ -266,9 +266,9 @@ export default function NewWedding() {
                   return (
                     <button key={slot.key} onClick={() => setActiveSlot(slot.key)}
                       className={`flex flex-col items-center py-4 px-3 rounded-xl border transition-all ${
-                        isActive    ? 'bg-[#7c3aed] text-white border-[#7c3aed]'
+                        isActive    ? 'bg-[#2563eb] text-white border-[#2563eb]'
                         : hasBooking ? 'bg-[#f0fdf4] text-green-700 border-green-200'
-                        : 'bg-[#fafafa] text-[#666] border-[#e8e5e0] hover:border-[#7c3aed]'
+                        : 'bg-[#fafafa] text-[#666] border-[#e8e5e0] hover:border-[#2563eb]'
                       }`}
                     >
                       <span className="font-semibold text-sm">{slot.label}</span>
@@ -283,7 +283,7 @@ export default function NewWedding() {
               {/* Booking form */}
               <div className="border-t border-[#f0ede8] pt-5">
                 <div className="flex items-center gap-2 mb-4">
-                  <div className="w-1 h-5 bg-[#7c3aed] rounded-full"></div>
+                  <div className="w-1 h-5 bg-[#2563eb] rounded-full"></div>
                   <h3 className="font-bold text-[#0f0f0f]">
                     {SLOTS.find(s => s.key === activeSlot)?.label} Event Details
                   </h3>
@@ -293,7 +293,7 @@ export default function NewWedding() {
                   <div>
                     <label className="block text-sm font-medium text-[#333] mb-1.5">Event Name *</label>
                     <select value={selectedEvent} onChange={e => setSelectedEvent(e.target.value)}
-                      className="w-full px-4 py-2.5 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#7c3aed] transition-all"
+                      className="w-full px-4 py-2.5 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#2563eb] transition-all"
                     >
                       <option value="">Select Event</option>
                       {EVENT_NAMES.map(name => <option key={name} value={name}>{name}</option>)}
@@ -308,7 +308,7 @@ export default function NewWedding() {
                           {selectedPhotographers.map(id => {
                             const p = photographers.find(ph => ph.id === id)
                             return (
-                              <div key={id} className="flex items-center gap-1.5 bg-[#ede9fe] text-[#7c3aed] px-3 py-1 rounded-full text-xs font-medium">
+                              <div key={id} className="flex items-center gap-1.5 bg-[#dbeafe] text-[#2563eb] px-3 py-1 rounded-full text-xs font-medium">
                                 <span>{p?.name}</span>
                                 <button onClick={() => togglePhotographer(id)} className="hover:text-red-500 ml-1"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
                               </div>
@@ -333,7 +333,7 @@ export default function NewWedding() {
                     <label className="block text-sm font-medium text-[#333] mb-1.5">Location</label>
                     <input type="text" value={bookingLocation} onChange={e => setBookingLocation(e.target.value)}
                       placeholder="Enter location name or address"
-                      className="w-full px-4 py-2.5 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#7c3aed] transition-all"
+                      className="w-full px-4 py-2.5 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#2563eb] transition-all"
                     />
                   </div>
 
@@ -345,7 +345,7 @@ export default function NewWedding() {
                     <div className="flex gap-3">
                       <button onClick={() => handleBook(false)}
                         disabled={saving || !selectedEvent || selectedPhotographers.length === 0}
-                        className="px-5 py-2.5 border border-[#e8e5e0] text-sm font-semibold text-[#333] rounded-xl hover:border-[#7c3aed] hover:text-[#7c3aed] disabled:opacity-40 transition-all"
+                        className="px-5 py-2.5 border border-[#e8e5e0] text-sm font-semibold text-[#333] rounded-xl hover:border-[#2563eb] hover:text-[#2563eb] disabled:opacity-40 transition-all"
                       >
                         Book
                       </button>
