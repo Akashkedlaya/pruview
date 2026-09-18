@@ -19,30 +19,35 @@ model Admin {
 }
 
 model Folder {
-  id        Int      @id @default(autoincrement())
-  name      String
-  token     String   @unique
-  adminId   Int
-  admin     Admin    @relation(fields: [adminId], references: [id])
-  images    Image[]
-  createdAt DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  name       String
+  shareToken String   @unique(map: "Folder_token_key")
+  adminId    Int
+  createdAt  DateTime @default(now())
+  isActive   Boolean  @default(true)
+  admin      Admin    @relation(fields: [adminId], references: [id])
+  images     Image[]
 }
 
 model Image {
   id             Int             @id @default(autoincrement())
   filename       String
-  s3Key          String
+  originalKey    String
   folderId       Int
-  folder         Folder          @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  uploadedAt     DateTime        @default(now())
+  thumbKey       String
+  sizeBytes      Int             @default(0)
   faceEmbeddings FaceEmbedding[]
-  createdAt      DateTime        @default(now())
+  folder         Folder          @relation(fields: [folderId], references: [id], onDelete: Cascade)
 }
 
 model FaceEmbedding {
-  id        Int    @id @default(autoincrement())
+  id        Int                   @id @default(autoincrement())
   imageId   Int
-  image     Image  @relation(fields: [imageId], references: [id], onDelete: Cascade)
-  embedding String
+  embedding Unsupported("vector")
+  folderId  Int
+  createdAt DateTime              @default(now()) @db.Timestamp(6)
+  image     Image                 @relation(fields: [imageId], references: [id], onDelete: Cascade)
 }
 
 model Photographer {
