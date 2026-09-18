@@ -177,16 +177,16 @@ export default function PhotographersPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-2">
         <div>
-          <h1 className="text-3xl font-bold text-[#0f0f0f]">
+          <h1 className="text-3xl font-bold text-[var(--pv-text)]">
             Photographers Directory
           </h1>
-          <p className="text-[#888] text-sm mt-1">
+          <p className="text-[var(--pv-muted)] text-sm mt-1">
             Manage your photography team, specialisations, and availability
           </p>
         </div>
         <button
           onClick={openAddModal}
-          className="flex items-center gap-2 px-5 py-2.5 bg-[#2563eb] text-white text-sm font-semibold rounded-xl hover:bg-[#1d4ed8] transition-all shadow-md"
+          className="flex items-center gap-2 px-5 py-2.5 bg-[var(--pv-accent)] text-[var(--pv-accent-on)] text-sm font-semibold rounded-xl hover:bg-[var(--pv-accent-hover)] transition-all shadow-md"
         >
           + Add Photographer
         </button>
@@ -195,18 +195,18 @@ export default function PhotographersPage() {
       {/* Search */}
       <div className="flex items-center gap-4 mt-6 mb-6">
         <div className="relative flex-1 max-w-sm">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#aaa]"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--pv-muted)]"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
           <input
             type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search name or specialty..."
-            className="w-full pl-9 pr-4 py-2.5 border border-[#dbeafe] rounded-xl text-sm text-[#0f0f0f] bg-white focus:outline-none focus:border-[#2563eb] transition-all"
+            className="w-full pl-9 pr-4 py-2.5 border border-[var(--pv-accent-tint)] rounded-xl text-sm text-[var(--pv-text)] bg-white focus:outline-none focus:border-[var(--pv-accent)] transition-all"
           />
         </div>
 
         {/* Legend */}
-        <div className="flex items-center gap-4 text-xs text-[#888]">
+        <div className="flex items-center gap-4 text-xs text-[var(--pv-muted)]">
           {Object.entries(STATUS_LABELS).map(([key, label]) => (
             <div key={key} className="flex items-center gap-1.5">
               <div className={`w-2 h-2 rounded-full ${STATUS_DOTS[key]}`} />
@@ -219,15 +219,15 @@ export default function PhotographersPage() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4 mb-8">
         {[
-          { label: 'Total',         value: photographers.length, dot: 'bg-[#2563eb]' },
+          { label: 'Total',         value: photographers.length, dot: 'bg-[var(--pv-accent)]' },
           { label: 'Available',     value: photographers.filter(p => p.status === 'AVAILABLE').length,     dot: 'bg-green-500' },
           { label: 'On Assignment', value: photographers.filter(p => p.status === 'ON_ASSIGNMENT').length, dot: 'bg-blue-500' },
         ].map(stat => (
-          <div key={stat.label} className="bg-white border border-[#dbeafe] rounded-2xl p-5 flex items-center gap-4">
+          <div key={stat.label} className="bg-white border border-[var(--pv-accent-tint)] rounded-2xl p-5 flex items-center gap-4">
             <div className={`w-3 h-3 rounded-full ${stat.dot}`} />
             <div>
-              <p className="text-2xl font-bold text-[#0f0f0f]">{stat.value}</p>
-              <p className="text-sm text-[#888]">{stat.label}</p>
+              <p className="text-2xl font-bold text-[var(--pv-text)]">{stat.value}</p>
+              <p className="text-sm text-[var(--pv-muted)]">{stat.label}</p>
             </div>
           </div>
         ))}
@@ -235,27 +235,27 @@ export default function PhotographersPage() {
 
       {/* Photographers List */}
       {loading ? (
-        <div className="text-center py-20 text-[#888]">Loading…</div>
+        <div className="text-center py-20 text-[var(--pv-muted)]">Loading…</div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-24 bg-white border border-[#dbeafe] rounded-2xl">
-          <div className="w-14 h-14 bg-[#eff6ff] rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <div className="text-center py-24 bg-white border border-[var(--pv-accent-tint)] rounded-2xl">
+          <div className="w-14 h-14 bg-[var(--pv-accent-tint-hover)] rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--pv-accent)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
           </div>
-          <p className="text-[#888]">No photographers yet. Add your first team member.</p>
+          <p className="text-[var(--pv-muted)]">No photographers yet. Add your first team member.</p>
           <button
             onClick={openAddModal}
-            className="mt-4 px-6 py-2.5 bg-[#2563eb] text-white text-sm font-semibold rounded-xl hover:bg-[#1d4ed8] transition-all"
+            className="mt-4 px-6 py-2.5 bg-[var(--pv-accent)] text-[var(--pv-accent-on)] text-sm font-semibold rounded-xl hover:bg-[var(--pv-accent-hover)] transition-all"
           >
             + Add Photographer
           </button>
         </div>
       ) : (
-        <div className="bg-white border border-[#dbeafe] rounded-2xl overflow-hidden">
+        <div className="bg-white border border-[var(--pv-accent-tint)] rounded-2xl overflow-hidden">
           {filtered.map((p, index) => (
             <div
               key={p.id}
               className={`flex items-center gap-5 px-6 py-5 hover:bg-[#faf9ff] transition-all ${
-                index !== filtered.length - 1 ? 'border-b border-[#eff6ff]' : ''
+                index !== filtered.length - 1 ? 'border-b border-[var(--pv-accent-tint-hover)]' : ''
               }`}
             >
               {/* Avatar */}
@@ -265,16 +265,16 @@ export default function PhotographersPage() {
 
               {/* Info */}
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-[#0f0f0f]">{p.name}</p>
+                <p className="font-semibold text-[var(--pv-text)]">{p.name}</p>
                 {p.specialization && (
-                  <p className="text-sm text-[#888] mt-0.5">{p.specialization}</p>
+                  <p className="text-sm text-[var(--pv-muted)] mt-0.5">{p.specialization}</p>
                 )}
               </div>
 
               {/* Contact */}
-              <div className="text-sm text-[#666] hidden sm:block">
+              <div className="text-sm text-[var(--pv-text-secondary)] hidden sm:block">
                 <p>+{p.phone}</p>
-                {p.email && <p className="text-[#888] mt-0.5">{p.email}</p>}
+                {p.email && <p className="text-[var(--pv-muted)] mt-0.5">{p.email}</p>}
               </div>
 
               {/* Status */}
@@ -297,7 +297,7 @@ export default function PhotographersPage() {
                 </button>
                 <button
                   onClick={() => openEditModal(p)}
-                  className="px-4 py-2 border border-[#dbeafe] text-[#2563eb] text-sm font-medium rounded-xl hover:bg-[#dbeafe] transition-all"
+                  className="px-4 py-2 border border-[var(--pv-accent-tint)] text-[var(--pv-accent)] text-sm font-medium rounded-xl hover:bg-[var(--pv-accent-tint)] transition-all"
                 >
                   Edit
                 </button>
@@ -319,17 +319,17 @@ export default function PhotographersPage() {
           <div className="bg-white rounded-2xl w-full max-w-lg overflow-hidden">
 
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-8 py-6 border-b border-[#eff6ff]">
+            <div className="flex items-center justify-between px-8 py-6 border-b border-[var(--pv-accent-tint-hover)]">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs bg-[#dbeafe] text-[#2563eb] px-2 py-0.5 rounded-full font-medium">
+                  <span className="text-xs bg-[var(--pv-accent-tint)] text-[var(--pv-accent)] px-2 py-0.5 rounded-full font-medium">
                     Photographer details
                   </span>
                 </div>
-                <h2 className="text-xl font-bold text-[#0f0f0f]">
+                <h2 className="text-xl font-bold text-[var(--pv-text)]">
                   {editingId ? 'Edit Photographer' : 'Add Photographer Information'}
                 </h2>
-                <p className="text-[#888] text-sm mt-1">
+                <p className="text-[var(--pv-muted)] text-sm mt-1">
                   {editingId
                     ? 'Update photographer profile details'
                     : 'Create a new photographer profile with contact details'}
@@ -337,7 +337,7 @@ export default function PhotographersPage() {
               </div>
               <button
                 onClick={() => setShowModal(false)}
-                className="w-8 h-8 border border-[#e8e5e0] rounded-full flex items-center justify-center text-[#888] hover:text-[#333] transition-all"
+                className="w-8 h-8 border border-[var(--pv-border)] rounded-full flex items-center justify-center text-[var(--pv-muted)] hover:text-[var(--pv-text-secondary)] transition-all"
               >
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               </button>
@@ -349,68 +349,68 @@ export default function PhotographersPage() {
               {/* Name + Specialization */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold text-[#333] mb-2">
+                  <label className="block text-sm font-semibold text-[var(--pv-text-secondary)] mb-2">
                     Name <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#aaa]"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--pv-muted)]"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
                     <input
                       type="text"
                       value={name}
                       onChange={e => setName(e.target.value)}
                       placeholder="Enter photographer name"
-                      className="w-full pl-9 pr-4 py-3 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#2563eb] transition-all"
+                      className="w-full pl-9 pr-4 py-3 border border-[var(--pv-border)] rounded-xl text-sm text-[var(--pv-text)] focus:outline-none focus:border-[var(--pv-accent)] transition-all"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-[#333] mb-2">
+                  <label className="block text-sm font-semibold text-[var(--pv-text-secondary)] mb-2">
                     Specialised <span className="text-red-400">*</span>
                   </label>
                   <select
                     value={specialization}
                     onChange={e => setSpecialization(e.target.value)}
-                    className="w-full px-4 py-3 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#2563eb] transition-all"
+                    className="w-full px-4 py-3 border border-[var(--pv-border)] rounded-xl text-sm text-[var(--pv-text)] focus:outline-none focus:border-[var(--pv-accent)] transition-all"
                   >
                     <option value="">Select or type specialty</option>
                     {SPECIALIZATIONS.map(s => (
                       <option key={s} value={s}>{s}</option>
                     ))}
                   </select>
-                  <p className="text-xs text-[#aaa] mt-1">Candid, Traditional, Drone, Portraits, Cinematic</p>
+                  <p className="text-xs text-[var(--pv-muted)] mt-1">Candid, Traditional, Drone, Portraits, Cinematic</p>
                 </div>
               </div>
 
               {/* Phone */}
               <div>
-                <label className="block text-sm font-semibold text-[#333] mb-2">
+                <label className="block text-sm font-semibold text-[var(--pv-text-secondary)] mb-2">
                   Mobile Number <span className="text-red-400">*</span>
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#aaa]"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6 19.79 19.79 0 0 1 1.61 5a2 2 0 0 1 1.99-2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--pv-muted)]"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6 19.79 19.79 0 0 1 1.61 5a2 2 0 0 1 1.99-2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
                   <input
                     type="text"
                     value={phone}
                     onChange={e => setPhone(e.target.value)}
                     placeholder="+91 98765 43210"
-                    className="w-full pl-9 pr-4 py-3 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#2563eb] transition-all"
+                    className="w-full pl-9 pr-4 py-3 border border-[var(--pv-border)] rounded-xl text-sm text-[var(--pv-text)] focus:outline-none focus:border-[var(--pv-accent)] transition-all"
                   />
                 </div>
               </div>
 
               {/* Email */}
               <div>
-                <label className="block text-sm font-semibold text-[#333] mb-2">
-                  Email Address <span className="text-[#aaa] font-normal">(optional)</span>
+                <label className="block text-sm font-semibold text-[var(--pv-text-secondary)] mb-2">
+                  Email Address <span className="text-[var(--pv-muted)] font-normal">(optional)</span>
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#aaa]"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--pv-muted)]"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
                   <input
                     type="email"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     placeholder="photographer@email.com"
-                    className="w-full pl-9 pr-4 py-3 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#2563eb] transition-all"
+                    className="w-full pl-9 pr-4 py-3 border border-[var(--pv-border)] rounded-xl text-sm text-[var(--pv-text)] focus:outline-none focus:border-[var(--pv-accent)] transition-all"
                   />
                 </div>
               </div>
@@ -418,7 +418,7 @@ export default function PhotographersPage() {
               {/* Status */}
               {editingId && (
                 <div>
-                  <label className="block text-sm font-semibold text-[#333] mb-2">
+                  <label className="block text-sm font-semibold text-[var(--pv-text-secondary)] mb-2">
                     Availability Status
                   </label>
                   <div className="flex gap-3">
@@ -429,7 +429,7 @@ export default function PhotographersPage() {
                         className={`flex-1 py-2.5 rounded-xl text-xs font-semibold border transition-all flex items-center justify-center gap-1.5 ${
                           status === key
                             ? STATUS_STYLES[key] + ' border-current'
-                            : 'border-[#e8e5e0] text-[#888] hover:border-[#2563eb]'
+                            : 'border-[var(--pv-border)] text-[var(--pv-muted)] hover:border-[var(--pv-accent)]'
                         }`}
                       >
                         <div className={`w-1.5 h-1.5 rounded-full ${STATUS_DOTS[key]}`} />
@@ -445,23 +445,23 @@ export default function PhotographersPage() {
               )}
 
               {/* Footer note */}
-              <p className="text-xs text-[#aaa] flex items-center gap-1.5">
+              <p className="text-xs text-[var(--pv-muted)] flex items-center gap-1.5">
                 Required fields help match the photographer to wedding bookings.
               </p>
             </div>
 
             {/* Modal Footer */}
-            <div className="flex gap-3 px-8 py-5 border-t border-[#eff6ff]">
+            <div className="flex gap-3 px-8 py-5 border-t border-[var(--pv-accent-tint-hover)]">
               <button
                 onClick={() => setShowModal(false)}
-                className="flex-1 py-3 border border-[#e8e5e0] text-[#333] text-sm font-semibold rounded-xl hover:bg-[#EDE8D0] transition-all"
+                className="flex-1 py-3 border border-[var(--pv-border)] text-[var(--pv-text-secondary)] text-sm font-semibold rounded-xl hover:bg-[var(--pv-bg)] transition-all"
               >
                 Cancel
               </button>
               <button
                 onClick={savePhotographer}
                 disabled={saving || !name.trim() || !phone.trim()}
-                className="flex-1 py-3 bg-[#2563eb] text-white text-sm font-semibold rounded-xl hover:bg-[#1d4ed8] disabled:opacity-40 transition-all flex items-center justify-center gap-2"
+                className="flex-1 py-3 bg-[var(--pv-accent)] text-[var(--pv-accent-on)] text-sm font-semibold rounded-xl hover:bg-[var(--pv-accent-hover)] disabled:opacity-40 transition-all flex items-center justify-center gap-2"
               >
                 {saving ? 'Saving…' : (
                   <><span>+</span><span>{editingId ? 'Update Photographer' : 'Add Photographer'}</span></>

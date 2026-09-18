@@ -179,29 +179,29 @@ Pruview`
 
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-[#0f0f0f]">Invoices & Payments</h1>
-          <p className="text-[#888] text-sm mt-1">Track payments for all events</p>
+          <h1 className="text-3xl font-bold text-[var(--pv-text)]">Invoices & Payments</h1>
+          <p className="text-[var(--pv-muted)] text-sm mt-1">Track payments for all events</p>
         </div>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4 mb-8">
-        <div className="bg-white border border-[#dbeafe] rounded-2xl p-5">
+        <div className="bg-white border border-[var(--pv-accent-tint)] rounded-2xl p-5">
           <p className="text-3xl font-bold text-green-500">₹{totalRevenue.toLocaleString('en-IN')}</p>
-          <p className="text-sm text-[#888] mt-1">Total Collected</p>
+          <p className="text-sm text-[var(--pv-muted)] mt-1">Total Collected</p>
         </div>
-        <div className="bg-white border border-[#dbeafe] rounded-2xl p-5">
+        <div className="bg-white border border-[var(--pv-accent-tint)] rounded-2xl p-5">
           <p className="text-3xl font-bold text-red-500">₹{totalPending.toLocaleString('en-IN')}</p>
-          <p className="text-sm text-[#888] mt-1">Pending Balance</p>
+          <p className="text-sm text-[var(--pv-muted)] mt-1">Pending Balance</p>
         </div>
-        <div className="bg-white border border-[#dbeafe] rounded-2xl p-5">
-          <p className="text-3xl font-bold text-[#2563eb]">{invoices.length}</p>
-          <p className="text-sm text-[#888] mt-1">Total Invoices</p>
+        <div className="bg-white border border-[var(--pv-accent-tint)] rounded-2xl p-5">
+          <p className="text-3xl font-bold text-[var(--pv-accent)]">{invoices.length}</p>
+          <p className="text-sm text-[var(--pv-muted)] mt-1">Total Invoices</p>
         </div>
       </div>
 
       {/* Filter tabs */}
-      <div className="flex gap-1 bg-white border border-[#dbeafe] rounded-xl p-1 w-fit mb-6">
+      <div className="flex gap-1 bg-white border border-[var(--pv-accent-tint)] rounded-xl p-1 w-fit mb-6">
         {[
           { key: 'all',     label: 'All' },
           { key: 'pending', label: 'Pending' },
@@ -209,7 +209,7 @@ Pruview`
         ].map(tab => (
           <button key={tab.key} onClick={() => setFilter(tab.key)}
             className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${
-              filter === tab.key ? 'bg-[#2563eb] text-white' : 'text-[#666] hover:text-[#0f0f0f]'
+              filter === tab.key ? 'bg-[var(--pv-accent)] text-[var(--pv-accent-on)]' : 'text-[var(--pv-text-secondary)] hover:text-[var(--pv-text)]'
             }`}>
             {tab.label}
           </button>
@@ -217,10 +217,10 @@ Pruview`
       </div>
 
       {loading ? (
-        <div className="text-center py-20 text-[#888]">Loading…</div>
+        <div className="text-center py-20 text-[var(--pv-muted)]">Loading…</div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-24 bg-white border border-[#dbeafe] rounded-2xl">
-          <p className="text-[#888]">No invoices found.</p>
+        <div className="text-center py-24 bg-white border border-[var(--pv-accent-tint)] rounded-2xl">
+          <p className="text-[var(--pv-muted)]">No invoices found.</p>
         </div>
       ) : (
         <div className="flex flex-col gap-4">
@@ -231,7 +231,7 @@ Pruview`
             const isEditing  = editingId === invoice.id
 
             return (
-              <div key={invoice.id} className="bg-white border border-[#dbeafe] rounded-2xl overflow-hidden">
+              <div key={invoice.id} className="bg-white border border-[var(--pv-accent-tint)] rounded-2xl overflow-hidden">
 
                 {/* Invoice header */}
                 <div
@@ -240,12 +240,12 @@ Pruview`
                 >
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-1 flex-wrap">
-                      <h3 className="font-bold text-[#0f0f0f] text-lg">{invoice.event.coupleName}</h3>
+                      <h3 className="font-bold text-[var(--pv-text)] text-lg">{invoice.event.coupleName}</h3>
                       <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${STATUS_STYLES[invoice.status]}`}>
                         {invoice.status}
                       </span>
                     </div>
-                    <p className="text-sm text-[#888]">
+                    <p className="text-sm text-[var(--pv-muted)]">
                       {invoice.packageName || 'Photography Package'} ·
                       {formatDate(invoice.event.startDate)}
                     </p>
@@ -253,66 +253,66 @@ Pruview`
 
                   <div className="flex items-center gap-6 text-right mr-4">
                     <div>
-                      <p className="text-xs text-[#888]">Total</p>
-                      <p className="font-bold text-[#0f0f0f]">₹{invoice.totalAmount.toLocaleString('en-IN')}</p>
+                      <p className="text-xs text-[var(--pv-muted)]">Total</p>
+                      <p className="font-bold text-[var(--pv-text)]">₹{invoice.totalAmount.toLocaleString('en-IN')}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-[#888]">Paid</p>
+                      <p className="text-xs text-[var(--pv-muted)]">Paid</p>
                       <p className="font-bold text-green-600">₹{totalPaid.toLocaleString('en-IN')}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-[#888]">Balance</p>
+                      <p className="text-xs text-[var(--pv-muted)]">Balance</p>
                       <p className={`font-bold ${balance > 0 ? 'text-red-500' : 'text-green-500'}`}>
                         ₹{balance.toLocaleString('en-IN')}
                       </p>
                     </div>
                   </div>
 
-                  <span className="text-[#aaa]">{isExpanded ? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="18 15 12 9 6 15"/></svg> : <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9"/></svg>}</span>
+                  <span className="text-[var(--pv-muted)]">{isExpanded ? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="18 15 12 9 6 15"/></svg> : <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9"/></svg>}</span>
                 </div>
 
                 {/* Expanded content */}
                 {isExpanded && (
-                  <div className="border-t border-[#eff6ff] px-6 py-5">
+                  <div className="border-t border-[var(--pv-accent-tint-hover)] px-6 py-5">
 
                     {/* Edit invoice details */}
                     {isEditing ? (
                       <div className="grid grid-cols-3 gap-4 mb-5">
                         <div>
-                          <label className="block text-xs font-semibold text-[#555] mb-1.5">Package Name</label>
+                          <label className="block text-xs font-semibold text-[var(--pv-text-secondary)] mb-1.5">Package Name</label>
                           <input type="text" value={editPackage} onChange={e => setEditPackage(e.target.value)}
-                            className="w-full px-3 py-2 border border-[#e8e5e0] rounded-lg text-sm text-[#0f0f0f] placeholder-[#999] focus:outline-none focus:border-[#2563eb] transition-all" />
+                            className="w-full px-3 py-2 border border-[var(--pv-border)] rounded-lg text-sm text-[var(--pv-text)] placeholder-[var(--pv-muted)] focus:outline-none focus:border-[var(--pv-accent)] transition-all" />
                         </div>
                         <div>
-                          <label className="block text-xs font-semibold text-[#555] mb-1.5">Total Amount (₹)</label>
+                          <label className="block text-xs font-semibold text-[var(--pv-text-secondary)] mb-1.5">Total Amount (₹)</label>
                           <input type="number" value={editAmount} onChange={e => setEditAmount(e.target.value)}
-                            className="w-full px-3 py-2 border border-[#e8e5e0] rounded-lg text-sm text-[#0f0f0f] placeholder-[#999] focus:outline-none focus:border-[#2563eb] transition-all" />
+                            className="w-full px-3 py-2 border border-[var(--pv-border)] rounded-lg text-sm text-[var(--pv-text)] placeholder-[var(--pv-muted)] focus:outline-none focus:border-[var(--pv-accent)] transition-all" />
                         </div>
                         <div>
-                          <label className="block text-xs font-semibold text-[#555] mb-1.5">Notes</label>
+                          <label className="block text-xs font-semibold text-[var(--pv-text-secondary)] mb-1.5">Notes</label>
                           <input type="text" value={editNotes} onChange={e => setEditNotes(e.target.value)}
-                            className="w-full px-3 py-2 border border-[#e8e5e0] rounded-lg text-sm text-[#0f0f0f] placeholder-[#999] focus:outline-none focus:border-[#2563eb] transition-all" />
+                            className="w-full px-3 py-2 border border-[var(--pv-border)] rounded-lg text-sm text-[var(--pv-text)] placeholder-[var(--pv-muted)] focus:outline-none focus:border-[var(--pv-accent)] transition-all" />
                         </div>
                         <div className="col-span-3 flex gap-2">
                           <button onClick={() => saveInvoice(invoice.id)} disabled={savingInvoice}
-                            className="px-4 py-2 bg-[#2563eb] text-white text-sm font-semibold rounded-lg hover:bg-[#1d4ed8] disabled:opacity-40 transition-all">
+                            className="px-4 py-2 bg-[var(--pv-accent)] text-[var(--pv-accent-on)] text-sm font-semibold rounded-lg hover:bg-[var(--pv-accent-hover)] disabled:opacity-40 transition-all">
                             {savingInvoice ? 'Saving…' : 'Save'}
                           </button>
                           <button onClick={() => setEditingId(null)}
-                            className="px-4 py-2 border border-[#e8e5e0] text-sm text-[#333] rounded-lg hover:bg-[#eff6ff] transition-all">
+                            className="px-4 py-2 border border-[var(--pv-border)] text-sm text-[var(--pv-text-secondary)] rounded-lg hover:bg-[var(--pv-accent-tint-hover)] transition-all">
                             Cancel
                           </button>
                         </div>
                       </div>
                     ) : (
                       <div className="flex items-center justify-between mb-5">
-                        <p className="text-sm text-[#888]">
+                        <p className="text-sm text-[var(--pv-muted)]">
                           {invoice.packageName || 'Photography Package'}
                           {invoice.notes && ` · ${invoice.notes}`}
                         </p>
                         <div className="flex gap-2">
                           <button onClick={() => openEdit(invoice)}
-                            className="px-3 py-1.5 border border-[#dbeafe] text-xs text-[#2563eb] rounded-lg hover:bg-[#dbeafe] transition-all">
+                            className="px-3 py-1.5 border border-[var(--pv-accent-tint)] text-xs text-[var(--pv-accent)] rounded-lg hover:bg-[var(--pv-accent-tint)] transition-all">
                             Edit Invoice
                           </button>
                           {balance > 0 && (
@@ -326,20 +326,20 @@ Pruview`
                     )}
 
                     {/* Payment history */}
-                    <p className="text-xs font-semibold text-[#888] uppercase tracking-wider mb-3">Payment History</p>
+                    <p className="text-xs font-semibold text-[var(--pv-muted)] uppercase tracking-wider mb-3">Payment History</p>
                     {invoice.payments.length === 0 ? (
-                      <p className="text-sm text-[#aaa] mb-4">No payments recorded yet.</p>
+                      <p className="text-sm text-[var(--pv-muted)] mb-4">No payments recorded yet.</p>
                     ) : (
                       <div className="flex flex-col gap-2 mb-4">
                         {invoice.payments.map(payment => (
-                          <div key={payment.id} className="flex items-center justify-between py-2 border-b border-[#eff6ff] last:border-0">
+                          <div key={payment.id} className="flex items-center justify-between py-2 border-b border-[var(--pv-accent-tint-hover)] last:border-0">
                             <div className="flex items-center gap-3">
                               <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
                                 <span className="text-green-600 text-xs font-bold">₹</span>
                               </div>
                               <div>
-                                <p className="text-sm font-semibold text-[#0f0f0f]">₹{payment.amount.toLocaleString('en-IN')}</p>
-                                <p className="text-xs text-[#888]">{payment.method} · {formatDate(payment.paidOn)}</p>
+                                <p className="text-sm font-semibold text-[var(--pv-text)]">₹{payment.amount.toLocaleString('en-IN')}</p>
+                                <p className="text-xs text-[var(--pv-muted)]">{payment.method} · {formatDate(payment.paidOn)}</p>
                               </div>
                             </div>
                             <button onClick={() => deletePayment(payment.id, invoice.id)}
@@ -353,41 +353,41 @@ Pruview`
 
                     {/* Add payment */}
                     {addingPayment === invoice.id ? (
-                      <div className="bg-[#eff6ff] rounded-xl p-4">
-                        <p className="text-xs font-semibold text-[#2563eb] uppercase tracking-wider mb-3">Add Payment</p>
+                      <div className="bg-[var(--pv-accent-tint-hover)] rounded-xl p-4">
+                        <p className="text-xs font-semibold text-[var(--pv-accent)] uppercase tracking-wider mb-3">Add Payment</p>
                         <div className="grid grid-cols-2 gap-3 mb-3">
                           <div>
-                            <label className="block text-xs text-[#555] mb-1">Amount (₹) *</label>
+                            <label className="block text-xs text-[var(--pv-text-secondary)] mb-1">Amount (₹) *</label>
                             <input type="number" value={payAmount} onChange={e => setPayAmount(e.target.value)}
                               placeholder="50000"
-                              className="w-full px-3 py-2 border border-[#e8e5e0] rounded-lg text-sm text-[#0f0f0f] placeholder-[#999] focus:outline-none focus:border-[#2563eb] transition-all" />
+                              className="w-full px-3 py-2 border border-[var(--pv-border)] rounded-lg text-sm text-[var(--pv-text)] placeholder-[var(--pv-muted)] focus:outline-none focus:border-[var(--pv-accent)] transition-all" />
                           </div>
                           <div>
-                            <label className="block text-xs text-[#555] mb-1">Date</label>
+                            <label className="block text-xs text-[var(--pv-text-secondary)] mb-1">Date</label>
                             <input type="date" value={payDate} onChange={e => setPayDate(e.target.value)}
-                              className="w-full px-3 py-2 border border-[#e8e5e0] rounded-lg text-sm text-[#0f0f0f] placeholder-[#999] focus:outline-none focus:border-[#2563eb] transition-all" />
+                              className="w-full px-3 py-2 border border-[var(--pv-border)] rounded-lg text-sm text-[var(--pv-text)] placeholder-[var(--pv-muted)] focus:outline-none focus:border-[var(--pv-accent)] transition-all" />
                           </div>
                           <div>
-                            <label className="block text-xs text-[#555] mb-1">Method</label>
+                            <label className="block text-xs text-[var(--pv-text-secondary)] mb-1">Method</label>
                             <select value={payMethod} onChange={e => setPayMethod(e.target.value)}
-                              className="w-full px-3 py-2 border border-[#e8e5e0] rounded-lg text-sm text-[#0f0f0f] placeholder-[#999] focus:outline-none focus:border-[#2563eb] transition-all">
+                              className="w-full px-3 py-2 border border-[var(--pv-border)] rounded-lg text-sm text-[var(--pv-text)] placeholder-[var(--pv-muted)] focus:outline-none focus:border-[var(--pv-accent)] transition-all">
                               {PAYMENT_METHODS.map(m => <option key={m} value={m}>{m}</option>)}
                             </select>
                           </div>
                           <div>
-                            <label className="block text-xs text-[#555] mb-1">Notes</label>
+                            <label className="block text-xs text-[var(--pv-text-secondary)] mb-1">Notes</label>
                             <input type="text" value={payNotes} onChange={e => setPayNotes(e.target.value)}
                               placeholder="Token / Balance / etc"
-                              className="w-full px-3 py-2 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#2563eb] transition-all" />
+                              className="w-full px-3 py-2 border border-[var(--pv-border)] rounded-lg text-sm focus:outline-none focus:border-[var(--pv-accent)] transition-all" />
                           </div>
                         </div>
                         <div className="flex gap-2">
                           <button onClick={() => addPayment(invoice.id)} disabled={savingPayment || !payAmount}
-                            className="px-4 py-2 bg-[#2563eb] text-white text-sm font-semibold rounded-lg hover:bg-[#1d4ed8] disabled:opacity-40 transition-all">
+                            className="px-4 py-2 bg-[var(--pv-accent)] text-[var(--pv-accent-on)] text-sm font-semibold rounded-lg hover:bg-[var(--pv-accent-hover)] disabled:opacity-40 transition-all">
                             {savingPayment ? 'Saving…' : 'Add Payment'}
                           </button>
                           <button onClick={() => setAddingPayment(null)}
-                            className="px-4 py-2 border border-[#e8e5e0] text-sm text-[#333] rounded-lg hover:bg-[#eff6ff] transition-all">
+                            className="px-4 py-2 border border-[var(--pv-border)] text-sm text-[var(--pv-text-secondary)] rounded-lg hover:bg-[var(--pv-accent-tint-hover)] transition-all">
                             Cancel
                           </button>
                         </div>
@@ -395,7 +395,7 @@ Pruview`
                     ) : (
                       balance > 0 && (
                         <button onClick={() => setAddingPayment(invoice.id)}
-                          className="px-4 py-2 bg-[#2563eb] text-white text-sm font-semibold rounded-lg hover:bg-[#1d4ed8] transition-all">
+                          className="px-4 py-2 bg-[var(--pv-accent)] text-[var(--pv-accent-on)] text-sm font-semibold rounded-lg hover:bg-[var(--pv-accent-hover)] transition-all">
                           + Add Payment
                         </button>
                       )

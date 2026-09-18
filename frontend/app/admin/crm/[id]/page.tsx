@@ -171,8 +171,8 @@ export default function EventDetail() {
   useEffect(() => { loadData() }, [id])
 
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#eff6ff' }}>
-      <p className="text-[#888]">Loading…</p>
+    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--pv-accent-tint-hover)' }}>
+      <p className="text-[var(--pv-muted)]">Loading…</p>
     </div>
   )
   if (!event) return null
@@ -180,20 +180,20 @@ export default function EventDetail() {
   const currentDay = event.days[activeDay]
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#eff6ff' }}>
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--pv-accent-tint-hover)' }}>
 
       {/* Header */}
-      <div className="bg-white border-b border-[#dbeafe] px-8 py-5">
+      <div className="bg-white border-b border-[var(--pv-accent-tint)] px-8 py-5">
         <div className="flex items-center gap-4 mb-1">
           <button onClick={() => router.push('/admin/crm')}
-            className="w-8 h-8 flex items-center justify-center border border-[#e8e5e0] rounded-lg text-[#666] hover:bg-[#eff6ff] transition-all">
+            className="w-8 h-8 flex items-center justify-center border border-[var(--pv-border)] rounded-lg text-[var(--pv-text-secondary)] hover:bg-[var(--pv-accent-tint-hover)] transition-all">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
           </button>
           <div className="flex-1">
-            <h1 className="text-2xl font-bold text-[#0f0f0f]">
+            <h1 className="text-2xl font-bold text-[var(--pv-text)]">
               {event.coupleName}
             </h1>
-            <p className="text-[#888] text-sm">
+            <p className="text-[var(--pv-muted)] text-sm">
               Edit Event Schedule • {formatFullDate(event.startDate, event.endDate)}
             </p>
           </div>
@@ -211,15 +211,15 @@ export default function EventDetail() {
             <button key={day.id} onClick={() => { setActiveDay(index); setActiveSlot(null) }}
               className={`px-5 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${
                 activeDay === index
-                  ? 'bg-[#0f0f0f] text-white'
-                  : 'bg-white text-[#666] border border-[#e8e5e0] hover:border-[#2563eb]'
+                  ? 'bg-[var(--pv-ink)] text-white'
+                  : 'bg-white text-[var(--pv-text-secondary)] border border-[var(--pv-border)] hover:border-[var(--pv-accent)]'
               }`}
             >
               Day {day.dayNumber}: {formatDate(day.date)}
             </button>
           ))}
           <button onClick={addDay} disabled={addingDay}
-            className="px-5 py-2.5 rounded-full text-sm font-semibold border border-dashed border-[#2563eb] text-[#2563eb] hover:bg-[#eff6ff] transition-all whitespace-nowrap disabled:opacity-40"
+            className="px-5 py-2.5 rounded-full text-sm font-semibold border border-dashed border-[var(--pv-accent)] text-[var(--pv-accent)] hover:bg-[var(--pv-accent-tint-hover)] transition-all whitespace-nowrap disabled:opacity-40"
           >
             {addingDay ? '…' : '+ Add Day'}
           </button>
@@ -236,7 +236,7 @@ export default function EventDetail() {
 
           {/* Left — Slot list */}
           <div className="col-span-3">
-            <p className="text-sm font-semibold text-[#888] mb-3">Select a time slot to edit</p>
+            <p className="text-sm font-semibold text-[var(--pv-muted)] mb-3">Select a time slot to edit</p>
             <div className="flex flex-col gap-3">
               {SLOTS.map(slot => {
                 const slotBookings = currentDay ? getBookingsForSlot(currentDay, slot.key) : []
@@ -245,26 +245,26 @@ export default function EventDetail() {
                   <div key={slot.key}
                     onClick={() => selectSlot(slot.key)}
                     className={`bg-white rounded-2xl border p-5 cursor-pointer transition-all ${
-                      isSelected ? 'border-[#2563eb] ring-2 ring-[#dbeafe]' : 'border-[#e8e5e0] hover:border-[#2563eb]'
+                      isSelected ? 'border-[var(--pv-accent)] ring-2 ring-[var(--pv-accent-tint)]' : 'border-[var(--pv-border)] hover:border-[var(--pv-accent)]'
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
                         <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                          isSelected ? 'bg-[#2563eb] text-white' : 'bg-[#eff6ff] text-[#2563eb]'
+                          isSelected ? 'bg-[var(--pv-accent)] text-[var(--pv-accent-on)]' : 'bg-[var(--pv-accent-tint-hover)] text-[var(--pv-accent)]'
                         }`}>
                           <span className="text-xs font-bold">{slot.key.slice(0,1)}</span>
                         </div>
                         <div>
-                          <p className="text-xs text-[#888] uppercase tracking-wide font-medium">
+                          <p className="text-xs text-[var(--pv-muted)] uppercase tracking-wide font-medium">
                             {slot.label} • {slot.time}
                           </p>
                           {slotBookings.length > 0 ? (
-                            <p className="font-semibold text-[#0f0f0f] mt-0.5">
+                            <p className="font-semibold text-[var(--pv-text)] mt-0.5">
                               {slotBookings[0].eventName}
                             </p>
                           ) : (
-                            <p className="text-[#aaa] mt-0.5">Unassigned</p>
+                            <p className="text-[var(--pv-muted)] mt-0.5">Unassigned</p>
                           )}
                         </div>
                       </div>
@@ -273,7 +273,7 @@ export default function EventDetail() {
                           {slotBookings.length} Photographer{slotBookings.length > 1 ? 's' : ''}
                         </span>
                       ) : (
-                        <span className="px-3 py-1 bg-[#eff6ff] text-[#aaa] text-xs font-medium rounded-full">
+                        <span className="px-3 py-1 bg-[var(--pv-accent-tint-hover)] text-[var(--pv-muted)] text-xs font-medium rounded-full">
                           Available
                         </span>
                       )}
@@ -281,12 +281,12 @@ export default function EventDetail() {
 
                     {/* Show existing bookings */}
                     {slotBookings.length > 0 && isSelected && (
-                      <div className="mt-3 pt-3 border-t border-[#f0ede8] flex flex-wrap gap-2">
+                      <div className="mt-3 pt-3 border-t border-[var(--pv-border)] flex flex-wrap gap-2">
                         {slotBookings.map(b => (
-                          <div key={b.id} className="flex items-center gap-2 bg-[#eff6ff] px-3 py-1.5 rounded-full text-xs">
-                            <span className="font-medium text-[#2563eb]">{b.photographer.name}</span>
+                          <div key={b.id} className="flex items-center gap-2 bg-[var(--pv-accent-tint-hover)] px-3 py-1.5 rounded-full text-xs">
+                            <span className="font-medium text-[var(--pv-accent)]">{b.photographer.name}</span>
                             <button onClick={e => { e.stopPropagation(); cancelBooking(b.id, activeDay) }}
-                              className="text-[#aaa] hover:text-red-500 transition-colors">
+                              className="text-[var(--pv-muted)] hover:text-red-500 transition-colors">
                               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                             </button>
                           </div>
@@ -302,24 +302,24 @@ export default function EventDetail() {
           {/* Right — Slot details form */}
           <div className="col-span-2">
             {activeSlot ? (
-              <div className="bg-white rounded-2xl border border-[#dbeafe] p-6 sticky top-6">
+              <div className="bg-white rounded-2xl border border-[var(--pv-accent-tint)] p-6 sticky top-6">
                 <div className="flex items-center justify-between mb-1">
-                  <h3 className="font-bold text-[#0f0f0f]">
+                  <h3 className="font-bold text-[var(--pv-text)]">
                     {SLOTS.find(s => s.key === activeSlot)?.label} Slot Details
                   </h3>
-                  <button onClick={() => setActiveSlot(null)} className="text-[#aaa] hover:text-[#333] transition-colors">
+                  <button onClick={() => setActiveSlot(null)} className="text-[var(--pv-muted)] hover:text-[var(--pv-text-secondary)] transition-colors">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                   </button>
                 </div>
-                <p className="text-xs text-[#2563eb] font-medium mb-5 bg-[#dbeafe] inline-block px-2 py-0.5 rounded">
+                <p className="text-xs text-[var(--pv-accent)] font-medium mb-5 bg-[var(--pv-accent-tint)] inline-block px-2 py-0.5 rounded">
                   {SLOTS.find(s => s.key === activeSlot)?.time}
                 </p>
 
                 <div className="flex flex-col gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-[#333] mb-1.5">Event Name</label>
+                    <label className="block text-sm font-medium text-[var(--pv-text-secondary)] mb-1.5">Event Name</label>
                     <select value={selectedEvent} onChange={e => setSelectedEvent(e.target.value)}
-                      className="w-full px-4 py-2.5 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#2563eb] transition-all"
+                      className="w-full px-4 py-2.5 border border-[var(--pv-border)] rounded-xl text-sm text-[var(--pv-text)] focus:outline-none focus:border-[var(--pv-accent)] transition-all"
                     >
                       <option value="">Select event type...</option>
                       {EVENT_NAMES.map(n => <option key={n} value={n}>{n}</option>)}
@@ -327,15 +327,15 @@ export default function EventDetail() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-[#333] mb-1.5">Assigned Photographers</label>
-                    <div className="border border-[#e8e5e0] rounded-xl p-3 min-h-[50px]">
+                    <label className="block text-sm font-medium text-[var(--pv-text-secondary)] mb-1.5">Assigned Photographers</label>
+                    <div className="border border-[var(--pv-border)] rounded-xl p-3 min-h-[50px]">
                       {selectedPhotographers.length > 0 && (
                         <div className="flex flex-wrap gap-1.5 mb-2">
                           {selectedPhotographers.map(pid => {
                             const p = photographers.find(ph => ph.id === pid)
                             return (
-                              <div key={pid} className="flex items-center gap-1 bg-[#dbeafe] text-[#2563eb] px-2.5 py-1 rounded-full text-xs font-medium">
-                                <span className="w-4 h-4 bg-[#2563eb] text-white rounded-full flex items-center justify-center text-[10px]">
+                              <div key={pid} className="flex items-center gap-1 bg-[var(--pv-accent-tint)] text-[var(--pv-accent)] px-2.5 py-1 rounded-full text-xs font-medium">
+                                <span className="w-4 h-4 bg-[var(--pv-accent)] text-[var(--pv-accent-on)] rounded-full flex items-center justify-center text-[10px]">
                                   {p?.name[0]}
                                 </span>
                                 <span>{p?.name.split(' ')[0]} {p?.name.split(' ')[1]?.[0]}.</span>
@@ -345,7 +345,7 @@ export default function EventDetail() {
                           })}
                           <button
                             onClick={() => {}}
-                            className="text-xs text-[#2563eb] font-medium hover:underline"
+                            className="text-xs text-[var(--pv-accent)] font-medium hover:underline"
                           >
                             + Add more
                           </button>
@@ -353,7 +353,7 @@ export default function EventDetail() {
                       )}
                       <select
                         onChange={e => { if (e.target.value) { togglePhotographer(parseInt(e.target.value)); e.target.value = '' }}}
-                        className="w-full text-sm text-[#666] focus:outline-none bg-transparent"
+                        className="w-full text-sm text-[var(--pv-text-secondary)] focus:outline-none bg-transparent"
                         defaultValue=""
                       >
                         <option value="" disabled>
@@ -367,30 +367,30 @@ export default function EventDetail() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-[#333] mb-1.5">
-                      Location <span className="text-[#aaa] font-normal">(Optional)</span>
+                    <label className="block text-sm font-medium text-[var(--pv-text-secondary)] mb-1.5">
+                      Location <span className="text-[var(--pv-muted)] font-normal">(Optional)</span>
                     </label>
                     <input type="text" value={bookingLocation} onChange={e => setBookingLocation(e.target.value)}
                       placeholder="Poolside Courtyard, The Ritz-Carlton"
-                      className="w-full px-4 py-2.5 border border-[#e8e5e0] rounded-xl text-sm text-[#0f0f0f] focus:outline-none focus:border-[#2563eb] transition-all"
+                      className="w-full px-4 py-2.5 border border-[var(--pv-border)] rounded-xl text-sm text-[var(--pv-text)] focus:outline-none focus:border-[var(--pv-accent)] transition-all"
                     />
                   </div>
 
                   <div className="flex items-center justify-between pt-2">
                     <button onClick={() => setActiveSlot(null)}
-                      className="text-sm text-[#888] hover:text-[#333] transition-colors">
+                      className="text-sm text-[var(--pv-muted)] hover:text-[var(--pv-text-secondary)] transition-colors">
                       Cancel
                     </button>
                     <div className="flex gap-2">
                       <button onClick={() => saveBooking(false)}
                         disabled={saving || !selectedEvent || selectedPhotographers.length === 0}
-                        className="px-4 py-2 border border-[#e8e5e0] text-sm font-semibold text-[#333] rounded-xl hover:border-[#2563eb] hover:text-[#2563eb] disabled:opacity-40 transition-all"
+                        className="px-4 py-2 border border-[var(--pv-border)] text-sm font-semibold text-[var(--pv-text-secondary)] rounded-xl hover:border-[var(--pv-accent)] hover:text-[var(--pv-accent)] disabled:opacity-40 transition-all"
                       >
                         Book
                       </button>
                       <button onClick={() => saveBooking(true)}
                         disabled={saving || !selectedEvent || selectedPhotographers.length === 0}
-                        className="px-4 py-2 bg-[#2563eb] text-white text-sm font-semibold rounded-xl hover:bg-[#1d4ed8] disabled:opacity-40 transition-all flex items-center gap-1.5"
+                        className="px-4 py-2 bg-[var(--pv-accent)] text-[var(--pv-accent-on)] text-sm font-semibold rounded-xl hover:bg-[var(--pv-accent-hover)] disabled:opacity-40 transition-all flex items-center gap-1.5"
                       >
                         Book & Notify
                       </button>
@@ -399,11 +399,11 @@ export default function EventDetail() {
                 </div>
               </div>
             ) : (
-              <div className="bg-white rounded-2xl border border-dashed border-[#dbeafe] p-8 text-center h-fit">
-                <div className="w-12 h-12 bg-[#eff6ff] rounded-xl flex items-center justify-center mx-auto mb-3">
+              <div className="bg-white rounded-2xl border border-dashed border-[var(--pv-accent-tint)] p-8 text-center h-fit">
+                <div className="w-12 h-12 bg-[var(--pv-accent-tint-hover)] rounded-xl flex items-center justify-center mx-auto mb-3">
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 8 12 12 16"/><line x1="16" y1="12" x2="8" y2="12"/></svg>
                 </div>
-                <p className="text-[#888] text-sm">Select a time slot on the left to view details and assign photographers</p>
+                <p className="text-[var(--pv-muted)] text-sm">Select a time slot on the left to view details and assign photographers</p>
               </div>
             )}
           </div>
@@ -418,8 +418,8 @@ export default function EventDetail() {
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               </div>
-              <h2 className="text-xl font-bold text-[#0f0f0f]">Booking Confirmed</h2>
-              <p className="text-[#888] text-sm mt-1">Send WhatsApp notifications to each photographer</p>
+              <h2 className="text-xl font-bold text-[var(--pv-text)]">Booking Confirmed</h2>
+              <p className="text-[var(--pv-muted)] text-sm mt-1">Send WhatsApp notifications to each photographer</p>
             </div>
             <div className="flex flex-col gap-3 mb-5">
               {whatsappLinks.map((link, i) => (
@@ -435,7 +435,7 @@ export default function EventDetail() {
               ))}
             </div>
             <button onClick={() => setWhatsappLinks([])}
-              className="w-full py-3 bg-[#2563eb] text-white text-sm font-semibold rounded-xl hover:bg-[#1d4ed8] transition-all">
+              className="w-full py-3 bg-[var(--pv-accent)] text-[var(--pv-accent-on)] text-sm font-semibold rounded-xl hover:bg-[var(--pv-accent-hover)] transition-all">
               Done
             </button>
           </div>

@@ -13,7 +13,7 @@ export default function EnquiryDetail() {
 
   return (
     <div className="p-8">
-      <p className="text-[#888]">Loading...</p>
+      <p className="text-[var(--pv-muted)]">Loading...</p>
     </div>
   )
 }

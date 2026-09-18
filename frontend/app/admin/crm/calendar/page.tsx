@@ -128,23 +128,23 @@ export default function CalendarPage() {
       {/* Calendar */}
       <div className="flex-1 p-8 overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold text-[#0f0f0f]">{MONTHS[currentMonth]} {currentYear}</h1>
+          <h1 className="text-3xl font-bold text-[var(--pv-text)]">{MONTHS[currentMonth]} {currentYear}</h1>
           <div className="flex items-center gap-2">
-            <button onClick={prevMonth} className="w-9 h-9 flex items-center justify-center bg-white border border-[#e8e5e0] rounded-lg hover:bg-[#eff6ff] text-[#555] transition-all font-bold">&lsaquo;</button>
-            <button onClick={nextMonth} className="w-9 h-9 flex items-center justify-center bg-white border border-[#e8e5e0] rounded-lg hover:bg-[#eff6ff] text-[#555] transition-all font-bold">&rsaquo;</button>
-            <button onClick={() => router.push('/admin/crm/new')} className="ml-2 px-4 py-2 bg-[#2563eb] text-white text-sm font-semibold rounded-xl hover:bg-[#1d4ed8] transition-all">+ Add Event</button>
+            <button onClick={prevMonth} className="w-9 h-9 flex items-center justify-center bg-white border border-[var(--pv-border)] rounded-lg hover:bg-[var(--pv-accent-tint-hover)] text-[var(--pv-text-secondary)] transition-all font-bold">&lsaquo;</button>
+            <button onClick={nextMonth} className="w-9 h-9 flex items-center justify-center bg-white border border-[var(--pv-border)] rounded-lg hover:bg-[var(--pv-accent-tint-hover)] text-[var(--pv-text-secondary)] transition-all font-bold">&rsaquo;</button>
+            <button onClick={() => router.push('/admin/crm/new')} className="ml-2 px-4 py-2 bg-[var(--pv-accent)] text-[var(--pv-accent-on)] text-sm font-semibold rounded-xl hover:bg-[var(--pv-accent-hover)] transition-all">+ Add Event</button>
           </div>
         </div>
 
-        <div className="bg-white border border-[#e8e5e0] rounded-2xl overflow-hidden shadow-sm">
-          <div className="grid grid-cols-7 border-b border-[#f0ede8]">
-            {DAYS_SHORT.map(d => <div key={d} className="py-3 text-center text-xs font-semibold text-[#aaa] uppercase tracking-wider">{d}</div>)}
+        <div className="bg-white border border-[var(--pv-border)] rounded-2xl overflow-hidden shadow-sm">
+          <div className="grid grid-cols-7 border-b border-[var(--pv-border)]">
+            {DAYS_SHORT.map(d => <div key={d} className="py-3 text-center text-xs font-semibold text-[var(--pv-muted)] uppercase tracking-wider">{d}</div>)}
           </div>
           <div className="grid grid-cols-7">
             {calDays.map((day, index) => {
               const isLastCol = index % 7 === 6
               const isLastRow = Math.floor(index / 7) === Math.floor((calDays.length - 1) / 7)
-              const border    = `${!isLastCol ? 'border-r' : ''} ${!isLastRow ? 'border-b' : ''} border-[#f0ede8]`
+              const border    = `${!isLastCol ? 'border-r' : ''} ${!isLastRow ? 'border-b' : ''} border-[var(--pv-border)]`
 
               if (!day) return <div key={index} className={`min-h-[90px] bg-[#fafafa] ${border}`} />
 
@@ -159,17 +159,17 @@ export default function CalendarPage() {
                 <div
                   key={index}
                   onClick={() => setSelectedDate(isSelect ? null : dateKey)}
-                  className={`min-h-[90px] p-2 cursor-pointer transition-all ${border} ${isSelect ? 'bg-[#dbeafe] ring-2 ring-[#2563eb] ring-inset' : 'hover:bg-[#faf9ff]'}`}
+                  className={`min-h-[90px] p-2 cursor-pointer transition-all ${border} ${isSelect ? 'bg-[var(--pv-accent-tint)] ring-2 ring-[var(--pv-accent)] ring-inset' : 'hover:bg-[#faf9ff]'}`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className={`text-sm font-semibold w-7 h-7 flex items-center justify-center rounded-full ${todayDay ? 'bg-[#2563eb] text-white' : isSelect ? 'text-[#2563eb] font-bold' : 'text-[#333]'}`}>{day}</span>
+                    <span className={`text-sm font-semibold w-7 h-7 flex items-center justify-center rounded-full ${todayDay ? 'bg-[var(--pv-accent)] text-[var(--pv-accent-on)]' : isSelect ? 'text-[var(--pv-accent)] font-bold' : 'text-[var(--pv-text-secondary)]'}`}>{day}</span>
                     <div className={`w-2 h-2 rounded-full ${dotColor[status]}`} />
                   </div>
                   {bookings.length > 0 && (
                     <div className="flex flex-col gap-0.5 mt-1">
                       {bookings.length <= 2
-                        ? names.map((name, i) => <div key={i} className={`text-xs truncate rounded px-1.5 py-0.5 ${isSelect ? 'bg-[#ddd6fe] text-[#2563eb]' : 'bg-[#eff6ff] text-[#666]'}`}>{name}</div>)
-                        : <div className={`text-xs rounded px-1.5 py-0.5 ${isSelect ? 'bg-[#ddd6fe] text-[#2563eb]' : 'bg-[#eff6ff] text-[#666]'}`}>{bookings.length} Bookings</div>
+                        ? names.map((name, i) => <div key={i} className={`text-xs truncate rounded px-1.5 py-0.5 ${isSelect ? 'bg-[#ddd6fe] text-[var(--pv-accent)]' : 'bg-[var(--pv-accent-tint-hover)] text-[var(--pv-text-secondary)]'}`}>{name}</div>)
+                        : <div className={`text-xs rounded px-1.5 py-0.5 ${isSelect ? 'bg-[#ddd6fe] text-[var(--pv-accent)]' : 'bg-[var(--pv-accent-tint-hover)] text-[var(--pv-text-secondary)]'}`}>{bookings.length} Bookings</div>
                       }
                     </div>
                   )}
@@ -181,23 +181,23 @@ export default function CalendarPage() {
       </div>
 
       {/* Right Panel */}
-      <div className="w-96 bg-white border-l border-[#e8e5e0] flex flex-col overflow-hidden flex-shrink-0">
+      <div className="w-96 bg-white border-l border-[var(--pv-border)] flex flex-col overflow-hidden flex-shrink-0">
         {selectedDate ? (
           <>
-            <div className="px-6 py-5 border-b border-[#f0ede8]">
+            <div className="px-6 py-5 border-b border-[var(--pv-border)]">
               <div className="flex items-start justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold text-[#0f0f0f]">
+                  <h2 className="text-2xl font-bold text-[var(--pv-text)]">
                     {new Date(selectedDate + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </h2>
-                  <p className="text-sm text-[#888] mt-0.5">{DAYS_FULL[new Date(selectedDate + 'T00:00:00').getDay()]} Schedule</p>
+                  <p className="text-sm text-[var(--pv-muted)] mt-0.5">{DAYS_FULL[new Date(selectedDate + 'T00:00:00').getDay()]} Schedule</p>
                   {selectedStatus !== 'available' && (
                     <span className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-semibold ${selectedStatus === 'booked' ? 'bg-red-100 text-red-600' : 'bg-orange-100 text-orange-600'}`}>
                       {selectedStatus === 'booked' ? 'Fully Booked' : 'Partially Booked'}
                     </span>
                   )}
                 </div>
-                <button onClick={() => setSelectedDate(null)} className="w-7 h-7 flex items-center justify-center border border-[#e8e5e0] rounded-lg text-[#aaa] hover:text-[#333] text-xs mt-1">x</button>
+                <button onClick={() => setSelectedDate(null)} className="w-7 h-7 flex items-center justify-center border border-[var(--pv-border)] rounded-lg text-[var(--pv-muted)] hover:text-[var(--pv-text-secondary)] text-xs mt-1">x</button>
               </div>
             </div>
 
@@ -207,17 +207,17 @@ export default function CalendarPage() {
                 return (
                   <div key={slot}>
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-[#aaa] text-sm">{SLOT_ICONS[slot]}</span>
-                      <p className="text-xs font-bold text-[#aaa] uppercase tracking-widest">{slot}</p>
+                      <span className="text-[var(--pv-muted)] text-sm">{SLOT_ICONS[slot]}</span>
+                      <p className="text-xs font-bold text-[var(--pv-muted)] uppercase tracking-widest">{slot}</p>
                     </div>
                     {groups.length > 0 ? (
                       <div className="flex flex-col gap-3">
                         {groups.map((group, gi) => (
-                          <div key={gi} className="bg-white border border-[#e8e5e0] rounded-xl p-4 shadow-sm">
+                          <div key={gi} className="bg-white border border-[var(--pv-border)] rounded-xl p-4 shadow-sm">
                             <div className="flex items-start justify-between mb-3">
                               <div>
-                                <p className="font-semibold text-[#0f0f0f]">{group.eventName}</p>
-                                <p className="text-sm text-[#888] mt-0.5">{group.coupleName}</p>
+                                <p className="font-semibold text-[var(--pv-text)]">{group.eventName}</p>
+                                <p className="text-sm text-[var(--pv-muted)] mt-0.5">{group.coupleName}</p>
                               </div>
                               <div className={`w-2.5 h-2.5 rounded-full mt-1.5 flex-shrink-0 ${slot === 'MORNING' ? 'bg-amber-400' : slot === 'AFTERNOON' ? 'bg-blue-400' : 'bg-purple-400'}`} />
                             </div>
@@ -228,20 +228,20 @@ export default function CalendarPage() {
                                     {getInitials(booking.photographer.name)}
                                   </div>
                                   <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-medium text-[#0f0f0f] truncate">{booking.photographer.name}</p>
-                                    {booking.photographer.specialization && <p className="text-xs text-[#888] truncate">{booking.photographer.specialization}</p>}
+                                    <p className="text-sm font-medium text-[var(--pv-text)] truncate">{booking.photographer.name}</p>
+                                    {booking.photographer.specialization && <p className="text-xs text-[var(--pv-muted)] truncate">{booking.photographer.specialization}</p>}
                                   </div>
                                 </div>
                               ))}
                             </div>
-                            <button onClick={() => router.push(`/admin/crm/${group.eventId}`)} className="w-full py-2 border border-[#e8e5e0] rounded-lg text-sm text-[#666] hover:border-[#2563eb] hover:text-[#2563eb] transition-all flex items-center justify-center gap-1.5">
+                            <button onClick={() => router.push(`/admin/crm/${group.eventId}`)} className="w-full py-2 border border-[var(--pv-border)] rounded-lg text-sm text-[var(--pv-text-secondary)] hover:border-[var(--pv-accent)] hover:text-[var(--pv-accent)] transition-all flex items-center justify-center gap-1.5">
                               Edit Event
                             </button>
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <button onClick={() => router.push('/admin/crm/new')} className="w-full py-3 border border-dashed border-[#e8e5e0] rounded-xl text-sm text-[#2563eb] hover:bg-[#eff6ff] hover:border-[#2563eb] transition-all">
+                      <button onClick={() => router.push('/admin/crm/new')} className="w-full py-3 border border-dashed border-[var(--pv-border)] rounded-xl text-sm text-[var(--pv-accent)] hover:bg-[var(--pv-accent-tint-hover)] hover:border-[var(--pv-accent)] transition-all">
                         + Add Event
                       </button>
                     )}
@@ -252,13 +252,13 @@ export default function CalendarPage() {
           </>
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
-            <div className="w-16 h-16 bg-[#dbeafe] rounded-2xl flex items-center justify-center mb-4">
-              <span className="text-[#2563eb] font-bold text-2xl">C</span>
+            <div className="w-16 h-16 bg-[var(--pv-accent-tint)] rounded-2xl flex items-center justify-center mb-4">
+              <span className="text-[var(--pv-accent)] font-bold text-2xl">C</span>
             </div>
-            <p className="font-semibold text-[#333] mb-1">Select a date</p>
-            <p className="text-sm text-[#aaa] mb-8">Click any date to view the schedule</p>
-            <div className="w-full pt-6 border-t border-[#f0ede8]">
-              <p className="text-xs font-bold text-[#aaa] uppercase tracking-wider mb-4">{MONTHS[currentMonth]} Summary</p>
+            <p className="font-semibold text-[var(--pv-text-secondary)] mb-1">Select a date</p>
+            <p className="text-sm text-[var(--pv-muted)] mb-8">Click any date to view the schedule</p>
+            <div className="w-full pt-6 border-t border-[var(--pv-border)]">
+              <p className="text-xs font-bold text-[var(--pv-muted)] uppercase tracking-wider mb-4">{MONTHS[currentMonth]} Summary</p>
               {(() => {
                 const entries = Object.entries(dateMap).filter(([key]) => {
                   const d = new Date(key)
@@ -266,13 +266,13 @@ export default function CalendarPage() {
                 })
                 return (
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="bg-[#eff6ff] rounded-xl p-4 text-left">
-                      <p className="text-2xl font-bold text-[#2563eb]">{entries.filter(([,b]) => b.length > 0).length}</p>
-                      <p className="text-xs text-[#888] mt-1">Days booked</p>
+                    <div className="bg-[var(--pv-accent-tint-hover)] rounded-xl p-4 text-left">
+                      <p className="text-2xl font-bold text-[var(--pv-accent)]">{entries.filter(([,b]) => b.length > 0).length}</p>
+                      <p className="text-xs text-[var(--pv-muted)] mt-1">Days booked</p>
                     </div>
-                    <div className="bg-[#eff6ff] rounded-xl p-4 text-left">
-                      <p className="text-2xl font-bold text-[#2563eb]">{entries.reduce((sum,[,b]) => sum + b.length, 0)}</p>
-                      <p className="text-xs text-[#888] mt-1">Total slots</p>
+                    <div className="bg-[var(--pv-accent-tint-hover)] rounded-xl p-4 text-left">
+                      <p className="text-2xl font-bold text-[var(--pv-accent)]">{entries.reduce((sum,[,b]) => sum + b.length, 0)}</p>
+                      <p className="text-xs text-[var(--pv-muted)] mt-1">Total slots</p>
                     </div>
                   </div>
                 )

@@ -184,12 +184,12 @@ export default function EnquiriesPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-[#0f0f0f]">Enquiries</h1>
-          <p className="text-[#888] text-sm mt-1">Manage incoming leads and wedding requests</p>
+          <h1 className="text-3xl font-bold text-[var(--pv-text)]">Enquiries</h1>
+          <p className="text-[var(--pv-muted)] text-sm mt-1">Manage incoming leads and wedding requests</p>
         </div>
         <button
           onClick={() => router.push('/admin/crm/enquiries/new')}
-          className="flex items-center gap-2 px-5 py-2.5 bg-[#2563eb] text-white text-sm font-semibold rounded-xl hover:bg-[#1d4ed8] transition-all shadow-md"
+          className="flex items-center gap-2 px-5 py-2.5 bg-[var(--pv-accent)] text-[var(--pv-accent-on)] text-sm font-semibold rounded-xl hover:bg-[var(--pv-accent-hover)] transition-all shadow-md"
         >
           + New Enquiry
         </button>
@@ -198,28 +198,28 @@ export default function EnquiriesPage() {
       {/* Stats */}
       <div className="grid grid-cols-4 gap-4 mb-8">
         {[
-          { label: 'Total',     value: enquiries.length,                                         color: 'text-[#2563eb]' },
+          { label: 'Total',     value: enquiries.length,                                         color: 'text-[var(--pv-accent)]' },
           { label: 'New',       value: enquiries.filter(e => e.status === 'NEW_REQUEST').length, color: 'text-blue-500' },
           { label: 'Follow Up', value: enquiries.filter(e => e.status === 'FOLLOW_UP').length,   color: 'text-violet-500' },
           { label: 'Converted', value: enquiries.filter(e => e.status === 'CONVERTED').length,   color: 'text-green-500' },
         ].map(stat => (
-          <div key={stat.label} className="bg-white border border-[#e8e5e0] rounded-2xl p-5">
+          <div key={stat.label} className="bg-white border border-[var(--pv-border)] rounded-2xl p-5">
             <p className={`text-3xl font-bold ${stat.color}`}>{stat.value}</p>
-            <p className="text-sm text-[#888] mt-1">{stat.label}</p>
+            <p className="text-sm text-[var(--pv-muted)] mt-1">{stat.label}</p>
           </div>
         ))}
       </div>
 
-      <h2 className="text-base font-semibold text-[#0f0f0f] mb-4">Enquiry Pipeline</h2>
+      <h2 className="text-base font-semibold text-[var(--pv-text)] mb-4">Enquiry Pipeline</h2>
 
       {loading ? (
-        <div className="text-center py-20 text-[#888]">Loading…</div>
+        <div className="text-center py-20 text-[var(--pv-muted)]">Loading…</div>
       ) : enquiries.length === 0 ? (
-        <div className="text-center py-24 bg-white border border-[#e8e5e0] rounded-2xl">
-          <p className="text-[#888] mb-4">No enquiries yet.</p>
+        <div className="text-center py-24 bg-white border border-[var(--pv-border)] rounded-2xl">
+          <p className="text-[var(--pv-muted)] mb-4">No enquiries yet.</p>
           <button
             onClick={() => router.push('/admin/crm/enquiries/new')}
-            className="px-6 py-2.5 bg-[#2563eb] text-white text-sm font-semibold rounded-xl hover:bg-[#1d4ed8] transition-all"
+            className="px-6 py-2.5 bg-[var(--pv-accent)] text-[var(--pv-accent-on)] text-sm font-semibold rounded-xl hover:bg-[var(--pv-accent-hover)] transition-all"
           >
             + New Enquiry
           </button>
@@ -237,7 +237,7 @@ export default function EnquiriesPage() {
             return (
               <div
                 key={enquiry.id}
-                className="bg-white border border-[#e8e5e0] rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                className="bg-white border border-[var(--pv-border)] rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
               >
                 {/* ── Card body ── */}
                 <div className="px-6 py-5">
@@ -246,16 +246,16 @@ export default function EnquiriesPage() {
                     {/* Left: client info */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-1.5 flex-wrap">
-                        <h3 className="font-bold text-[#0f0f0f] text-lg leading-tight">{enquiry.coupleName}</h3>
+                        <h3 className="font-bold text-[var(--pv-text)] text-lg leading-tight">{enquiry.coupleName}</h3>
                         {/* Current status badge */}
                         <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${cfg.bg} ${cfg.text}`}>
                           <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
                           {cfg.label}
                         </span>
-                        <span className="text-xs text-[#bbb]">{timeAgo(enquiry.createdAt)}</span>
+                        <span className="text-xs text-[var(--pv-muted)]">{timeAgo(enquiry.createdAt)}</span>
                       </div>
 
-                      <div className="flex items-center gap-4 text-sm text-[#777] flex-wrap">
+                      <div className="flex items-center gap-4 text-sm text-[var(--pv-muted)] flex-wrap">
                         {enquiry.phone && (
                           <span className="flex items-center gap-1.5">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.6 3.35 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.39 16z"/></svg>
@@ -277,12 +277,12 @@ export default function EnquiriesPage() {
                         )}
                         {enquiry.expectedGuests && <span>{enquiry.expectedGuests} guests</span>}
                         {enquiry.leadSource && (
-                          <span className="text-xs bg-[#f0ede8] text-[#888] px-2 py-0.5 rounded-full">{enquiry.leadSource}</span>
+                          <span className="text-xs bg-[var(--pv-border)] text-[var(--pv-muted)] px-2 py-0.5 rounded-full">{enquiry.leadSource}</span>
                         )}
                       </div>
 
                       {enquiry.description && (
-                        <p className="mt-2 text-sm text-[#999] line-clamp-1">{enquiry.description}</p>
+                        <p className="mt-2 text-sm text-[var(--pv-muted)] line-clamp-1">{enquiry.description}</p>
                       )}
                     </div>
 
@@ -302,7 +302,7 @@ export default function EnquiriesPage() {
                                 setPendingStatus(prev => ({ ...prev, [enquiry.id]: val }))
                               }
                             }}
-                            className="border border-[#e8e5e0] rounded-lg px-3 py-1.5 text-sm text-[#333] focus:outline-none focus:border-[#2563eb] bg-white transition-all cursor-pointer"
+                            className="border border-[var(--pv-border)] rounded-lg px-3 py-1.5 text-sm text-[var(--pv-text-secondary)] focus:outline-none focus:border-[var(--pv-accent)] bg-white transition-all cursor-pointer"
                           >
                             <option value="NEW_REQUEST">New Request</option>
                             <option value="CONTACTED">Contacted</option>
@@ -314,7 +314,7 @@ export default function EnquiriesPage() {
                           <button
                             onClick={() => saveStatus(enquiry.id)}
                             disabled={!hasPending || isSaving}
-                            className="px-4 py-1.5 bg-[#2563eb] text-white text-sm font-semibold rounded-lg disabled:opacity-30 hover:bg-[#1d4ed8] disabled:cursor-not-allowed transition-all"
+                            className="px-4 py-1.5 bg-[var(--pv-accent)] text-[var(--pv-accent-on)] text-sm font-semibold rounded-lg disabled:opacity-30 hover:bg-[var(--pv-accent-hover)] disabled:cursor-not-allowed transition-all"
                           >
                             {isSaving ? 'Saving…' : 'Save'}
                           </button>
@@ -322,7 +322,7 @@ export default function EnquiriesPage() {
                           {/* Edit button */}
                           <button
                             onClick={() => isEditing ? setEditingId(null) : openEdit(enquiry)}
-                            className="flex items-center gap-1.5 px-3 py-1.5 border border-[#e8e5e0] text-[#555] text-sm font-semibold rounded-lg hover:border-[#2563eb] hover:text-[#2563eb] transition-all"
+                            className="flex items-center gap-1.5 px-3 py-1.5 border border-[var(--pv-border)] text-[var(--pv-text-secondary)] text-sm font-semibold rounded-lg hover:border-[var(--pv-accent)] hover:text-[var(--pv-accent)] transition-all"
                           >
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                             {isEditing ? 'Cancel' : 'Edit'}
@@ -342,13 +342,13 @@ export default function EnquiriesPage() {
                           {/* Converted state — view booking + edit + delete */}
                           <button
                             onClick={() => router.push('/admin/crm')}
-                            className="px-4 py-1.5 border border-[#2563eb] text-[#2563eb] text-sm font-semibold rounded-lg hover:bg-[#eff6ff] transition-all"
+                            className="px-4 py-1.5 border border-[var(--pv-accent)] text-[var(--pv-accent)] text-sm font-semibold rounded-lg hover:bg-[var(--pv-accent-tint-hover)] transition-all"
                           >
                             View Booking
                           </button>
                           <button
                             onClick={() => isEditing ? setEditingId(null) : openEdit(enquiry)}
-                            className="flex items-center gap-1.5 px-3 py-1.5 border border-[#e8e5e0] text-[#555] text-sm font-semibold rounded-lg hover:border-[#2563eb] hover:text-[#2563eb] transition-all"
+                            className="flex items-center gap-1.5 px-3 py-1.5 border border-[var(--pv-border)] text-[var(--pv-text-secondary)] text-sm font-semibold rounded-lg hover:border-[var(--pv-accent)] hover:text-[var(--pv-accent)] transition-all"
                           >
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                             {isEditing ? 'Cancel' : 'Edit'}
@@ -368,67 +368,67 @@ export default function EnquiriesPage() {
 
                 {/* ── Edit form (expands below) ── */}
                 {isEditing && (
-                  <div className="px-6 pb-6 border-t border-[#dbeafe] bg-[#fafeff]">
-                    <p className="text-xs font-semibold text-[#2563eb] uppercase tracking-wider mt-5 mb-4 flex items-center gap-2">
+                  <div className="px-6 pb-6 border-t border-[var(--pv-accent-tint)] bg-[#fafeff]">
+                    <p className="text-xs font-semibold text-[var(--pv-accent)] uppercase tracking-wider mt-5 mb-4 flex items-center gap-2">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                       Edit Enquiry Details
                     </p>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold text-[#555] mb-1.5">Couple Name</label>
+                        <label className="block text-xs font-semibold text-[var(--pv-text-secondary)] mb-1.5">Couple Name</label>
                         <input type="text" value={editCoupleName} onChange={e => setEditCoupleName(e.target.value)}
-                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#2563eb] transition-all bg-white" />
+                          className="w-full px-3 py-2.5 border border-[var(--pv-border)] rounded-lg text-sm focus:outline-none focus:border-[var(--pv-accent)] transition-all bg-white" />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-[#555] mb-1.5">Phone Number</label>
+                        <label className="block text-xs font-semibold text-[var(--pv-text-secondary)] mb-1.5">Phone Number</label>
                         <input type="text" value={editPhone} onChange={e => setEditPhone(e.target.value)}
-                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#2563eb] transition-all bg-white" />
+                          className="w-full px-3 py-2.5 border border-[var(--pv-border)] rounded-lg text-sm focus:outline-none focus:border-[var(--pv-accent)] transition-all bg-white" />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-[#555] mb-1.5">Start Date</label>
+                        <label className="block text-xs font-semibold text-[var(--pv-text-secondary)] mb-1.5">Start Date</label>
                         <input type="date" value={editStartDate} onChange={e => setEditStartDate(e.target.value)}
-                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#2563eb] transition-all bg-white" />
+                          className="w-full px-3 py-2.5 border border-[var(--pv-border)] rounded-lg text-sm focus:outline-none focus:border-[var(--pv-accent)] transition-all bg-white" />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-[#555] mb-1.5">End Date</label>
+                        <label className="block text-xs font-semibold text-[var(--pv-text-secondary)] mb-1.5">End Date</label>
                         <input type="date" value={editEndDate} onChange={e => setEditEndDate(e.target.value)}
-                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#2563eb] transition-all bg-white" />
+                          className="w-full px-3 py-2.5 border border-[var(--pv-border)] rounded-lg text-sm focus:outline-none focus:border-[var(--pv-accent)] transition-all bg-white" />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-[#555] mb-1.5">Location</label>
+                        <label className="block text-xs font-semibold text-[var(--pv-text-secondary)] mb-1.5">Location</label>
                         <input type="text" value={editLocation} onChange={e => setEditLocation(e.target.value)}
-                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#2563eb] transition-all bg-white" />
+                          className="w-full px-3 py-2.5 border border-[var(--pv-border)] rounded-lg text-sm focus:outline-none focus:border-[var(--pv-accent)] transition-all bg-white" />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-[#555] mb-1.5">Expected Guests</label>
+                        <label className="block text-xs font-semibold text-[var(--pv-text-secondary)] mb-1.5">Expected Guests</label>
                         <input type="number" value={editGuests} onChange={e => setEditGuests(e.target.value)}
-                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#2563eb] transition-all bg-white" />
+                          className="w-full px-3 py-2.5 border border-[var(--pv-border)] rounded-lg text-sm focus:outline-none focus:border-[var(--pv-accent)] transition-all bg-white" />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-[#555] mb-1.5">Lead Source</label>
+                        <label className="block text-xs font-semibold text-[var(--pv-text-secondary)] mb-1.5">Lead Source</label>
                         <select value={editLeadSource} onChange={e => setEditLeadSource(e.target.value)}
-                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#2563eb] transition-all bg-white">
+                          className="w-full px-3 py-2.5 border border-[var(--pv-border)] rounded-lg text-sm focus:outline-none focus:border-[var(--pv-accent)] transition-all bg-white">
                           {LEAD_SOURCES.map(s => <option key={s} value={s}>{s}</option>)}
                         </select>
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-[#555] mb-1.5">Follow Up Days</label>
+                        <label className="block text-xs font-semibold text-[var(--pv-text-secondary)] mb-1.5">Follow Up Days</label>
                         <input type="number" value={editFollowUpDays} onChange={e => setEditFollowUpDays(e.target.value)}
-                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#2563eb] transition-all bg-white" />
+                          className="w-full px-3 py-2.5 border border-[var(--pv-border)] rounded-lg text-sm focus:outline-none focus:border-[var(--pv-accent)] transition-all bg-white" />
                       </div>
                       <div className="col-span-2">
-                        <label className="block text-xs font-semibold text-[#555] mb-1.5">Description / Notes</label>
+                        <label className="block text-xs font-semibold text-[var(--pv-text-secondary)] mb-1.5">Description / Notes</label>
                         <textarea value={editDescription} onChange={e => setEditDescription(e.target.value)} rows={3}
-                          className="w-full px-3 py-2.5 border border-[#e8e5e0] rounded-lg text-sm focus:outline-none focus:border-[#2563eb] transition-all resize-none bg-white" />
+                          className="w-full px-3 py-2.5 border border-[var(--pv-border)] rounded-lg text-sm focus:outline-none focus:border-[var(--pv-accent)] transition-all resize-none bg-white" />
                       </div>
                     </div>
                     <div className="flex justify-end gap-3 mt-5">
                       <button onClick={() => setEditingId(null)}
-                        className="px-5 py-2 border border-[#e8e5e0] text-[#555] text-sm font-semibold rounded-lg hover:bg-[#EDE8D0] transition-all">
+                        className="px-5 py-2 border border-[var(--pv-border)] text-[var(--pv-text-secondary)] text-sm font-semibold rounded-lg hover:bg-[var(--pv-bg)] transition-all">
                         Cancel
                       </button>
                       <button onClick={saveEdit} disabled={isSaving}
-                        className="px-5 py-2 bg-[#2563eb] text-white text-sm font-semibold rounded-lg hover:bg-[#1d4ed8] disabled:opacity-40 transition-all">
+                        className="px-5 py-2 bg-[var(--pv-accent)] text-[var(--pv-accent-on)] text-sm font-semibold rounded-lg hover:bg-[var(--pv-accent-hover)] disabled:opacity-40 transition-all">
                         {isSaving ? 'Saving…' : 'Save Changes'}
                       </button>
                     </div>

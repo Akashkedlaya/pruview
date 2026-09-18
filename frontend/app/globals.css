@@ -33,3 +33,108 @@ body {
 * {
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
 }
+
+/*
+ * Admin/CRM design tokens.
+ * .pv-admin carries the default (light) values; [data-theme] overrides
+ * them for dark/warm. Everything under /admin reads colors through
+ * these variables so switching themes needs no per-component logic.
+ */
+.pv-admin {
+  --pv-bg: #F7F7F7;
+  --pv-card: #FFFFFF;
+  --pv-border: #E5E5E5;
+  --pv-text: #0F172A;
+  --pv-text-secondary: #334155;
+  --pv-muted: #6B7280;
+  --pv-accent: #2B8EC4;
+  --pv-accent-hover: #226F99;
+  --pv-accent-tint: #DCEEF7;
+  --pv-accent-tint-hover: #EFF7FB;
+  --pv-accent-active-bg: #226F99;
+  --pv-accent-active-text: #FFFFFF;
+  /* Text color to use on top of a solid --pv-accent fill (buttons, chips).
+     Dark theme's accent is a light blue, so this flips to a dark color there. */
+  --pv-accent-on: #FFFFFF;
+  /* Solid dark-fill surface for buttons/nav bars that need to read as "ink"
+     regardless of theme — unlike --pv-text, this never flips light. */
+  --pv-ink: #0F172A;
+  --pv-ink-hover: #334155;
+
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  background: var(--pv-bg);
+  color: var(--pv-text);
+}
+
+.pv-admin * {
+  font-family: inherit;
+}
+
+.pv-admin[data-theme="dark"] {
+  --pv-bg: #0F1A2C;
+  --pv-card: #16233A;
+  --pv-border: #223349;
+  --pv-text: #F1F5F9;
+  --pv-text-secondary: #CBD5E1;
+  --pv-muted: #94A3B8;
+  --pv-accent: #60A5FA;
+  --pv-accent-hover: #82BBFC;
+  --pv-accent-tint: #1E2E45;
+  --pv-accent-tint-hover: #24374F;
+  --pv-accent-active-bg: #60A5FA;
+  --pv-accent-active-text: #0F1A2C;
+  --pv-accent-on: #0F1A2C;
+  --pv-ink: #1E293B;
+  --pv-ink-hover: #2A3B52;
+}
+
+.pv-admin[data-theme="warm"] {
+  --pv-bg: #EDE8D0;
+  --pv-card: #FFFDF7;
+  --pv-border: #E0DDD8;
+  --pv-text: #2B2416;
+  --pv-text-secondary: #55492E;
+  --pv-muted: #8A7B5C;
+  --pv-accent: #2B8EC4;
+  --pv-accent-hover: #226F99;
+  --pv-accent-tint: #DCEEF7;
+  --pv-accent-tint-hover: #EFF7FB;
+  --pv-accent-active-bg: #226F99;
+  --pv-accent-active-text: #FFFFFF;
+  --pv-accent-on: #FFFFFF;
+  --pv-ink: #2B2416;
+  --pv-ink-hover: #55492E;
+}
+
+/* Type scale, per the dashboard design audit. */
+.pv-title {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.6px;
+  color: var(--pv-text);
+}
+
+.pv-section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--pv-text);
+}
+
+.pv-label {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--pv-muted);
+  letter-spacing: 0.02em;
+}
+
+.pv-metric {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--pv-accent);
+}
+
+.pv-body {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--pv-text);
+}

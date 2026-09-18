@@ -166,40 +166,40 @@ export default function PostProductionPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-[#0f0f0f]">Post Production</h1>
-          <p className="text-[#888] text-sm mt-1">Track editing, delivery and completion for past events</p>
+          <h1 className="text-3xl font-bold text-[var(--pv-text)]">Post Production</h1>
+          <p className="text-[var(--pv-muted)] text-sm mt-1">Track editing, delivery and completion for past events</p>
         </div>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4 mb-8">
-        <div className="bg-white border border-[#dbeafe] rounded-2xl p-5">
-          <p className="text-3xl font-bold text-[#2563eb]">{events.length}</p>
-          <p className="text-sm text-[#888] mt-1">In Post Production</p>
+        <div className="bg-white border border-[var(--pv-accent-tint)] rounded-2xl p-5">
+          <p className="text-3xl font-bold text-[var(--pv-accent)]">{events.length}</p>
+          <p className="text-sm text-[var(--pv-muted)] mt-1">In Post Production</p>
         </div>
-        <div className="bg-white border border-[#dbeafe] rounded-2xl p-5">
+        <div className="bg-white border border-[var(--pv-accent-tint)] rounded-2xl p-5">
           <p className="text-3xl font-bold text-red-500">{overdueEvents.length}</p>
-          <p className="text-sm text-[#888] mt-1">Overdue</p>
+          <p className="text-sm text-[var(--pv-muted)] mt-1">Overdue</p>
         </div>
-        <div className="bg-white border border-[#dbeafe] rounded-2xl p-5">
+        <div className="bg-white border border-[var(--pv-accent-tint)] rounded-2xl p-5">
           <p className="text-3xl font-bold text-green-500">
             {events.filter(e => getProgress(e.postProductionTasks) === 100).length}
           </p>
-          <p className="text-sm text-[#888] mt-1">Tasks Complete</p>
+          <p className="text-sm text-[var(--pv-muted)] mt-1">Tasks Complete</p>
         </div>
       </div>
 
       {loading ? (
-        <div className="text-center py-20 text-[#888]">Loading…</div>
+        <div className="text-center py-20 text-[var(--pv-muted)]">Loading…</div>
       ) : events.length === 0 ? (
-        <div className="text-center py-24 bg-white border border-[#dbeafe] rounded-2xl">
+        <div className="text-center py-24 bg-white border border-[var(--pv-accent-tint)] rounded-2xl">
           <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
           </div>
-          <p className="font-semibold text-[#333]">All caught up!</p>
-          <p className="text-sm text-[#888] mt-1">No events in post production.</p>
+          <p className="font-semibold text-[var(--pv-text-secondary)]">All caught up!</p>
+          <p className="text-sm text-[var(--pv-muted)] mt-1">No events in post production.</p>
         </div>
       ) : (
         <div className="flex flex-col gap-4">
@@ -212,7 +212,7 @@ export default function PostProductionPage() {
 
             return (
               <div key={event.id} className={`bg-white border rounded-2xl overflow-hidden transition-all ${
-                overdue ? 'border-red-200' : 'border-[#dbeafe]'
+                overdue ? 'border-red-200' : 'border-[var(--pv-accent-tint)]'
               }`}>
 
                 {/* Card header */}
@@ -227,7 +227,7 @@ export default function PostProductionPage() {
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 flex-wrap mb-1">
-                      <h3 className="font-bold text-[#0f0f0f] text-lg">{event.coupleName}</h3>
+                      <h3 className="font-bold text-[var(--pv-text)] text-lg">{event.coupleName}</h3>
                       {overdue && (
                         <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-600">
                           Overdue
@@ -239,20 +239,20 @@ export default function PostProductionPage() {
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-[#888]">
+                    <p className="text-sm text-[var(--pv-muted)]">
                       {formatDate(event.startDate)} – {formatDate(event.endDate)}
                       {event.location && ` · ${event.location}`}
                     </p>
 
                     {/* Progress bar */}
                     <div className="flex items-center gap-3 mt-3">
-                      <div className="flex-1 bg-[#f0ede8] rounded-full h-2">
+                      <div className="flex-1 bg-[var(--pv-border)] rounded-full h-2">
                         <div
-                          className="bg-[#2563eb] h-2 rounded-full transition-all"
+                          className="bg-[var(--pv-accent)] h-2 rounded-full transition-all"
                           style={{ width: `${progress}%` }}
                         />
                       </div>
-                      <span className="text-xs text-[#888] w-10 text-right">{progress}%</span>
+                      <span className="text-xs text-[var(--pv-muted)] w-10 text-right">{progress}%</span>
                     </div>
                   </div>
 
@@ -263,40 +263,40 @@ export default function PostProductionPage() {
                         type="date"
                         value={event.deliveryDeadline ? event.deliveryDeadline.split('T')[0] : ''}
                         onChange={e => updateDeadline(event.id, e.target.value)}
-                        className="text-xs border border-[#e8e5e0] rounded-lg px-2 py-1.5 text-[#333] focus:outline-none focus:border-[#2563eb] transition-all"
+                        className="text-xs border border-[var(--pv-border)] rounded-lg px-2 py-1.5 text-[var(--pv-text-secondary)] focus:outline-none focus:border-[var(--pv-accent)] transition-all"
                         title="Delivery deadline"
                       />
                     </div>
                     <button
                       onClick={e => { e.stopPropagation(); router.push(`/admin/crm/${event.id}`) }}
-                      className="text-xs text-[#2563eb] font-medium hover:underline"
+                      className="text-xs text-[var(--pv-accent)] font-medium hover:underline"
                     >
                       View Event
                     </button>
-                    <span className="text-[#aaa]">{isExpanded ? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="18 15 12 9 6 15"/></svg> : <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9"/></svg>}</span>
+                    <span className="text-[var(--pv-muted)]">{isExpanded ? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="18 15 12 9 6 15"/></svg> : <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9"/></svg>}</span>
                   </div>
                 </div>
 
                 {/* Expanded tasks */}
                 {isExpanded && (
-                  <div className="border-t border-[#eff6ff] px-6 py-4">
+                  <div className="border-t border-[var(--pv-accent-tint-hover)] px-6 py-4">
 
                     {/* Payment summary */}
-                    <div className="flex items-center justify-between mb-4 bg-[#eff6ff] rounded-xl px-4 py-3">
+                    <div className="flex items-center justify-between mb-4 bg-[var(--pv-accent-tint-hover)] rounded-xl px-4 py-3">
                       <div className="flex items-center gap-6 text-sm">
-                        <span className="text-[#888]">
-                          Total: <span className="font-semibold text-[#0f0f0f]">₹{(event.invoice?.totalAmount || 0).toLocaleString('en-IN')}</span>
+                        <span className="text-[var(--pv-muted)]">
+                          Total: <span className="font-semibold text-[var(--pv-text)]">₹{(event.invoice?.totalAmount || 0).toLocaleString('en-IN')}</span>
                         </span>
-                        <span className="text-[#888]">
+                        <span className="text-[var(--pv-muted)]">
                           Paid: <span className="font-semibold text-green-600">₹{totalPaid.toLocaleString('en-IN')}</span>
                         </span>
-                        <span className="text-[#888]">
+                        <span className="text-[var(--pv-muted)]">
                           Balance: <span className="font-semibold text-red-500">₹{balance.toLocaleString('en-IN')}</span>
                         </span>
                       </div>
                       <button
                         onClick={() => router.push('/admin/crm/invoices')}
-                        className="text-xs text-[#2563eb] font-medium hover:underline"
+                        className="text-xs text-[var(--pv-accent)] font-medium hover:underline"
                       >
                         Manage Invoice
                       </button>
@@ -305,7 +305,7 @@ export default function PostProductionPage() {
                     {/* Tasks */}
                     <div className="flex flex-col gap-2">
                       {event.postProductionTasks.map(task => (
-                        <div key={task.id} className="flex items-center gap-3 py-2 border-b border-[#eff6ff] last:border-0">
+                        <div key={task.id} className="flex items-center gap-3 py-2 border-b border-[var(--pv-accent-tint-hover)] last:border-0">
 
                           {/* Status dot */}
                           <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${
@@ -315,7 +315,7 @@ export default function PostProductionPage() {
                           }`} />
 
                           {/* Task name */}
-                          <p className={`text-sm flex-1 ${task.status === 'COMPLETED' ? 'line-through text-[#aaa]' : 'text-[#0f0f0f]'}`}>
+                          <p className={`text-sm flex-1 ${task.status === 'COMPLETED' ? 'line-through text-[var(--pv-muted)]' : 'text-[var(--pv-text)]'}`}>
                             {task.taskName}
                           </p>
 
@@ -325,7 +325,7 @@ export default function PostProductionPage() {
                             value={task.assigneeName || ''}
                             onChange={e => updateTask(task.id, event.id, { assigneeName: e.target.value })}
                             placeholder="Assignee"
-                            className="text-xs border border-[#e8e5e0] rounded-lg px-2 py-1 w-28 focus:outline-none focus:border-[#2563eb] transition-all"
+                            className="text-xs border border-[var(--pv-border)] rounded-lg px-2 py-1 w-28 focus:outline-none focus:border-[var(--pv-accent)] transition-all"
                           />
 
                           {/* Due date */}
@@ -333,7 +333,7 @@ export default function PostProductionPage() {
                             type="date"
                             value={task.dueDate ? task.dueDate.split('T')[0] : ''}
                             onChange={e => updateTask(task.id, event.id, { dueDate: e.target.value })}
-                            className="text-xs border border-[#e8e5e0] rounded-lg px-2 py-1 focus:outline-none focus:border-[#2563eb] transition-all"
+                            className="text-xs border border-[var(--pv-border)] rounded-lg px-2 py-1 focus:outline-none focus:border-[var(--pv-accent)] transition-all"
                           />
 
                           {/* Status dropdown */}
@@ -360,21 +360,21 @@ export default function PostProductionPage() {
                             placeholder="Task name..."
                             autoFocus
                             onKeyDown={e => { if (e.key === 'Enter') addCustomTask(event.id) }}
-                            className="flex-1 text-sm border border-[#2563eb] rounded-lg px-3 py-1.5 focus:outline-none"
+                            className="flex-1 text-sm border border-[var(--pv-accent)] rounded-lg px-3 py-1.5 focus:outline-none"
                           />
                           <button onClick={() => addCustomTask(event.id)}
-                            className="px-3 py-1.5 bg-[#2563eb] text-white text-xs font-semibold rounded-lg hover:bg-[#1d4ed8] transition-all">
+                            className="px-3 py-1.5 bg-[var(--pv-accent)] text-[var(--pv-accent-on)] text-xs font-semibold rounded-lg hover:bg-[var(--pv-accent-hover)] transition-all">
                             Add
                           </button>
                           <button onClick={() => { setAddingTask(null); setNewTaskName('') }}
-                            className="px-3 py-1.5 border border-[#e8e5e0] text-xs text-[#666] rounded-lg hover:bg-[#eff6ff] transition-all">
+                            className="px-3 py-1.5 border border-[var(--pv-border)] text-xs text-[var(--pv-text-secondary)] rounded-lg hover:bg-[var(--pv-accent-tint-hover)] transition-all">
                             Cancel
                           </button>
                         </div>
                       ) : (
                         <button
                           onClick={() => setAddingTask(event.id)}
-                          className="mt-2 text-xs text-[#2563eb] hover:underline text-left"
+                          className="mt-2 text-xs text-[var(--pv-accent)] hover:underline text-left"
                         >
                           + Add custom task
                         </button>

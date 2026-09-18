@@ -173,22 +173,22 @@ export default function UploadPage() {
   useEffect(() => { loadFolder() }, [id])
 
   if (!folder) return (
-    <div className="min-h-screen bg-[#EDE8D0] flex items-center justify-center">
-      <p className="text-[#888]">Loading…</p>
+    <div className="min-h-screen bg-[var(--pv-bg)] flex items-center justify-center">
+      <p className="text-[var(--pv-muted)]">Loading…</p>
     </div>
   )
 
   return (
-    <div className="min-h-screen bg-[#EDE8D0]">
+    <div className="min-h-screen bg-[var(--pv-bg)]">
 
       {/* Nav */}
-      <nav className="bg-[#0f0f0f] px-8 py-4 flex items-center gap-4">
+      <nav className="bg-[var(--pv-ink)] px-8 py-4 flex items-center gap-4">
         <button onClick={() => router.push('/admin')}
-          className="text-[#666] hover:text-white text-sm transition-colors">
+          className="text-[var(--pv-text-secondary)] hover:text-white text-sm transition-colors">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back
         </button>
         <span className="text-white text-xl font-semibold">
-          pru<span className="text-[#e8c547]">view</span>
+          pru<span className="text-[var(--pv-accent)]">view</span>
         </span>
       </nav>
 
@@ -197,25 +197,25 @@ export default function UploadPage() {
         {/* Header */}
         <div className="flex items-start justify-between mb-10">
           <div>
-            <h1 className="text-3xl font-semibold text-[#0f0f0f]">
+            <h1 className="text-3xl font-semibold text-[var(--pv-text)]">
               {folder.name}
             </h1>
-            <p className="text-[#888] text-sm mt-1">{folder.images?.length ?? 0} photos</p>
+            <p className="text-[var(--pv-muted)] text-sm mt-1">{folder.images?.length ?? 0} photos</p>
           </div>
           <button onClick={copyLink}
-            className="px-5 py-2.5 border border-[#e0ddd8] text-[#333] text-sm font-semibold rounded-xl hover:border-[#c8a020] hover:text-[#c8a020] transition-all">
+            className="px-5 py-2.5 border border-[var(--pv-border)] text-[var(--pv-text-secondary)] text-sm font-semibold rounded-xl hover:border-[var(--pv-accent)] hover:text-[var(--pv-accent)] transition-all">
             {copied ? 'Link copied!' : 'Copy share link'}
           </button>
         </div>
         <div className="flex items-center gap-3">
   <button
     onClick={reindexFaces}
-    className="px-4 py-2 border border-[#e0ddd8] text-[#333] text-xs font-semibold rounded-xl hover:border-[#c8a020] hover:text-[#c8a020] transition-all"
+    className="px-4 py-2 border border-[var(--pv-border)] text-[var(--pv-text-secondary)] text-xs font-semibold rounded-xl hover:border-[var(--pv-accent)] hover:text-[var(--pv-accent)] transition-all"
   >
     Re-index faces
   </button>
   <button onClick={copyLink}
-    className="px-5 py-2.5 border border-[#e0ddd8] text-[#333] text-sm font-semibold rounded-xl hover:border-[#c8a020] hover:text-[#c8a020] transition-all">
+    className="px-5 py-2.5 border border-[var(--pv-border)] text-[var(--pv-text-secondary)] text-sm font-semibold rounded-xl hover:border-[var(--pv-accent)] hover:text-[var(--pv-accent)] transition-all">
     {copied ? 'Link copied!' : 'Copy share link'}
   </button>
 </div>
@@ -225,26 +225,26 @@ export default function UploadPage() {
           onClick={() => fileInput.current?.click()}
           onDragOver={e => e.preventDefault()}
           onDrop={e => { e.preventDefault(); handleFiles(e.dataTransfer.files) }}
-          className="border-2 border-dashed border-[#e0ddd8] rounded-2xl p-12 text-center cursor-pointer hover:border-[#c8a020] transition-all mb-8 bg-white"
+          className="border-2 border-dashed border-[var(--pv-border)] rounded-2xl p-12 text-center cursor-pointer hover:border-[var(--pv-accent)] transition-all mb-8 bg-white"
         >
-          <div className="w-12 h-12 bg-[#EDE8D0] border border-[#e8e5e0] rounded-xl flex items-center justify-center mx-auto mb-3">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <div className="w-12 h-12 bg-[var(--pv-bg)] border border-[var(--pv-border)] rounded-xl flex items-center justify-center mx-auto mb-3">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--pv-muted)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
           </div>
-          <p className="font-semibold text-[#333] mb-1">
+          <p className="font-semibold text-[var(--pv-text-secondary)] mb-1">
             {uploading ? 'Uploading…' : 'Drop photos here or click to select'}
           </p>
-          <p className="text-xs text-[#aaa]">JPG, PNG, WEBP, HEIC — up to 15 MB each</p>
+          <p className="text-xs text-[var(--pv-muted)]">JPG, PNG, WEBP, HEIC — up to 15 MB each</p>
 
           {Object.entries(progress).length > 0 && (
             <div className="mt-6 flex flex-col gap-2 text-left max-w-sm mx-auto">
               {Object.entries(progress).map(([name, pct], index) => (
                 <div key={`${index}-${name}`}>
-                  <div className="flex justify-between text-xs text-[#888] mb-1">
+                  <div className="flex justify-between text-xs text-[var(--pv-muted)] mb-1">
                     <span className="truncate max-w-[200px]">{name}</span>
                     <span>{pct}%</span>
                   </div>
-                  <div className="h-1.5 bg-[#f0ede8] rounded-full overflow-hidden">
-                    <div className="h-full bg-[#c8a020] rounded-full transition-all"
+                  <div className="h-1.5 bg-[var(--pv-border)] rounded-full overflow-hidden">
+                    <div className="h-full bg-[var(--pv-accent)] rounded-full transition-all"
                       style={{ width: `${pct}%` }} />
                   </div>
                 </div>
@@ -266,13 +266,13 @@ export default function UploadPage() {
 
         {/* Images grid */}
         {folder.images.length === 0 ? (
-          <div className="text-center py-16 text-[#aaa]">
+          <div className="text-center py-16 text-[var(--pv-muted)]">
             <p className="text-sm">No photos yet — upload some above.</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {folder.images.map(img => (
-              <div key={img.id} className="group relative aspect-square rounded-xl overflow-hidden bg-[#e8e5e0]">
+              <div key={img.id} className="group relative aspect-square rounded-xl overflow-hidden bg-[var(--pv-border)]">
                 <img
                   src={img.thumbUrl}
                   alt={img.filename}

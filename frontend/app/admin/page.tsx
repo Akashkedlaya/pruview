@@ -94,21 +94,21 @@ export default function AdminHome() {
   useEffect(() => { loadFolders() }, [])
 
   return (
-    <div className="min-h-screen bg-[#EDE8D0]">
+    <div className="min-h-screen bg-[var(--pv-bg)]">
 
       {/* Nav */}
       
-      <nav className="bg-[#0f0f0f] px-8 py-4 flex items-center justify-between">
+      <nav className="bg-[var(--pv-ink)] px-8 py-4 flex items-center justify-between">
          <span className="text-white text-xl font-semibold">
-          pru<span className="text-[#e8c547]">view</span>
+          pru<span className="text-[var(--pv-accent)]">view</span>
          </span>
          <div className="flex items-center gap-6">
            <button
              onClick={() => router.push('/admin/crm')}
-             className="text-[#666] hover:text-white text-sm transition-colors">
+             className="text-[var(--pv-text-secondary)] hover:text-white text-sm transition-colors">
               CRM
            </button>
-           <button onClick={logout} className="text-[#666] text-sm hover:text-white transition-colors">
+           <button onClick={logout} className="text-[var(--pv-text-secondary)] text-sm hover:text-white transition-colors">
              Sign out
            </button>
          </div>
@@ -118,15 +118,15 @@ export default function AdminHome() {
 
         {/* Header */}
         <div className="mb-10">
-          <h1 className="text-3xl font-semibold text-[#0f0f0f] mb-1">
+          <h1 className="text-3xl font-semibold text-[var(--pv-text)] mb-1">
             Your Galleries
           </h1>
-          <p className="text-[#888] text-sm">Create a folder, upload photos, share the link.</p>
+          <p className="text-[var(--pv-muted)] text-sm">Create a folder, upload photos, share the link.</p>
         </div>
 
         {/* Create folder */}
-        <div className="bg-white border border-[#e8e5e0] rounded-2xl p-6 mb-8">
-          <p className="text-xs font-semibold tracking-widest uppercase text-[#888] mb-3">
+        <div className="bg-white border border-[var(--pv-border)] rounded-2xl p-6 mb-8">
+          <p className="text-xs font-semibold tracking-widest uppercase text-[var(--pv-muted)] mb-3">
             New Gallery
           </p>
           <div className="flex gap-3">
@@ -136,12 +136,12 @@ export default function AdminHome() {
               onChange={e => setNewName(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && createFolder()}
               placeholder="e.g. Wedding – Priya & Arjun"
-              className="flex-1 px-4 py-3 border border-[#e0ddd8] rounded-xl text-sm text-[#0f0f0f] placeholder-[#aaa] focus:outline-none focus:border-[#c8a020] focus:ring-1 focus:ring-[#c8a020] transition-all"
+              className="flex-1 px-4 py-3 border border-[var(--pv-border)] rounded-xl text-sm text-[var(--pv-text)] placeholder-[var(--pv-muted)] focus:outline-none focus:border-[var(--pv-accent)] focus:ring-1 focus:ring-[var(--pv-accent)] transition-all"
             />
             <button
               onClick={createFolder}
               disabled={creating || !newName.trim()}
-              className="px-6 py-3 bg-[#0f0f0f] text-white text-sm font-semibold rounded-xl hover:bg-[#222] disabled:opacity-40 transition-all"
+              className="px-6 py-3 bg-[var(--pv-ink)] text-white text-sm font-semibold rounded-xl hover:bg-[var(--pv-ink-hover)] disabled:opacity-40 transition-all"
             >
               {creating ? 'Creating…' : 'Create'}
             </button>
@@ -151,11 +151,11 @@ export default function AdminHome() {
 
         {/* Folders list */}
         {loading ? (
-          <p className="text-[#888] text-sm">Loading…</p>
+          <p className="text-[var(--pv-muted)] text-sm">Loading…</p>
         ) : folders.length === 0 ? (
-          <div className="text-center py-20 text-[#aaa]">
-            <div className="w-14 h-14 bg-[#f5f3f0] border border-[#e8e5e0] rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#bbb" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          <div className="text-center py-20 text-[var(--pv-muted)]">
+            <div className="w-14 h-14 bg-[var(--pv-accent-tint)] border border-[var(--pv-border)] rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--pv-muted)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
             </div>
             <p className="text-sm">No galleries yet. Create your first one above.</p>
           </div>
@@ -164,17 +164,17 @@ export default function AdminHome() {
             {folders.map(folder => (
               <div key={folder.id}
                 onClick={() => router.push(`/admin/folders/${folder.id}`)}
-                className="bg-white border border-[#e8e5e0] rounded-2xl px-6 py-5 flex items-center gap-4 cursor-pointer hover:border-[#c8a020] transition-all">
+                className="bg-white border border-[var(--pv-border)] rounded-2xl px-6 py-5 flex items-center gap-4 cursor-pointer hover:border-[var(--pv-accent)] transition-all">
 
                 {/* Icon */}
-                <div className="w-10 h-10 rounded-xl bg-[#EDE8D0] border border-[#e8e5e0] flex items-center justify-center flex-shrink-0">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                <div className="w-10 h-10 rounded-xl bg-[var(--pv-bg)] border border-[var(--pv-border)] flex items-center justify-center flex-shrink-0">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--pv-muted)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
                 </div>
 
                 {/* Info */}
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-[#0f0f0f] truncate">{folder.name}</p>
-                  <p className="text-xs text-[#aaa] mt-0.5">
+                  <p className="font-semibold text-[var(--pv-text)] truncate">{folder.name}</p>
+                  <p className="text-xs text-[var(--pv-muted)] mt-0.5">
                     {folder._count.images} photos · {new Date(folder.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </p>
                 </div>
@@ -183,13 +183,13 @@ export default function AdminHome() {
                 <div className="flex items-center gap-2 flex-shrink-0">
                   <button
                     onClick={() => copyLink(folder)}
-                    className="px-4 py-2 text-xs font-semibold text-[#333] border border-[#e0ddd8] rounded-lg hover:border-[#c8a020] hover:text-[#c8a020] transition-all"
+                    className="px-4 py-2 text-xs font-semibold text-[var(--pv-text-secondary)] border border-[var(--pv-border)] rounded-lg hover:border-[var(--pv-accent)] hover:text-[var(--pv-accent)] transition-all"
                   >
                     {copied === folder.id ? 'Copied!' : 'Copy link'}
                   </button>
                   <button
                     onClick={() => deleteFolder(folder.id)}
-                    className="px-4 py-2 text-xs font-semibold text-[#333] border border-[#e0ddd8] rounded-lg hover:border-red-300 hover:text-red-500 transition-all"
+                    className="px-4 py-2 text-xs font-semibold text-[var(--pv-text-secondary)] border border-[var(--pv-border)] rounded-lg hover:border-red-300 hover:text-red-500 transition-all"
                   >
                     Delete
                   </button>
