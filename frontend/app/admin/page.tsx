@@ -103,12 +103,15 @@ export default function AdminHome() {
           pru<span className="text-[var(--pv-accent)]">view</span>
          </span>
          <div className="flex items-center gap-6">
+           <button className="text-white text-sm font-semibold transition-colors">
+              Gallery
+           </button>
            <button
              onClick={() => router.push('/admin/crm')}
-             className="text-[var(--pv-text-secondary)] hover:text-white text-sm transition-colors">
+             className="text-white/50 hover:text-white text-sm transition-colors">
               CRM
            </button>
-           <button onClick={logout} className="text-[var(--pv-text-secondary)] text-sm hover:text-white transition-colors">
+           <button onClick={logout} className="text-white/50 hover:text-white text-sm transition-colors">
              Sign out
            </button>
          </div>

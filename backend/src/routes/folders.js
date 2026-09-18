@@ -8,11 +8,11 @@ const { getPresignedUploadUrl, getS3Url, deleteObject } = require('../lib/s3')
 const router = express.Router()
 router.use(requireAuth)
 
-// GET /api/folders — list all folders
+// GET /api/folders — list top-level folders (subfolders are shown inside their parent)
 router.get('/', async (req, res) => {
   try {
     const folders = await prisma.folder.findMany({
-      where:   { adminId: req.adminId },
+      where:   { adminId: req.adminId, parentId: null },
       orderBy: { createdAt: 'desc' },
       include: { _count: { select: { images: true } } }
     })
@@ -23,13 +23,16 @@ router.get('/', async (req, res) => {
   }
 })
 
-// GET /api/folders/:id — get single folder with images
+// GET /api/folders/:id — get single folder with images and subfolders
 router.get('/:id', async (req, res) => {
   try {
     const folderId = parseInt(req.params.id)
     const folder = await prisma.folder.findFirst({
       where:   { id: folderId, adminId: req.adminId },
-      include: { images: { orderBy: { uploadedAt: 'desc' } } }
+      include: {
+        images:   { orderBy: { uploadedAt: 'desc' } },
+        children: { orderBy: { createdAt: 'desc' }, include: { _count: { select: { images: true } } } }
+      }
     })
     if (!folder) return res.status(404).json({ message: 'Folder not found.' })
 
@@ -46,7 +49,7 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-// POST /api/folders — create folder
+// POST /api/folders — create a top-level folder
 router.post('/', async (req, res) => {
   try {
     const { name } = req.body
@@ -64,18 +67,48 @@ router.post('/', async (req, res) => {
   }
 })
 
-// DELETE /api/folders/:id — delete folder
+// POST /api/folders/:id/subfolders — create a subfolder under this folder
+router.post('/:id/subfolders', async (req, res) => {
+  try {
+    const parentId = parseInt(req.params.id)
+    const { name } = req.body
+    if (!name || !name.trim()) {
+      return res.status(400).json({ message: 'Folder name is required.' })
+    }
+
+    const parent = await prisma.folder.findFirst({
+      where: { id: parentId, adminId: req.adminId }
+    })
+    if (!parent) return res.status(404).json({ message: 'Folder not found.' })
+    if (parent.parentId) {
+      return res.status(400).json({ message: 'Subfolders can only be one level deep.' })
+    }
+
+    const folder = await prisma.folder.create({
+      data: { name: name.trim(), shareToken: uuidv4(), adminId: req.adminId, parentId }
+    })
+    const shareUrl = `${process.env.FRONTEND_URL}/g/${folder.shareToken}`
+    return res.status(201).json({ ...folder, shareUrl, _count: { images: 0 } })
+  } catch (err) {
+    console.error(err)
+    return res.status(500).json({ message: 'Could not create subfolder.' })
+  }
+})
+
+// DELETE /api/folders/:id — delete folder (and any subfolders + their images)
 router.delete('/:id', async (req, res) => {
   try {
     const folderId = parseInt(req.params.id)
     const folder = await prisma.folder.findFirst({
       where:   { id: folderId, adminId: req.adminId },
-      include: { images: true }
+      include: { images: true, children: { include: { images: true } } }
     })
     if (!folder) return res.status(404).json({ message: 'Folder not found.' })
 
+    const allImages = [...folder.images, ...folder.children.flatMap(c => c.images)]
+
     // Delete all S3 files
-    for (const img of folder.images) {
+    for (const img of allImages) {
       await deleteObject(img.originalKey).catch(() => {})
       await deleteObject(img.thumbKey).catch(() => {})
     }

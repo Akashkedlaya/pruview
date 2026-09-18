@@ -10,11 +10,21 @@ type Image = {
   sizeBytes: number
 }
 
+type SubFolder = {
+  id: number
+  name: string
+  shareToken: string
+  createdAt: string
+  _count: { images: number }
+}
+
 type Folder = {
   id: number
   name: string
   shareToken: string
+  parentId: number | null
   images: Image[]
+  children: SubFolder[]
 }
 
 export default function UploadPage() {
@@ -27,6 +37,10 @@ export default function UploadPage() {
   const [progress, setProgress]   = useState<Record<string, number>>({})
   const [error, setError]         = useState('')
   const [copied, setCopied]       = useState(false)
+  const [subError, setSubError]           = useState('')
+  const [newSubfolderName, setNewSubfolderName] = useState('')
+  const [creatingSubfolder, setCreatingSubfolder] = useState(false)
+  const [copiedSubId, setCopiedSubId]     = useState<number | null>(null)
 
   const API = process.env.NEXT_PUBLIC_API_URL
 
@@ -160,6 +174,36 @@ export default function UploadPage() {
     setFolder(f => f ? { ...f, images: f.images.filter(i => i.id !== imageId) } : f)
   }
 
+  async function createSubfolder() {
+    if (!newSubfolderName.trim() || !folder) return
+    setCreatingSubfolder(true)
+    setSubError('')
+    try {
+      const res = await fetch(`${API}/api/folders/${folder.id}/subfolders`, {
+        method:  'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization:  `Bearer ${getToken()}`
+        },
+        body: JSON.stringify({ name: newSubfolderName.trim() })
+      })
+      const data = await res.json()
+      if (!res.ok) { setSubError(data.message || 'Could not create subfolder.'); return }
+      setFolder(f => f ? { ...f, children: [data, ...f.children] } : f)
+      setNewSubfolderName('')
+    } catch (err) {
+      setSubError('Could not create subfolder.')
+    } finally {
+      setCreatingSubfolder(false)
+    }
+  }
+
+  function copySubLink(sub: SubFolder) {
+    navigator.clipboard.writeText(`${window.location.origin}/g/${sub.shareToken}`)
+    setCopiedSubId(sub.id)
+    setTimeout(() => setCopiedSubId(null), 2000)
+  }
+
   function copyLink() {
     navigator.clipboard.writeText(`${window.location.origin}/g/${folder?.shareToken}`)
     setCopied(true)
@@ -183,8 +227,8 @@ export default function UploadPage() {
 
       {/* Nav */}
       <nav className="bg-[var(--pv-ink)] px-8 py-4 flex items-center gap-4">
-        <button onClick={() => router.push('/admin')}
-          className="text-[var(--pv-text-secondary)] hover:text-white text-sm transition-colors">
+        <button onClick={() => router.push(folder.parentId ? `/admin/folders/${folder.parentId}` : '/admin')}
+          className="text-white/50 hover:text-white text-sm transition-colors">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back
         </button>
         <span className="text-white text-xl font-semibold">
@@ -195,30 +239,75 @@ export default function UploadPage() {
       <div className="max-w-5xl mx-auto px-8 py-12">
 
         {/* Header */}
-        <div className="flex items-start justify-between mb-10">
+        <div className="flex items-start justify-between mb-6">
           <div>
             <h1 className="text-3xl font-semibold text-[var(--pv-text)]">
               {folder.name}
             </h1>
             <p className="text-[var(--pv-muted)] text-sm mt-1">{folder.images?.length ?? 0} photos</p>
           </div>
-          <button onClick={copyLink}
-            className="px-5 py-2.5 border border-[var(--pv-border)] text-[var(--pv-text-secondary)] text-sm font-semibold rounded-xl hover:border-[var(--pv-accent)] hover:text-[var(--pv-accent)] transition-all">
-            {copied ? 'Link copied!' : 'Copy share link'}
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={reindexFaces}
+              className="px-4 py-2 border border-[var(--pv-border)] text-[var(--pv-text-secondary)] text-xs font-semibold rounded-xl hover:border-[var(--pv-accent)] hover:text-[var(--pv-accent)] transition-all"
+            >
+              Re-index faces
+            </button>
+            <button onClick={copyLink}
+              className="px-5 py-2.5 border border-[var(--pv-border)] text-[var(--pv-text-secondary)] text-sm font-semibold rounded-xl hover:border-[var(--pv-accent)] hover:text-[var(--pv-accent)] transition-all">
+              {copied ? 'Link copied!' : 'Copy share link'}
+            </button>
+          </div>
         </div>
-        <div className="flex items-center gap-3">
-  <button
-    onClick={reindexFaces}
-    className="px-4 py-2 border border-[var(--pv-border)] text-[var(--pv-text-secondary)] text-xs font-semibold rounded-xl hover:border-[var(--pv-accent)] hover:text-[var(--pv-accent)] transition-all"
-  >
-    Re-index faces
-  </button>
-  <button onClick={copyLink}
-    className="px-5 py-2.5 border border-[var(--pv-border)] text-[var(--pv-text-secondary)] text-sm font-semibold rounded-xl hover:border-[var(--pv-accent)] hover:text-[var(--pv-accent)] transition-all">
-    {copied ? 'Link copied!' : 'Copy share link'}
-  </button>
-</div>
+
+        {/* Subfolders — one level of nesting only */}
+        {!folder.parentId && (
+          <div className="mb-10">
+            <p className="text-xs font-semibold tracking-widest uppercase text-[var(--pv-muted)] mb-3">
+              Subfolders
+            </p>
+            <div className="flex gap-3 mb-4">
+              <input
+                type="text"
+                value={newSubfolderName}
+                onChange={e => setNewSubfolderName(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && createSubfolder()}
+                placeholder="e.g. Ceremony"
+                className="flex-1 px-4 py-2.5 border border-[var(--pv-border)] rounded-xl text-sm text-[var(--pv-text)] bg-white placeholder-[var(--pv-muted)] focus:outline-none focus:border-[var(--pv-accent)] focus:ring-1 focus:ring-[var(--pv-accent)] transition-all"
+              />
+              <button
+                onClick={createSubfolder}
+                disabled={creatingSubfolder || !newSubfolderName.trim()}
+                className="px-5 py-2.5 bg-[var(--pv-ink)] text-white text-sm font-semibold rounded-xl hover:bg-[var(--pv-ink-hover)] disabled:opacity-40 transition-all"
+              >
+                {creatingSubfolder ? 'Creating…' : '+ Subfolder'}
+              </button>
+            </div>
+            {subError && <p className="text-red-500 text-sm mb-4">{subError}</p>}
+
+            {folder.children.length > 0 && (
+              <div className="flex flex-col gap-2">
+                {folder.children.map(sub => (
+                  <div key={sub.id}
+                    onClick={() => router.push(`/admin/folders/${sub.id}`)}
+                    className="bg-white border border-[var(--pv-border)] rounded-xl px-5 py-3.5 flex items-center gap-4 cursor-pointer hover:border-[var(--pv-accent)] transition-all">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--pv-muted)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-sm text-[var(--pv-text)] truncate">{sub.name}</p>
+                      <p className="text-xs text-[var(--pv-muted)]">{sub._count.images} photos</p>
+                    </div>
+                    <button
+                      onClick={e => { e.stopPropagation(); copySubLink(sub) }}
+                      className="px-3 py-1.5 text-xs font-semibold text-[var(--pv-text-secondary)] border border-[var(--pv-border)] rounded-lg hover:border-[var(--pv-accent)] hover:text-[var(--pv-accent)] transition-all flex-shrink-0"
+                    >
+                      {copiedSubId === sub.id ? 'Copied!' : 'Copy link'}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Upload zone */}
         <div

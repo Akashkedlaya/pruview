@@ -25,8 +25,11 @@ model Folder {
   adminId    Int
   createdAt  DateTime @default(now())
   isActive   Boolean  @default(true)
+  parentId   Int?
   admin      Admin    @relation(fields: [adminId], references: [id])
   images     Image[]
+  parent     Folder?  @relation("SubFolders", fields: [parentId], references: [id], onDelete: Cascade)
+  children   Folder[] @relation("SubFolders")
 }
 
 model Image {
