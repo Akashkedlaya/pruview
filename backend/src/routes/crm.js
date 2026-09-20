@@ -397,8 +397,8 @@ router.delete('/bookings/:id', requirePermission('calendar.delete'), async (req,
 // ── POST PRODUCTION ───────────────────────────────────
 
 const DEFAULT_TASKS = [
-  'Culling', 'Basic Editing', 'Retouching',
-  'Album Design', 'Client Review', 'Final Delivery'
+  'Sneak Peek', 'Candid Video', 'Traditional Video',
+  'Candid Pictures', 'Traditional Pictures'
 ]
 
 router.get('/post-production', requirePermission('postproduction.read'), async (req, res) => {

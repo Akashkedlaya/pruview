@@ -32,18 +32,20 @@ type Event = {
 }
 
 const TASK_STATUS_STYLES: Record<string, string> = {
-  NOT_STARTED:   'bg-gray-100 text-gray-600',
-  IN_PROGRESS:   'bg-blue-100 text-blue-600',
-  REVIEW:        'bg-amber-100 text-amber-600',
-  COMPLETED:     'bg-green-100 text-green-600',
+  NOT_STARTED:    'bg-gray-100 text-gray-600',
+  SENT_TO_EDITOR: 'bg-indigo-100 text-indigo-600',
+  IN_PROGRESS:    'bg-blue-100 text-blue-600',
+  REVIEW:         'bg-amber-100 text-amber-600',
+  COMPLETED:      'bg-green-100 text-green-600',
 }
 
-const TASK_STATUSES = ['NOT_STARTED', 'IN_PROGRESS', 'REVIEW', 'COMPLETED']
+const TASK_STATUSES = ['NOT_STARTED', 'SENT_TO_EDITOR', 'IN_PROGRESS', 'REVIEW', 'COMPLETED']
 const TASK_STATUS_LABELS: Record<string, string> = {
-  NOT_STARTED: 'Not Started',
-  IN_PROGRESS: 'In Progress',
-  REVIEW:      'In Review',
-  COMPLETED:   'Completed',
+  NOT_STARTED:    'Not Started',
+  SENT_TO_EDITOR: 'Sent to Editor',
+  IN_PROGRESS:    'In Progress',
+  REVIEW:         'In Review',
+  COMPLETED:      'Completed',
 }
 
 export default function PostProductionPage() {
@@ -309,9 +311,10 @@ export default function PostProductionPage() {
 
                           {/* Status dot */}
                           <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${
-                            task.status === 'COMPLETED'   ? 'bg-green-500' :
-                            task.status === 'IN_PROGRESS' ? 'bg-blue-500'  :
-                            task.status === 'REVIEW'      ? 'bg-amber-500' : 'bg-gray-300'
+                            task.status === 'COMPLETED'      ? 'bg-green-500'  :
+                            task.status === 'IN_PROGRESS'    ? 'bg-blue-500'   :
+                            task.status === 'REVIEW'         ? 'bg-amber-500' :
+                            task.status === 'SENT_TO_EDITOR' ? 'bg-indigo-500' : 'bg-gray-300'
                           }`} />
 
                           {/* Task name */}
@@ -376,7 +379,7 @@ export default function PostProductionPage() {
                           onClick={() => setAddingTask(event.id)}
                           className="mt-2 text-xs text-[var(--pv-accent)] hover:underline text-left"
                         >
-                          + Add custom task
+                          + Add Custom Task
                         </button>
                       )}
                     </div>
