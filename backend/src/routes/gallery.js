@@ -4,12 +4,12 @@ const { getS3Url, getPresignedDownloadUrl } = require('../lib/s3')
 
 const router = express.Router()
 
-// GET /api/g/:token — public gallery view (includes subfolder photos)
+// GET /api/g/:token — public gallery view (own photos + subfolder sections)
 router.get('/:token', async (req, res) => {
   try {
     const folder = await prisma.folder.findUnique({
       where:   { shareToken: req.params.token },
-      include: { children: { select: { id: true } } }
+      include: { children: { orderBy: { createdAt: 'asc' } } }
     })
 
     if (!folder)       return res.status(404).json({ message: 'Gallery not found.' })
@@ -21,18 +21,26 @@ router.get('/:token', async (req, res) => {
       orderBy: { uploadedAt: 'asc' }
     })
 
-    const images = allImages.map(img => ({
+    const toImageDTO = img => ({
       id:         img.id,
       filename:   img.filename,
       thumbUrl:   getS3Url(img.thumbKey),
       sizeBytes:  img.sizeBytes,
       uploadedAt: img.uploadedAt,
+    })
+
+    const images = allImages.filter(img => img.folderId === folder.id).map(toImageDTO)
+    const subfolders = folder.children.map(child => ({
+      id:     child.id,
+      name:   child.name,
+      images: allImages.filter(img => img.folderId === child.id).map(toImageDTO)
     }))
 
     return res.json({
       folder: { id: folder.id, name: folder.name, createdAt: folder.createdAt },
       images,
-      total: images.length,
+      subfolders,
+      total: allImages.length,
     })
   } catch (err) {
     console.error(err)

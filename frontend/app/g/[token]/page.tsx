@@ -10,9 +10,16 @@ type Image = {
   sizeBytes: number
 }
 
+type SubfolderGallery = {
+  id: number
+  name: string
+  images: Image[]
+}
+
 type Gallery = {
   folder: { id: number; name: string; createdAt: string }
   images: Image[]
+  subfolders: SubfolderGallery[]
   total: number
 }
 
@@ -46,6 +53,13 @@ export default function GalleryPage() {
       .catch(() => setError('This gallery link is invalid or has been removed.'))
   }, [token])
 
+  // Flat list of every photo across the folder and its subfolders, in display
+  // order — used for lightbox navigation and "download all" regardless of
+  // which section a thumbnail was clicked from.
+  const allImages: Image[] = gallery
+    ? [...gallery.images, ...gallery.subfolders.flatMap(s => s.images)]
+    : []
+
   // Keyboard navigation
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
@@ -59,13 +73,13 @@ export default function GalleryPage() {
   }, [lightboxIndex, gallery])
 
   function goNext() {
-    if (!gallery || lightboxIndex === null) return
-    setLightboxIndex(i => i !== null ? (i + 1) % gallery.images.length : null)
+    if (lightboxIndex === null) return
+    setLightboxIndex(i => i !== null ? (i + 1) % allImages.length : null)
   }
 
   function goPrev() {
-    if (!gallery || lightboxIndex === null) return
-    setLightboxIndex(i => i !== null ? (i - 1 + gallery.images.length) % gallery.images.length : null)
+    if (lightboxIndex === null) return
+    setLightboxIndex(i => i !== null ? (i - 1 + allImages.length) % allImages.length : null)
   }
 
   async function getDownloadUrl(imageId: number) {
@@ -90,8 +104,8 @@ export default function GalleryPage() {
     if (!gallery) return
     setDownloadingAll(true)
     setDownloadProgress(0)
-    for (let i = 0; i < gallery.images.length; i++) {
-      const img = gallery.images[i]
+    for (let i = 0; i < allImages.length; i++) {
+      const img = allImages[i]
       try {
         const url = await getDownloadUrl(img.id)
         const a = document.createElement('a')
@@ -105,7 +119,7 @@ export default function GalleryPage() {
       } catch {
         console.error('Failed to download:', img.filename)
       }
-      setDownloadProgress(Math.round(((i + 1) / gallery.images.length) * 100))
+      setDownloadProgress(Math.round(((i + 1) / allImages.length) * 100))
     }
     setDownloadingAll(false)
     setDownloadProgress(0)
@@ -191,8 +205,12 @@ export default function GalleryPage() {
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB'
   }
 
-  const lightboxImage = lightboxIndex !== null && gallery ? gallery.images[lightboxIndex] : null
-  const displayImages = scanResult !== null ? scanResult : gallery?.images ?? []
+  const lightboxImage = lightboxIndex !== null ? allImages[lightboxIndex] : null
+
+  function openLightbox(img: Image) {
+    const index = allImages.findIndex(i => i.id === img.id)
+    setLightboxIndex(index >= 0 ? index : null)
+  }
 
   // ── Error state
   if (error) return (
@@ -345,31 +363,32 @@ export default function GalleryPage() {
 
       {/* Grid */}
       <div className="max-w-6xl mx-auto px-8 py-10">
-        {displayImages.length === 0 ? (
+        {scanResult !== null ? (
+          scanResult.length === 0 ? (
+            <div className="text-center py-24">
+              <p className="text-[#aaa] text-sm">No matching photos found.</p>
+            </div>
+          ) : (
+            <ImageGrid images={scanResult} onSelect={openLightbox} />
+          )
+        ) : allImages.length === 0 ? (
           <div className="text-center py-24">
-            <p className="text-[#aaa] text-sm">
-              {scanResult !== null ? 'No matching photos found.' : 'No photos in this gallery yet.'}
-            </p>
+            <p className="text-[#aaa] text-sm">No photos in this gallery yet.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-            {displayImages.map((img, index) => (
-              <div
-                key={img.id}
-                className="group relative aspect-square rounded-xl overflow-hidden bg-[#e8e5e0] cursor-pointer"
-                onClick={() => {
-                  const fullIndex = gallery.images.findIndex(i => i.id === img.id)
-                  setLightboxIndex(fullIndex >= 0 ? fullIndex : index)
-                }}
-              >
-                <img
-                  src={img.thumbUrl}
-                  alt={img.filename}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
-                  <p className="text-white text-xs truncate w-full">{img.filename}</p>
-                </div>
+          <div className="flex flex-col gap-12">
+            {gallery.images.length > 0 && (
+              <ImageGrid images={gallery.images} onSelect={openLightbox} />
+            )}
+            {gallery.subfolders.map(sub => sub.images.length > 0 && (
+              <div key={sub.id}>
+                <h2 className="text-lg font-semibold text-[#0f0f0f] mb-4">
+                  {sub.name}
+                  <span className="text-sm font-normal text-[#999] ml-2">
+                    {sub.images.length} {sub.images.length === 1 ? 'photo' : 'photos'}
+                  </span>
+                </h2>
+                <ImageGrid images={sub.images} onSelect={openLightbox} />
               </div>
             ))}
           </div>
@@ -402,7 +421,7 @@ export default function GalleryPage() {
           <div className="relative max-w-4xl w-full" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-3">
               <span className="text-[#aaa] text-sm">
-                {lightboxIndex + 1} / {gallery.images.length}
+                {lightboxIndex + 1} / {allImages.length}
               </span>
               <button
                 onClick={() => setLightboxIndex(null)}
@@ -436,6 +455,29 @@ export default function GalleryPage() {
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+function ImageGrid({ images, onSelect }: { images: Image[]; onSelect: (img: Image) => void }) {
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+      {images.map(img => (
+        <div
+          key={img.id}
+          className="group relative aspect-square rounded-xl overflow-hidden bg-[#e8e5e0] cursor-pointer"
+          onClick={() => onSelect(img)}
+        >
+          <img
+            src={img.thumbUrl}
+            alt={img.filename}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+            <p className="text-white text-xs truncate w-full">{img.filename}</p>
+          </div>
+        </div>
+      ))}
     </div>
   )
 }
