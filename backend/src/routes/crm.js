@@ -316,6 +316,30 @@ router.post('/events/:id/days', requirePermission('events.update'), async (req, 
   }
 })
 
+// Delete an event day (and, via cascade, its bookings). Day 1 is protected
+// since it anchors the event and can't be recreated with the same meaning.
+router.delete('/events/:id/days/:dayId', requirePermission('events.update'), async (req, res) => {
+  try {
+    const eventId = parseInt(req.params.id)
+    const dayId   = parseInt(req.params.dayId)
+
+    const event = await prisma.event.findFirst({ where: { id: eventId, adminId: req.adminId } })
+    if (!event) return res.status(404).json({ message: 'Event not found.' })
+
+    const day = await prisma.eventDay.findFirst({ where: { id: dayId, eventId } })
+    if (!day) return res.status(404).json({ message: 'Day not found.' })
+    if (day.dayNumber === 1) {
+      return res.status(400).json({ message: 'Day 1 cannot be deleted.' })
+    }
+
+    await prisma.eventDay.delete({ where: { id: dayId } })
+    return res.json({ message: 'Day deleted.' })
+  } catch (err) {
+    console.error(err)
+    return res.status(500).json({ message: 'Could not delete day.' })
+  }
+})
+
 router.put('/events/:id/action', requirePermission('events.update'), async (req, res) => {
   try {
     const { actionStatus, actionNotes } = req.body

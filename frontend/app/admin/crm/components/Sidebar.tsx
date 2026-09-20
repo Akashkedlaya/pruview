@@ -107,23 +107,10 @@ export default function Sidebar() {
   const visibleItems = navItems.filter(item => permissions.includes(item.permission))
 
   return (
-    <div className="w-56 min-h-screen bg-[var(--pv-card)] border-r border-[var(--pv-border)] flex flex-col fixed left-0 top-0 z-40">
-
-      {/* Logo */}
-      <div className="px-6 py-6 border-b border-[var(--pv-border)]">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-[var(--pv-accent)] rounded-lg flex items-center justify-center">
-            <span className="text-[var(--pv-accent-on)] text-xs font-bold">P</span>
-          </div>
-          <span className="font-semibold text-[var(--pv-text)] text-sm">
-            pru<span className="text-[var(--pv-accent)]">view</span>
-          </span>
-        </div>
-        <p className="text-[var(--pv-muted)] text-xs mt-1 ml-10">CRM</p>
-      </div>
+    <div className="w-56 bg-[var(--pv-card)] border-r border-[var(--pv-border)] flex flex-col fixed left-0 top-16 h-[calc(100vh-4rem)] z-40">
 
       {/* Nav */}
-      <nav className="flex-1 px-3 py-4">
+      <nav className="flex-1 px-3 py-4 mt-3">
         {visibleItems.map(item => {
           const isActive = pathname === item.path ||
             (item.path !== '/admin/crm' && pathname.startsWith(item.path))

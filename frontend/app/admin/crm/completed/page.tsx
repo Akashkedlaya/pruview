@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { hasPermission } from '../../permissions'
 
 type Event = {
   id: number
@@ -17,6 +18,7 @@ type Event = {
 
 export default function CompletedPage() {
   const router = useRouter()
+  const [allowed, setAllowed] = useState<boolean | null>(null)
   const [events, setEvents]   = useState<Event[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter]   = useState('all')
@@ -40,6 +42,7 @@ export default function CompletedPage() {
         headers: { Authorization: `Bearer ${getToken()}` }
       })
       if (res.status === 401) { router.push('/admin/login'); return }
+      if (res.status === 403) { setAllowed(false); return }
       setEvents(await res.json())
     } catch (err) { console.error(err) }
     finally { setLoading(false) }
@@ -56,10 +59,29 @@ export default function CompletedPage() {
 
   const totalRevenue = events.reduce((sum, e) => sum + getTotalPaid(e), 0)
 
-  useEffect(() => { loadEvents() }, [filter, year, month, quarter])
+  useEffect(() => {
+    if (!hasPermission('completed.read')) { setAllowed(false); return }
+    setAllowed(true)
+    loadEvents()
+  }, [filter, year, month, quarter])
 
   const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
   const YEARS  = ['2024','2025','2026','2027']
+
+  if (allowed === false) {
+    return (
+      <div className="p-8">
+        <div className="text-center py-24 bg-white border border-[var(--pv-border)] rounded-2xl">
+          <p className="text-[var(--pv-text)] font-semibold mb-1">You don't have access to this page.</p>
+          <p className="text-[var(--pv-muted)] text-sm">Completed events are only visible to Admin users.</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (allowed === null) {
+    return <div className="p-8 text-[var(--pv-muted)]">Loading…</div>
+  }
 
   return (
     <div className="p-8">

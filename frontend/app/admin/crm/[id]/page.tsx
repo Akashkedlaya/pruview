@@ -78,6 +78,31 @@ export default function EventDetail() {
     finally   { setAddingDay(false) }
   }
 
+  async function deleteDay(day: EventDay) {
+    if (day.dayNumber === 1 || !event) return
+    const confirmed = confirm(
+      'Are you sure you want to delete this day? All schedules and photographer assignments for this day will also be removed.'
+    )
+    if (!confirmed) return
+    try {
+      const res = await fetch(`${API}/api/crm/events/${id}/days/${day.id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${getToken()}` }
+      })
+      const data = await res.json()
+      if (!res.ok) { setError(data.message || 'Could not delete day.'); return }
+
+      const deletedIndex = event.days.findIndex(d => d.id === day.id)
+      const newDays = event.days.filter(d => d.id !== day.id)
+      setEvent(prev => prev ? { ...prev, days: newDays } : prev)
+      setActiveDay(prev => {
+        if (deletedIndex < prev) return prev - 1
+        return Math.min(prev, newDays.length - 1)
+      })
+      setActiveSlot(null)
+    } catch { setError('Could not delete day.') }
+  }
+
   function selectSlot(slot: string) {
     setActiveSlot(slot)
     setSelectedEvent('')
@@ -208,15 +233,30 @@ export default function EventDetail() {
         {/* Day tabs */}
         <div className="flex gap-2 mb-6 overflow-x-auto pb-1">
           {event.days.map((day, index) => (
-            <button key={day.id} onClick={() => { setActiveDay(index); setActiveSlot(null) }}
-              className={`px-5 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${
+            <div key={day.id}
+              className={`flex items-center gap-1 pl-5 pr-1.5 py-1.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${
                 activeDay === index
                   ? 'bg-[var(--pv-ink)] text-white'
                   : 'bg-white text-[var(--pv-text-secondary)] border border-[var(--pv-border)] hover:border-[var(--pv-accent)]'
               }`}
             >
-              Day {day.dayNumber}: {formatDate(day.date)}
-            </button>
+              <button onClick={() => { setActiveDay(index); setActiveSlot(null) }}>
+                Day {day.dayNumber}: {formatDate(day.date)}
+              </button>
+              {day.dayNumber !== 1 && (
+                <button
+                  onClick={() => deleteDay(day)}
+                  title="Delete day"
+                  className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
+                    activeDay === index
+                      ? 'text-white/60 hover:text-white hover:bg-white/20'
+                      : 'text-[var(--pv-muted)] hover:text-red-500 hover:bg-red-50'
+                  }`}
+                >
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              )}
+            </div>
           ))}
           <button onClick={addDay} disabled={addingDay}
             className="px-5 py-2.5 rounded-full text-sm font-semibold border border-dashed border-[var(--pv-accent)] text-[var(--pv-accent)] hover:bg-[var(--pv-accent-tint-hover)] transition-all whitespace-nowrap disabled:opacity-40"

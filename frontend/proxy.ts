@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server'
 // Paths only the ADMIN role may open. This is a UX-level gate only — the
 // backend independently enforces the same restriction on every API call,
 // so bypassing this (or this middleware misbehaving) can't expose data.
-const ADMIN_ONLY_PREFIXES = ['/admin/crm/invoices', '/admin/crm/users']
+const ADMIN_ONLY_PREFIXES = ['/admin/crm/invoices', '/admin/crm/users', '/admin/crm/completed']
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl

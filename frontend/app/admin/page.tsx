@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { clearStoredUser } from './permissions'
+import TopNav from './components/TopNav'
 
 type Folder = {
   id: number
@@ -86,38 +86,11 @@ export default function AdminHome() {
     setTimeout(() => setCopied(null), 2000)
   }
 
-  function logout() {
-  localStorage.removeItem('pruview_token')
-  document.cookie = 'pruview_token=; path=/; max-age=0'
-  clearStoredUser()
-  router.push('/admin/login')
-}
-
   useEffect(() => { loadFolders() }, [])
 
   return (
-    <div className="min-h-screen bg-[var(--pv-bg)]">
-
-      {/* Nav */}
-      
-      <nav className="bg-[var(--pv-ink)] px-8 py-4 flex items-center justify-between">
-         <span className="text-white text-xl font-semibold">
-          pru<span className="text-[var(--pv-accent)]">view</span>
-         </span>
-         <div className="flex items-center gap-6">
-           <button className="text-white text-sm font-semibold transition-colors">
-              Gallery
-           </button>
-           <button
-             onClick={() => router.push('/admin/crm')}
-             className="text-white/50 hover:text-white text-sm transition-colors">
-              CRM
-           </button>
-           <button onClick={logout} className="text-white/50 hover:text-white text-sm transition-colors">
-             Sign out
-           </button>
-         </div>
-      </nav>
+    <div className="min-h-screen bg-[var(--pv-bg)] pt-16">
+      <TopNav />
 
       <div className="max-w-4xl mx-auto px-8 py-12">
 
