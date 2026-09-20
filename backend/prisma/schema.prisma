@@ -17,6 +17,28 @@ model Admin {
   events        Event[]
   enquiries     Enquiry[]
   users         User[]
+  notifications Notification[]
+}
+
+// Shared per-tenant notification inbox — every User under an Admin
+// (account) sees and reads the same feed. type + relatedEnquiryId /
+// relatedEventId are what generation logic checks before creating a
+// row, so the same event is never notified twice.
+model Notification {
+  id               Int       @id @default(autoincrement())
+  adminId          Int
+  admin            Admin     @relation(fields: [adminId], references: [id])
+  type             String    // ENQUIRY_FOLLOW_UP | EVENT_TOMORROW | EVENT_CONVERTED
+  title            String
+  message          String
+  relatedEnquiryId Int?
+  relatedEventId   Int?
+  isRead           Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  readAt           DateTime?
+
+  @@unique([type, relatedEnquiryId])
+  @@unique([type, relatedEventId])
 }
 
 // ── RBAC ──────────────────────────────────────────────

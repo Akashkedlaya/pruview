@@ -2,6 +2,7 @@
 
 import { useRouter, usePathname } from 'next/navigation'
 import { clearStoredUser } from '../permissions'
+import NotificationBell from './NotificationBell'
 
 export default function TopNav() {
   const router   = useRouter()
@@ -40,6 +41,7 @@ export default function TopNav() {
             CRM
           </button>
         )}
+        {isCrmActive && <NotificationBell />}
         <button onClick={logout} className="text-white/50 hover:text-white text-sm transition-colors">
           Sign out
         </button>

@@ -2,6 +2,7 @@ const express     = require('express')
 const prisma      = require('../lib/prisma')
 const requireAuth = require('../middleware/auth')
 const { requirePermission } = require('../middleware/permissions')
+const { notifyEventConverted } = require('../lib/notifications')
 
 const router = express.Router()
 router.use(requireAuth)
@@ -180,6 +181,8 @@ router.put('/enquiries/:id/confirm', requirePermission('enquiries.update'), asyn
 
       return { event, invoice }
     })
+
+    await notifyEventConverted(req.adminId, result.event)
 
     return res.status(201).json(result)
   } catch (err) {
