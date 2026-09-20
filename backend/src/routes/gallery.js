@@ -4,18 +4,24 @@ const { getS3Url, getPresignedDownloadUrl } = require('../lib/s3')
 
 const router = express.Router()
 
-// GET /api/g/:token — public gallery view
+// GET /api/g/:token — public gallery view (includes subfolder photos)
 router.get('/:token', async (req, res) => {
   try {
     const folder = await prisma.folder.findUnique({
       where:   { shareToken: req.params.token },
-      include: { images: { orderBy: { uploadedAt: 'asc' } } }
+      include: { children: { select: { id: true } } }
     })
 
     if (!folder)       return res.status(404).json({ message: 'Gallery not found.' })
     if (!folder.isActive) return res.status(403).json({ message: 'This link has been deactivated.' })
 
-    const images = folder.images.map(img => ({
+    const folderIds = [folder.id, ...folder.children.map(c => c.id)]
+    const allImages = await prisma.image.findMany({
+      where:   { folderId: { in: folderIds } },
+      orderBy: { uploadedAt: 'asc' }
+    })
+
+    const images = allImages.map(img => ({
       id:         img.id,
       filename:   img.filename,
       thumbUrl:   getS3Url(img.thumbKey),
@@ -38,14 +44,16 @@ router.get('/:token', async (req, res) => {
 router.get('/:token/download/:imageId', async (req, res) => {
   try {
     const folder = await prisma.folder.findUnique({
-      where: { shareToken: req.params.token }
+      where:   { shareToken: req.params.token },
+      include: { children: { select: { id: true } } }
     })
     if (!folder || !folder.isActive) {
       return res.status(404).json({ message: 'Gallery not found.' })
     }
 
+    const folderIds = [folder.id, ...folder.children.map(c => c.id)]
     const image = await prisma.image.findFirst({
-      where: { id: parseInt(req.params.imageId), folderId: folder.id }
+      where: { id: parseInt(req.params.imageId), folderId: { in: folderIds } }
     })
     if (!image) return res.status(404).json({ message: 'Image not found.' })
 

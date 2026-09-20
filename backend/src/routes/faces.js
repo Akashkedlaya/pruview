@@ -13,23 +13,25 @@ router.post('/:token/match-face', async (req, res) => {
     }
 
     const folder = await prisma.folder.findUnique({
-      where: { shareToken: req.params.token }
+      where:   { shareToken: req.params.token },
+      include: { children: { select: { id: true } } }
     })
 
     if (!folder || !folder.isActive) {
       return res.status(404).json({ message: 'Gallery not found.' })
     }
 
+    const folderIds = [folder.id, ...folder.children.map(c => c.id)]
     const vectorStr = `[${embedding.join(',')}]`
 
     const matches = await prisma.$queryRawUnsafe(`
-      SELECT 
+      SELECT
         fe.id as embedding_id,
         fe."imageId",
         fe."folderId",
         1 - (fe.embedding <=> '${vectorStr}'::vector) as similarity
       FROM "FaceEmbedding" fe
-      WHERE fe."folderId" = ${folder.id}
+      WHERE fe."folderId" IN (${folderIds.join(',')})
       ORDER BY similarity DESC
       LIMIT 50
     `)
