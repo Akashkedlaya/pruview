@@ -8,7 +8,14 @@ const crypto = require('crypto')
 // and search" checks are still meaningfully testable, but two different
 // photos of the same real person will NOT produce similar vectors here.
 // Swap FACE_MODEL_PROVIDER=production-v1 for an actual recognizer.
-const DIMENSION = 128
+//
+// Dimension comes from FACE_EMBEDDING_DIMENSION (same env var productionV1
+// reads), not a hardcoded number — the pgvector column is provisioned to
+// one fixed width, so whichever provider is active must match it. Do not
+// give the stub its own separate dimension "for clarity"; that's exactly
+// what causes an "expected N dimensions, not M" insert failure the moment
+// it's the active provider.
+const DIMENSION = parseInt(process.env.FACE_EMBEDDING_DIMENSION || '512', 10)
 const MODEL_NAME = 'stub-face-model'
 const MODEL_VERSION = 'dev'
 
