@@ -1,13 +1,14 @@
 const express     = require('express')
 const prisma      = require('../lib/prisma')
 const requireAuth = require('../middleware/auth')
+const { requirePermission } = require('../middleware/permissions')
 
 const router = express.Router()
 router.use(requireAuth)
 
 // ── PHOTOGRAPHERS ──────────────────────────────────────
 
-router.get('/photographers', async (req, res) => {
+router.get('/photographers', requirePermission('photographers.read'), async (req, res) => {
   try {
     const photographers = await prisma.photographer.findMany({
       where:   { adminId: req.adminId },
@@ -20,7 +21,7 @@ router.get('/photographers', async (req, res) => {
   }
 })
 
-router.post('/photographers', async (req, res) => {
+router.post('/photographers', requirePermission('photographers.create'), async (req, res) => {
   try {
     const { name, phone, email, specialization } = req.body
     if (!name || !phone) return res.status(400).json({ message: 'Name and phone are required.' })
@@ -34,7 +35,7 @@ router.post('/photographers', async (req, res) => {
   }
 })
 
-router.put('/photographers/:id', async (req, res) => {
+router.put('/photographers/:id', requirePermission('photographers.update'), async (req, res) => {
   try {
     const { name, phone, email, specialization, status } = req.body
     const photographer = await prisma.photographer.update({
@@ -48,7 +49,7 @@ router.put('/photographers/:id', async (req, res) => {
   }
 })
 
-router.delete('/photographers/:id', async (req, res) => {
+router.delete('/photographers/:id', requirePermission('photographers.delete'), async (req, res) => {
   try {
     await prisma.photographer.delete({ where: { id: parseInt(req.params.id) } })
     return res.json({ message: 'Photographer deleted.' })
@@ -59,7 +60,7 @@ router.delete('/photographers/:id', async (req, res) => {
 
 // ── ENQUIRIES ─────────────────────────────────────────
 
-router.get('/enquiries', async (req, res) => {
+router.get('/enquiries', requirePermission('enquiries.read'), async (req, res) => {
   try {
     const enquiries = await prisma.enquiry.findMany({
       where:   { adminId: req.adminId, status: { not: 'ARCHIVED' } },
@@ -72,7 +73,7 @@ router.get('/enquiries', async (req, res) => {
   }
 })
 
-router.post('/enquiries', async (req, res) => {
+router.post('/enquiries', requirePermission('enquiries.create'), async (req, res) => {
   try {
     const {
       coupleName, phone, startDate, endDate, location,
@@ -97,7 +98,7 @@ router.post('/enquiries', async (req, res) => {
   }
 })
 
-router.put('/enquiries/:id', async (req, res) => {
+router.put('/enquiries/:id', requirePermission('enquiries.update'), async (req, res) => {
   try {
     const enquiry = await prisma.enquiry.update({
       where: { id: parseInt(req.params.id) },
@@ -109,7 +110,7 @@ router.put('/enquiries/:id', async (req, res) => {
   }
 })
 
-router.delete('/enquiries/:id', async (req, res) => {
+router.delete('/enquiries/:id', requirePermission('enquiries.delete'), async (req, res) => {
   try {
     await prisma.enquiry.delete({ where: { id: parseInt(req.params.id) } })
     return res.json({ message: 'Enquiry deleted.' })
@@ -120,7 +121,7 @@ router.delete('/enquiries/:id', async (req, res) => {
 
 // ── T1: CONFIRM ENQUIRY → CREATE EVENT + INVOICE ──────
 
-router.put('/enquiries/:id/confirm', async (req, res) => {
+router.put('/enquiries/:id/confirm', requirePermission('enquiries.update'), async (req, res) => {
   try {
     const enquiry = await prisma.enquiry.findFirst({
       where: { id: parseInt(req.params.id), adminId: req.adminId }
@@ -199,7 +200,7 @@ async function syncEventStatuses(adminId) {
   })
 }
 
-router.get('/events', async (req, res) => {
+router.get('/events', requirePermission('dashboard.read'), async (req, res) => {
   try {
     await syncEventStatuses(req.adminId)
     const events = await prisma.event.findMany({
@@ -219,7 +220,7 @@ router.get('/events', async (req, res) => {
   }
 })
 
-router.post('/events', async (req, res) => {
+router.post('/events', requirePermission('events.create'), async (req, res) => {
   try {
     const { coupleName, startDate, endDate, location } = req.body
     if (!coupleName || !startDate || !endDate) {
@@ -253,7 +254,7 @@ router.post('/events', async (req, res) => {
   }
 })
 
-router.get('/events/:id', async (req, res) => {
+router.get('/events/:id', requirePermission('events.read'), async (req, res) => {
   try {
     const event = await prisma.event.findFirst({
       where:   { id: parseInt(req.params.id), adminId: req.adminId },
@@ -273,7 +274,7 @@ router.get('/events/:id', async (req, res) => {
   }
 })
 
-router.put('/events/:id', async (req, res) => {
+router.put('/events/:id', requirePermission('events.update'), async (req, res) => {
   try {
     const { coupleName, startDate, endDate, location, status, deliveryDeadline } = req.body
     const event = await prisma.event.update({
@@ -293,7 +294,7 @@ router.put('/events/:id', async (req, res) => {
   }
 })
 
-router.delete('/events/:id', async (req, res) => {
+router.delete('/events/:id', requirePermission('events.delete'), async (req, res) => {
   try {
     await prisma.event.delete({ where: { id: parseInt(req.params.id) } })
     return res.json({ message: 'Event deleted.' })
@@ -302,7 +303,7 @@ router.delete('/events/:id', async (req, res) => {
   }
 })
 
-router.post('/events/:id/days', async (req, res) => {
+router.post('/events/:id/days', requirePermission('events.update'), async (req, res) => {
   try {
     const { dayNumber, date } = req.body
     const day = await prisma.eventDay.create({
@@ -315,7 +316,7 @@ router.post('/events/:id/days', async (req, res) => {
   }
 })
 
-router.put('/events/:id/action', async (req, res) => {
+router.put('/events/:id/action', requirePermission('events.update'), async (req, res) => {
   try {
     const { actionStatus, actionNotes } = req.body
     const event = await prisma.event.update({
@@ -330,7 +331,7 @@ router.put('/events/:id/action', async (req, res) => {
 
 // ── BOOKINGS ──────────────────────────────────────────
 
-router.post('/bookings', async (req, res) => {
+router.post('/bookings', requirePermission('calendar.create'), async (req, res) => {
   try {
     const { eventDayId, slot, eventName, photographerId, location } = req.body
     if (!eventDayId || !slot || !eventName || !photographerId) {
@@ -360,7 +361,7 @@ router.post('/bookings', async (req, res) => {
   }
 })
 
-router.delete('/bookings/:id', async (req, res) => {
+router.delete('/bookings/:id', requirePermission('calendar.delete'), async (req, res) => {
   try {
     await prisma.booking.delete({ where: { id: parseInt(req.params.id) } })
     return res.json({ message: 'Booking cancelled.' })
@@ -376,7 +377,7 @@ const DEFAULT_TASKS = [
   'Album Design', 'Client Review', 'Final Delivery'
 ]
 
-router.get('/post-production', async (req, res) => {
+router.get('/post-production', requirePermission('postproduction.read'), async (req, res) => {
   try {
     await syncEventStatuses(req.adminId)
     const events = await prisma.event.findMany({
@@ -397,7 +398,7 @@ router.get('/post-production', async (req, res) => {
   }
 })
 
-router.get('/post-production/:id/tasks', async (req, res) => {
+router.get('/post-production/:id/tasks', requirePermission('postproduction.read'), async (req, res) => {
   try {
     const tasks = await prisma.postProductionTask.findMany({
       where:   { eventId: parseInt(req.params.id) },
@@ -409,7 +410,7 @@ router.get('/post-production/:id/tasks', async (req, res) => {
   }
 })
 
-router.post('/post-production/:id/tasks', async (req, res) => {
+router.post('/post-production/:id/tasks', requirePermission('postproduction.create'), async (req, res) => {
   try {
     const { taskName, assigneeName, assigneeId, dueDate, status, notes, order } = req.body
     const task = await prisma.postProductionTask.create({
@@ -432,7 +433,7 @@ router.post('/post-production/:id/tasks', async (req, res) => {
 })
 
 // Seed default tasks for an event
-router.post('/post-production/:id/seed-tasks', async (req, res) => {
+router.post('/post-production/:id/seed-tasks', requirePermission('postproduction.create'), async (req, res) => {
   try {
     const eventId = parseInt(req.params.id)
     const existing = await prisma.postProductionTask.findMany({ where: { eventId } })
@@ -452,7 +453,7 @@ router.post('/post-production/:id/seed-tasks', async (req, res) => {
   }
 })
 
-router.put('/post-production/tasks/:id', async (req, res) => {
+router.put('/post-production/tasks/:id', requirePermission('postproduction.update'), async (req, res) => {
   try {
     const { taskName, assigneeName, assigneeId, dueDate, status, notes } = req.body
     const task = await prisma.postProductionTask.update({
@@ -489,7 +490,7 @@ router.put('/post-production/tasks/:id', async (req, res) => {
   }
 })
 
-router.delete('/post-production/tasks/:id', async (req, res) => {
+router.delete('/post-production/tasks/:id', requirePermission('postproduction.delete'), async (req, res) => {
   try {
     await prisma.postProductionTask.delete({ where: { id: parseInt(req.params.id) } })
     return res.json({ message: 'Task deleted.' })
@@ -500,7 +501,7 @@ router.delete('/post-production/tasks/:id', async (req, res) => {
 
 // ── INVOICES ──────────────────────────────────────────
 
-router.get('/invoices', async (req, res) => {
+router.get('/invoices', requirePermission('invoices.read'), async (req, res) => {
   try {
     const invoices = await prisma.invoice.findMany({
       where: { event: { adminId: req.adminId } },
@@ -517,7 +518,7 @@ router.get('/invoices', async (req, res) => {
   }
 })
 
-router.get('/invoices/:eventId', async (req, res) => {
+router.get('/invoices/:eventId', requirePermission('invoices.read'), async (req, res) => {
   try {
     const invoice = await prisma.invoice.findUnique({
       where:   { eventId: parseInt(req.params.eventId) },
@@ -533,7 +534,7 @@ router.get('/invoices/:eventId', async (req, res) => {
   }
 })
 
-router.put('/invoices/:id', async (req, res) => {
+router.put('/invoices/:id', requirePermission('invoices.update'), async (req, res) => {
   try {
     const { packageName, totalAmount, notes } = req.body
     const invoice = await prisma.invoice.update({
@@ -551,7 +552,7 @@ router.put('/invoices/:id', async (req, res) => {
   }
 })
 
-router.post('/invoices/:id/payments', async (req, res) => {
+router.post('/invoices/:id/payments', requirePermission('invoices.update'), async (req, res) => {
   try {
     const { amount, paidOn, method, notes } = req.body
     if (!amount) return res.status(400).json({ message: 'Amount is required.' })
@@ -603,7 +604,7 @@ router.post('/invoices/:id/payments', async (req, res) => {
   }
 })
 
-router.delete('/payments/:id', async (req, res) => {
+router.delete('/payments/:id', requirePermission('invoices.delete'), async (req, res) => {
   try {
     const payment = await prisma.payment.delete({ where: { id: parseInt(req.params.id) } })
     // Recalculate invoice status after deletion
@@ -627,7 +628,7 @@ router.delete('/payments/:id', async (req, res) => {
 
 // ── COMPLETED EVENTS ──────────────────────────────────
 
-router.get('/completed', async (req, res) => {
+router.get('/completed', requirePermission('completed.read'), async (req, res) => {
   try {
     const { filter, year, month, quarter } = req.query
     const now = new Date()
@@ -682,7 +683,7 @@ router.get('/completed', async (req, res) => {
 
 // ── CALENDAR (for calendar page) ─────────────────────
 
-router.get('/calendar-events', async (req, res) => {
+router.get('/calendar-events', requirePermission('calendar.read'), async (req, res) => {
   try {
     const events = await prisma.event.findMany({
       where:   { adminId: req.adminId },

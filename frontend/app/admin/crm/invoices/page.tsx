@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { hasPermission } from '../../permissions'
 
 type Payment = {
   id: number
@@ -39,6 +40,7 @@ const PAYMENT_METHODS = ['CASH', 'UPI', 'BANK', 'CARD', 'OTHER']
 
 export default function InvoicesPage() {
   const router = useRouter()
+  const [allowed, setAllowed]         = useState<boolean | null>(null)
   const [invoices, setInvoices]       = useState<Invoice[]>([])
   const [loading, setLoading]         = useState(true)
   const [expanded, setExpanded]       = useState<number | null>(null)
@@ -69,6 +71,7 @@ export default function InvoicesPage() {
         headers: { Authorization: `Bearer ${getToken()}` }
       })
       if (res.status === 401) { router.push('/admin/login'); return }
+      if (res.status === 403) { setAllowed(false); return }
       setInvoices(await res.json())
     } catch (err) { console.error(err) }
     finally { setLoading(false) }
@@ -172,7 +175,26 @@ Pruview`
   const totalRevenue    = invoices.filter(i => i.status === 'PAID').reduce((sum, i) => sum + i.totalAmount, 0)
   const totalPending    = invoices.filter(i => i.status !== 'PAID').reduce((sum, i) => sum + getBalance(i), 0)
 
-  useEffect(() => { loadInvoices() }, [])
+  useEffect(() => {
+    if (!hasPermission('invoices.read')) { setAllowed(false); return }
+    setAllowed(true)
+    loadInvoices()
+  }, [])
+
+  if (allowed === false) {
+    return (
+      <div className="p-8">
+        <div className="text-center py-24 bg-white border border-[var(--pv-border)] rounded-2xl">
+          <p className="text-[var(--pv-text)] font-semibold mb-1">You don't have access to this page.</p>
+          <p className="text-[var(--pv-muted)] text-sm">Invoices are only visible to Admin users.</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (allowed === null) {
+    return <div className="p-8 text-[var(--pv-muted)]">Loading…</div>
+  }
 
   return (
     <div className="p-8">

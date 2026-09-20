@@ -17,6 +17,7 @@ app.use('/api/g',       require('./routes/gallery'))
 app.use('/api/g',       require('./routes/faces')) 
 app.use('/api/images',  require('./routes/faceIndex')) 
 app.use('/api/crm',     require('./routes/crm'))
+app.use('/api/users',   require('./routes/users'))
 
 
 app.listen(process.env.PORT, () => {

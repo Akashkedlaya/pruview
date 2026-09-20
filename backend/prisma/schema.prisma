@@ -16,6 +16,47 @@ model Admin {
   photographers Photographer[]
   events        Event[]
   enquiries     Enquiry[]
+  users         User[]
+}
+
+// ── RBAC ──────────────────────────────────────────────
+// User -> Role -> Permission -> Resource. A User logs in and belongs to
+// one Admin (tenant/account); their Role determines which permission
+// keys they hold, which in turn gate both API routes and frontend nav.
+
+model Role {
+  id          Int              @id @default(autoincrement())
+  name        String           @unique // "ADMIN" | "AGENT" | future roles
+  permissions RolePermission[]
+  users       User[]
+}
+
+model Permission {
+  id    Int              @id @default(autoincrement())
+  key   String           @unique // e.g. "invoices.read", "users.create"
+  roles RolePermission[]
+}
+
+model RolePermission {
+  roleId       Int
+  permissionId Int
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  status       String   @default("ACTIVE") // ACTIVE | DISABLED
+  roleId       Int
+  role         Role     @relation(fields: [roleId], references: [id])
+  adminId      Int
+  admin        Admin    @relation(fields: [adminId], references: [id])
+  createdAt    DateTime @default(now())
 }
 
 model Folder {

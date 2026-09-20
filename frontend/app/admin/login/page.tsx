@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { setStoredUser } from '../permissions'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -31,6 +32,7 @@ export default function LoginPage() {
       localStorage.setItem('pruview_token', data.token)
       // Also save as cookie for middleware to read
       document.cookie = `pruview_token=${data.token}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Strict`
+      setStoredUser(data.user)
       router.push('/admin')
     } catch (err) {
       setError('Cannot connect to server.')

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { clearStoredUser } from './permissions'
 
 type Folder = {
   id: number
@@ -88,6 +89,7 @@ export default function AdminHome() {
   function logout() {
   localStorage.removeItem('pruview_token')
   document.cookie = 'pruview_token=; path=/; max-age=0'
+  clearStoredUser()
   router.push('/admin/login')
 }
 
