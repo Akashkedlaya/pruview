@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useParams } from 'next/navigation'
+import Link from 'next/link'
 
 type Image = {
   id: number
@@ -10,16 +11,17 @@ type Image = {
   sizeBytes: number
 }
 
-type SubfolderGallery = {
+type SubfolderLink = {
   id: number
   name: string
-  images: Image[]
+  shareToken: string
+  total: number
 }
 
 type Gallery = {
   folder: { id: number; name: string; createdAt: string }
   images: Image[]
-  subfolders: SubfolderGallery[]
+  subfolders: SubfolderLink[]
   total: number
 }
 
@@ -53,12 +55,9 @@ export default function GalleryPage() {
       .catch(() => setError('This gallery link is invalid or has been removed.'))
   }, [token])
 
-  // Flat list of every photo across the folder and its subfolders, in display
-  // order — used for lightbox navigation and "download all" regardless of
-  // which section a thumbnail was clicked from.
-  const allImages: Image[] = gallery
-    ? [...gallery.images, ...gallery.subfolders.flatMap(s => s.images)]
-    : []
+  // What's currently on screen: face-scan matches when scanning, otherwise
+  // this folder's own photos (subfolders are browsed into separately).
+  const displayImages: Image[] = scanResult !== null ? scanResult : gallery?.images ?? []
 
   // Keyboard navigation
   useEffect(() => {
@@ -74,12 +73,12 @@ export default function GalleryPage() {
 
   function goNext() {
     if (lightboxIndex === null) return
-    setLightboxIndex(i => i !== null ? (i + 1) % allImages.length : null)
+    setLightboxIndex(i => i !== null ? (i + 1) % displayImages.length : null)
   }
 
   function goPrev() {
     if (lightboxIndex === null) return
-    setLightboxIndex(i => i !== null ? (i - 1 + allImages.length) % allImages.length : null)
+    setLightboxIndex(i => i !== null ? (i - 1 + displayImages.length) % displayImages.length : null)
   }
 
   async function getDownloadUrl(imageId: number) {
@@ -104,8 +103,8 @@ export default function GalleryPage() {
     if (!gallery) return
     setDownloadingAll(true)
     setDownloadProgress(0)
-    for (let i = 0; i < allImages.length; i++) {
-      const img = allImages[i]
+    for (let i = 0; i < displayImages.length; i++) {
+      const img = displayImages[i]
       try {
         const url = await getDownloadUrl(img.id)
         const a = document.createElement('a')
@@ -119,7 +118,7 @@ export default function GalleryPage() {
       } catch {
         console.error('Failed to download:', img.filename)
       }
-      setDownloadProgress(Math.round(((i + 1) / allImages.length) * 100))
+      setDownloadProgress(Math.round(((i + 1) / displayImages.length) * 100))
     }
     setDownloadingAll(false)
     setDownloadProgress(0)
@@ -205,10 +204,10 @@ export default function GalleryPage() {
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB'
   }
 
-  const lightboxImage = lightboxIndex !== null ? allImages[lightboxIndex] : null
+  const lightboxImage = lightboxIndex !== null ? displayImages[lightboxIndex] : null
 
   function openLightbox(img: Image) {
-    const index = allImages.findIndex(i => i.id === img.id)
+    const index = displayImages.findIndex(i => i.id === img.id)
     setLightboxIndex(index >= 0 ? index : null)
   }
 
@@ -361,6 +360,28 @@ export default function GalleryPage() {
         )}
       </div>
 
+      {/* Folders — browse into a subfolder's own gallery */}
+      {scanResult === null && gallery.subfolders.length > 0 && (
+        <div className="max-w-6xl mx-auto px-8 pt-10">
+          <h2 className="text-lg font-semibold text-[#0f0f0f] mb-4">Folders</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            {gallery.subfolders.map(sub => (
+              <Link
+                key={sub.id}
+                href={`/g/${sub.shareToken}`}
+                className="flex items-center gap-3 px-5 py-4 border border-[#e8e5e0] rounded-xl hover:border-[#5f9ea0] transition-all"
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5f9ea0" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                <div className="min-w-0">
+                  <p className="font-semibold text-sm text-[#0f0f0f] truncate">{sub.name}</p>
+                  <p className="text-xs text-[#999]">{sub.total} {sub.total === 1 ? 'photo' : 'photos'}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Grid */}
       <div className="max-w-6xl mx-auto px-8 py-10">
         {scanResult !== null ? (
@@ -371,27 +392,14 @@ export default function GalleryPage() {
           ) : (
             <ImageGrid images={scanResult} onSelect={openLightbox} />
           )
-        ) : allImages.length === 0 ? (
-          <div className="text-center py-24">
-            <p className="text-[#aaa] text-sm">No photos in this gallery yet.</p>
-          </div>
+        ) : displayImages.length === 0 ? (
+          gallery.subfolders.length === 0 && (
+            <div className="text-center py-24">
+              <p className="text-[#aaa] text-sm">No photos in this gallery yet.</p>
+            </div>
+          )
         ) : (
-          <div className="flex flex-col gap-12">
-            {gallery.images.length > 0 && (
-              <ImageGrid images={gallery.images} onSelect={openLightbox} />
-            )}
-            {gallery.subfolders.map(sub => sub.images.length > 0 && (
-              <div key={sub.id}>
-                <h2 className="text-lg font-semibold text-[#0f0f0f] mb-4">
-                  {sub.name}
-                  <span className="text-sm font-normal text-[#999] ml-2">
-                    {sub.images.length} {sub.images.length === 1 ? 'photo' : 'photos'}
-                  </span>
-                </h2>
-                <ImageGrid images={sub.images} onSelect={openLightbox} />
-              </div>
-            ))}
-          </div>
+          <ImageGrid images={displayImages} onSelect={openLightbox} />
         )}
       </div>
 
@@ -421,7 +429,7 @@ export default function GalleryPage() {
           <div className="relative max-w-4xl w-full" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-3">
               <span className="text-[#aaa] text-sm">
-                {lightboxIndex + 1} / {allImages.length}
+                {lightboxIndex + 1} / {displayImages.length}
               </span>
               <button
                 onClick={() => setLightboxIndex(null)}
