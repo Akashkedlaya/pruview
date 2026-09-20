@@ -125,6 +125,10 @@ export default function GalleryPage() {
   }
 
   // ── Face scan functions
+  // Face detection/embedding now happens entirely server-side (the same
+  // production model used to index the gallery) — the browser's only job
+  // is capturing one still frame and sending it, so the guest embedding
+  // is guaranteed to come from the same model as what it's compared against.
   async function startFaceScan() {
     if (!token) return
     setScanning(true)
@@ -133,10 +137,6 @@ export default function GalleryPage() {
     setModelsReady(false)
 
     try {
-      const { loadModels, detectFaceFromVideo } = await import('@/app/lib/faceDetection')
-      await loadModels()
-      setModelsReady(true)
-
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'user', width: 640, height: 480 }
       })
@@ -146,32 +146,33 @@ export default function GalleryPage() {
         videoRef.current.srcObject = stream
         await videoRef.current.play()
       }
+      setModelsReady(true)
 
-      let detected = false
-      for (let i = 0; i < 20; i++) {
-        await new Promise(r => setTimeout(r, 500))
-        if (!videoRef.current) break
+      // Brief pause so the camera can focus/expose before the capture.
+      await new Promise(r => setTimeout(r, 1500))
 
-        const embedding = await detectFaceFromVideo(videoRef.current)
-        if (embedding) {
-          detected = true
-          stopCamera()
+      const video = videoRef.current
+      if (!video || !video.videoWidth) throw new Error('Camera not ready.')
 
-          const res = await fetch(`${API}/api/g/${token}/match-face`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ embedding })
-          })
-          const data = await res.json()
-          setScanResult(data.images || [])
-          break
-        }
+      const canvas = document.createElement('canvas')
+      canvas.width = video.videoWidth
+      canvas.height = video.videoHeight
+      canvas.getContext('2d')?.drawImage(video, 0, 0, canvas.width, canvas.height)
+      const image = canvas.toDataURL('image/jpeg', 0.9)
+
+      stopCamera()
+
+      const res = await fetch(`${API}/api/g/${token}/match-face`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image })
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setCameraError(data.message || 'No face detected. Please try again in good lighting.')
+        return
       }
-
-      if (!detected) {
-        stopCamera()
-        setCameraError('No face detected. Please try again in good lighting.')
-      }
+      setScanResult(data.images || [])
 
     } catch (err: any) {
       stopCamera()
@@ -323,7 +324,7 @@ export default function GalleryPage() {
               />
               {!modelsReady && (
                 <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
-                  <p className="text-white text-sm">Loading AI models...</p>
+                  <p className="text-white text-sm">Starting camera...</p>
                 </div>
               )}
               {modelsReady && (

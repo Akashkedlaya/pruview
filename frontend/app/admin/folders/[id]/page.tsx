@@ -8,6 +8,9 @@ type Image = {
   filename: string
   thumbUrl: string
   sizeBytes: number
+  status: 'UPLOADED' | 'PROCESSING' | 'PROCESSED' | 'FAILED'
+  faceCount: number
+  processingError?: string | null
 }
 
 type SubFolder = {
@@ -48,37 +51,37 @@ export default function UploadPage() {
     return localStorage.getItem('pruview_token')
   }
   async function reindexFaces() {
-  if (!folder) return
-  setError('')
-  try {
-    const { loadModels, detectFacesInImage } = await import('@/app/lib/faceDetection')
-    await loadModels()
-
-    let indexed = 0
-    for (const img of folder.images) {
-      try {
-        const embeddings = await detectFacesInImage(img.thumbUrl)
-        if (embeddings.length > 0) {
-          await fetch(`${API}/api/images/${img.id}/index-faces`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${getToken()}`
-            },
-            body: JSON.stringify({ embeddings, folderId: id })
-          })
-          indexed++
-          console.log(`Indexed ${img.filename}: ${embeddings.length} face(s)`)
-        }
-      } catch (err) {
-        console.warn(`Skipped ${img.filename}:`, err)
-      }
+    if (!folder) return
+    setError('')
+    try {
+      const res = await fetch(`${API}/api/folders/${folder.id}/reindex-faces`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${getToken()}` }
+      })
+      const data = await res.json()
+      if (!res.ok) { setError(data.message || 'Re-indexing failed.'); return }
+      // Reflect the queued state immediately; the poll loop below will
+      // pick up PROCESSING/PROCESSED/FAILED as the background worker runs.
+      setFolder(f => f ? { ...f, images: f.images.map(img => ({ ...img, status: 'UPLOADED', processingError: null })) } : f)
+    } catch (err) {
+      setError('Re-indexing failed.')
     }
-    alert(`Re-indexed ${indexed} photos with faces`)
-  } catch (err) {
-    setError('Re-indexing failed.')
   }
-}  
+
+  async function retryImage(imageId: number) {
+    try {
+      await fetch(`${API}/api/images/${imageId}/process-faces`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${getToken()}` }
+      })
+      setFolder(f => f ? {
+        ...f,
+        images: f.images.map(img => img.id === imageId ? { ...img, status: 'UPLOADED', processingError: null } : img)
+      } : f)
+    } catch (err) {
+      setError('Could not retry processing.')
+    }
+  }
   async function loadFolder() {
     try {
       const res = await fetch(`${API}/api/folders/${id}`, {
@@ -126,27 +129,8 @@ export default function UploadPage() {
       })
       const newImage = await saveRes.json()
 
-      // Step 4 — detect and index faces
-      setProgress(p => ({ ...p, [file.name]: 75 }))
-      try {
-        const { loadModels, detectFacesInImage } = await import('@/app/lib/faceDetection')
-        await loadModels()
-        const embeddings = await detectFacesInImage(newImage.thumbUrl)
-        if (embeddings.length > 0) {
-          await fetch(`${API}/api/images/${newImage.id}/index-faces`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${getToken()}`
-            },
-            body: JSON.stringify({ embeddings, folderId: id })
-          })
-          console.log(`Indexed ${embeddings.length} face(s) in ${file.name}`)
-        }
-      } catch (faceErr) {
-        console.warn('Face indexing failed (non-critical):', faceErr)
-      }
-
+      // Face processing is queued server-side by the backend the moment
+      // the image row is created — nothing left for the browser to do.
       setProgress(p => ({ ...p, [file.name]: 100 }))
       setFolder(f => f ? { ...f, images: [newImage, ...f.images] } : f)
 
@@ -215,6 +199,16 @@ export default function UploadPage() {
   }
 
   useEffect(() => { loadFolder() }, [id])
+
+  // Face processing happens in the background — poll while anything is
+  // still queued/running so statuses (and face counts) update without a
+  // manual refresh, and stop once everything's settled.
+  useEffect(() => {
+    const pending = folder?.images.some(img => img.status === 'UPLOADED' || img.status === 'PROCESSING')
+    if (!pending) return
+    const interval = setInterval(loadFolder, 4000)
+    return () => clearInterval(interval)
+  }, [folder])
 
   if (!folder) return (
     <div className="min-h-screen bg-[var(--pv-bg)] flex items-center justify-center">
@@ -367,17 +361,51 @@ export default function UploadPage() {
                   alt={img.filename}
                   className="w-full h-full object-cover"
                 />
+
+                {/* Processing status badge */}
+                {(img.status === 'UPLOADED' || img.status === 'PROCESSING') && (
+                  <span className="absolute top-2 left-2 flex items-center gap-1.5 bg-black/60 text-white text-[10px] font-medium px-2 py-1 rounded-full">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                    Processing…
+                  </span>
+                )}
+                {img.status === 'PROCESSED' && (
+                  <span className="absolute top-2 left-2 flex items-center gap-1.5 bg-black/60 text-white text-[10px] font-medium px-2 py-1 rounded-full">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
+                    {img.faceCount} {img.faceCount === 1 ? 'face' : 'faces'}
+                  </span>
+                )}
+                {img.status === 'FAILED' && (
+                  <span
+                    className="absolute top-2 left-2 flex items-center gap-1.5 bg-red-600 text-white text-[10px] font-medium px-2 py-1 rounded-full"
+                    title={img.processingError || 'Processing failed'}
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-white" />
+                    Failed
+                  </span>
+                )}
+
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
                   <p className="text-white text-xs text-center px-2 truncate w-full">
                     {img.filename}
                   </p>
                   <p className="text-white/60 text-xs">{formatSize(img.sizeBytes)}</p>
-                  <button
-                    onClick={() => deleteImage(img.id)}
-                    className="px-3 py-1 bg-red-500 text-white text-xs rounded-lg hover:bg-red-600 transition-colors"
-                  >
-                    Delete
-                  </button>
+                  <div className="flex items-center gap-2">
+                    {img.status === 'FAILED' && (
+                      <button
+                        onClick={() => retryImage(img.id)}
+                        className="px-3 py-1 bg-[var(--pv-accent)] text-[var(--pv-accent-on)] text-xs rounded-lg hover:bg-[var(--pv-accent-hover)] transition-colors"
+                      >
+                        Retry
+                      </button>
+                    )}
+                    <button
+                      onClick={() => deleteImage(img.id)}
+                      className="px-3 py-1 bg-red-500 text-white text-xs rounded-lg hover:bg-red-600 transition-colors"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

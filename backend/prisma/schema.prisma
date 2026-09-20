@@ -103,17 +103,56 @@ model Image {
   uploadedAt     DateTime        @default(now())
   thumbKey       String
   sizeBytes      Int             @default(0)
-  faceEmbeddings FaceEmbedding[]
+  // Async face-processing status — set to UPLOADED at upload time, flipped
+  // to PROCESSING/PROCESSED/FAILED by the background worker. Never set
+  // synchronously inside the upload request.
+  status                String    @default("UPLOADED") // UPLOADED | PROCESSING | PROCESSED | FAILED
+  faceCount              Int       @default(0)
+  processingStartedAt    DateTime?
+  processingCompletedAt  DateTime?
+  processingError        String?
+  processingJobs ProcessingJob[]  @relation("ImageProcessingJobs")
+  embeddings     FaceEmbedding[]
   folder         Folder          @relation(fields: [folderId], references: [id], onDelete: Cascade)
 }
 
+// One row per detected face (an image can have several). The
+// (modelName, modelVersion) pair travels with every embedding so a future
+// model upgrade never gets compared against incompatible old vectors —
+// callers filter search/generation by the current provider's identity,
+// not just by folder.
 model FaceEmbedding {
-  id        Int                   @id @default(autoincrement())
-  imageId   Int
-  embedding Unsupported("vector")
-  folderId  Int
-  createdAt DateTime              @default(now()) @db.Timestamp(6)
-  image     Image                 @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  id                 Int                   @id @default(autoincrement())
+  imageId            Int
+  folderId           Int
+  embedding          Unsupported("vector")
+  modelName          String
+  modelVersion       String
+  embeddingDimension Int
+  faceIndex          Int                   @default(0)
+  qualityScore       Float?
+  createdAt          DateTime              @default(now()) @db.Timestamp(6)
+  updatedAt          DateTime              @default(now()) @updatedAt
+  image              Image                 @relation(fields: [imageId], references: [id], onDelete: Cascade)
+
+  @@index([folderId, modelName, modelVersion])
+}
+
+// Minimal in-process job queue: rows this backend polls on an interval
+// (see server.js). No external queue infra today — see ProcessingJob's
+// own note for the upgrade path if/when volume needs one.
+model ProcessingJob {
+  id         Int       @id @default(autoincrement())
+  imageId    Int
+  image      Image     @relation("ImageProcessingJobs", fields: [imageId], references: [id], onDelete: Cascade)
+  status     String    @default("PENDING") // PENDING | RUNNING | DONE | FAILED
+  attempts   Int       @default(0)
+  error      String?
+  createdAt  DateTime  @default(now())
+  startedAt  DateTime?
+  finishedAt DateTime?
+
+  @@index([status, createdAt])
 }
 
 model Photographer {

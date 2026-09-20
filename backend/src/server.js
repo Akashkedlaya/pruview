@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const cors    = require('cors')
 const { generatePendingNotificationsForAllAdmins } = require('./lib/notifications')
+const { processNextBatch } = require('./lib/faceProcessingWorker')
 
 const app = express()
 app.use(cors({ origin: process.env.FRONTEND_URL }))
@@ -32,3 +33,21 @@ app.listen(process.env.PORT, () => {
 const NOTIFICATION_SWEEP_INTERVAL_MS = 15 * 60 * 1000
 setTimeout(() => generatePendingNotificationsForAllAdmins().catch(console.error), 5000)
 setInterval(() => generatePendingNotificationsForAllAdmins().catch(console.error), NOTIFICATION_SWEEP_INTERVAL_MS)
+
+// Face-processing job queue — an in-process poll loop rather than a
+// separate worker/queue service (no SQS/Redis in this deployment yet).
+// Picks up a small batch every few seconds so uploads never wait on AI
+// processing; see faceProcessingWorker.js for the actual pipeline.
+const FACE_QUEUE_POLL_INTERVAL_MS = 3000
+let faceQueueBusy = false
+setInterval(async () => {
+  if (faceQueueBusy) return
+  faceQueueBusy = true
+  try {
+    await processNextBatch()
+  } catch (err) {
+    console.error('[face-processing] batch failed:', err)
+  } finally {
+    faceQueueBusy = false
+  }
+}, FACE_QUEUE_POLL_INTERVAL_MS)

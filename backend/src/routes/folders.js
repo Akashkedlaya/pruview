@@ -4,6 +4,7 @@ const path           = require('path')
 const prisma         = require('../lib/prisma')
 const requireAuth    = require('../middleware/auth')
 const { getPresignedUploadUrl, getS3Url, deleteObject } = require('../lib/s3')
+const { enqueueImageForProcessing } = require('../lib/faceProcessingWorker')
 
 const router = express.Router()
 router.use(requireAuth)
@@ -175,6 +176,10 @@ router.post('/:id/images', async (req, res) => {
       data: { filename, originalKey, thumbKey, sizeBytes: parseInt(sizeBytes), folderId }
     })
 
+    // Queue AI face processing — the browser's job ends here; detection and
+    // embedding happen in the background worker, never inside this request.
+    await enqueueImageForProcessing(image.id)
+
     return res.status(201).json({
       ...image,
       thumbUrl:    getS3Url(thumbKey),
@@ -183,6 +188,40 @@ router.post('/:id/images', async (req, res) => {
   } catch (err) {
     console.error(err)
     return res.status(500).json({ message: 'Could not save image.' })
+  }
+})
+
+// POST /api/folders/:id/reindex-faces — re-queue every image in this
+// folder and its subfolders for face processing (old embeddings are
+// cleared by the worker when each job runs, not here, so an image keeps
+// its existing embeddings until its new job actually completes).
+router.post('/:id/reindex-faces', async (req, res) => {
+  try {
+    const folderId = parseInt(req.params.id)
+    const folder = await prisma.folder.findFirst({
+      where:   { id: folderId, adminId: req.adminId },
+      include: { children: { select: { id: true } } }
+    })
+    if (!folder) return res.status(404).json({ message: 'Folder not found.' })
+
+    const folderIds = [folder.id, ...folder.children.map(c => c.id)]
+    const images = await prisma.image.findMany({
+      where:  { folderId: { in: folderIds } },
+      select: { id: true }
+    })
+
+    await prisma.image.updateMany({
+      where: { id: { in: images.map(i => i.id) } },
+      data:  { status: 'UPLOADED', processingError: null }
+    })
+    for (const image of images) {
+      await enqueueImageForProcessing(image.id)
+    }
+
+    return res.json({ message: 'Re-indexing queued.', queued: images.length })
+  } catch (err) {
+    console.error(err)
+    return res.status(500).json({ message: 'Could not queue re-indexing.' })
   }
 })
 
